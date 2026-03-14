@@ -14,7 +14,7 @@
 <body>
 <div class="container right-panel-active">
     <div class="form-container register-container">
-        <form action="register" method="post" id="registerForm">
+        <form action="register" method="post" id="registerForm" novalidate>
             <h1>Đăng Ký</h1>
 
             <c:if test="${not empty error}">
