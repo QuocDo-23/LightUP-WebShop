@@ -26,7 +26,7 @@
             <h3>VỀ CHÚNG TÔI</h3>
             <ul class="footer-links">
                 <li><a href="./about.jsp">Giới thiệu</a></li>
-                <li><a href="./products.jsp">Sản phẩm</a></li>
+                <li><a href="/views/user/products.jsp">Sản phẩm</a></li>
                 <li><a href="./news.jsp">Tin tức</a></li>
                 <li><a href="./contact.jsp">Liên hệ</a></li>
             </ul>
