@@ -1,0 +1,195 @@
+
+.section_1_about {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 500px;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url("https://anhsanghoanglam.vn/wp-content/uploads/2022/05/home2-parallax-1.jpg") no-repeat center center;
+    background-size: cover;
+    overflow: hidden;
+    margin-top: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+
+.section_1_content h1 {
+    font-family: 'Monsieur La Doulaise', cursive;
+    font-size: 100px;
+    color: #ddb28c;
+    font-weight: normal;
+    margin-bottom: 0;
+    line-height: 0;
+}
+
+.section_1_about .highlight {
+    color: white;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 90px;
+    font-family: "Literata", sans-serif;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+.story-header {
+    background: #fff;
+    width: 1300px;
+    margin: 20px auto 0;
+    box-shadow: 0 -20px 20px rgba(11, 4, 4, 0.05);
+    margin-top: 0;
+}
+
+.story-section {
+    width: 1300px;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 20px 20px rgba(11, 4, 4, 0.05);
+}
+
+.story-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 49px;
+    align-items: center;
+    padding: 10px 40px 80px 40px;
+}
+
+.story-text h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #8b7355;
+    font-weight: bold;
+    text-align: center;
+}
+
+.story-text p {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.story-image {
+    height: 500px;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.story-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+}
+
+
+.divider {
+    width: 100px;
+    height: 3px;
+    background-color: #8b7355;
+    margin: 10px auto;
+}
+
+.values-section {
+    background-color: #fff;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.values-cont {
+    width: 1300px;
+    margin: 0 auto;
+}
+
+.values-cont h2 {
+    color: rgb(15, 11, 11);
+    margin-top: 0;
+    padding-top: 40px;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+    padding: 40px;
+}
+
+.value-card {
+    background: white;
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 40px;
+    text-align: center;
+    transition: transform 0.3s ease, background 0.3s ease;
+    border: solid 3px rgba(15, 13, 13, 0.2);
+    color: black;
+    box-shadow: 0 20px 20px rgba(11, 4, 4, 0.05);
+    cursor: pointer;
+}
+
+.value-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.value-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.value-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    font-weight: 400;
+}
+
+.value-card p {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+#about.stats-section {
+    padding: 10px 20px 80px 20px;
+}
+
+#about h2 {
+    color: white;
+}
+
+
+.ux-shape-divider {
+    --divider-top-width: 100%;
+    --divider-width: 100%;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    bottom: 0;
+}
+
+.ux-shape-divider svg {
+    display: block;
+    position: relative;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    height: 150px;
+    width: 100%;
+}
+
+.ux-shape-divider--bottom svg {
+    width: calc(var(--divider-width) + 2px);
+}
+
+
+.ux-shape-fill {
+    fill: #ffffff;
+}

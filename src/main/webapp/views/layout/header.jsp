@@ -30,7 +30,7 @@
 
                 <!-- GIỚI THIỆU -->
                 <li>
-                    <a href="${pageContext.request.contextPath}/about.jsp"
+                    <a href="${pageContext.request.contextPath}/about"
                        class="${pageContext.request.requestURI.contains('/about') ? 'active' : ''}">
                         GIỚI THIỆU
                     </a>
