@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/sub_login.css">
-    <link rel="stylesheet" href="./CSS/products.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/products.css">
     <base href="${pageContext.request.contextPath}/">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/cart.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/cart.css">
 
     <link href='https://fonts.googleapis.com/css?family=Monsieur La Doulaise' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Literata' rel='stylesheet'>
