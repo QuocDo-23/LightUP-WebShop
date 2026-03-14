@@ -18,7 +18,7 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/"
                        class="${not pageContext.request.requestURI.contains('/products')
-                            and not pageContext.request.requestURI.contains('/news')
+                            and not pageContext.request.requestURI.contains('/views/user/news')
                             and not pageContext.request.requestURI.contains('/about')
                             and not pageContext.request.requestURI.contains('/contact')
                             and not pageContext.request.requestURI.contains('/login')
