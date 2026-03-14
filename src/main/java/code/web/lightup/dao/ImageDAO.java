@@ -14,7 +14,9 @@ public class ImageDAO {
         this.jdbi = BaseDao.get();
     }
 
-
+    /**
+     * Lấy tất cả hình ảnh của sản phẩm
+     */
     public List<Image> getImagesByProductId(int productId) {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
@@ -28,7 +30,9 @@ public class ImageDAO {
         );
     }
 
-
+    /**
+     * Lấy hình ảnh chính của sản phẩm
+     */
     public Image getMainImage(int productId) {
         return jdbi.withHandle(handle ->
                 handle.createQuery(

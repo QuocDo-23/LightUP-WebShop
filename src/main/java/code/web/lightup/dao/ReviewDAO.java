@@ -16,7 +16,9 @@ public class ReviewDAO {
         this.jdbi = BaseDao.get();
     }
 
+    // ================= USER =================
 
+    // Lấy review theo sản phẩm
     public List<Review> getReviewsByProductId(int productId) {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
@@ -32,7 +34,7 @@ public class ReviewDAO {
         );
     }
 
-
+    // Thống kê theo sản phẩm
     public ReviewStatistics getReviewStatistics(int productId) {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
@@ -52,7 +54,7 @@ public class ReviewDAO {
         );
     }
 
-
+    // Thêm review
     public int addReview(Review review) {
         return jdbi.withHandle(handle ->
                 handle.createUpdate(
@@ -68,9 +70,9 @@ public class ReviewDAO {
         );
     }
 
+    // ================= ADMIN =================
 
-
-
+    // Lấy toàn bộ review
     public List<Review> getAllReviews() {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
@@ -100,7 +102,7 @@ public class ReviewDAO {
         );
     }
 
-
+    // Duyệt / ẩn review
     public int updateReviewStatus(int reviewId, int status) {
         return jdbi.withHandle(handle ->
                 handle.createUpdate(
@@ -152,5 +154,4 @@ public class ReviewDAO {
                         .mapTo(Integer.class)
                         .one() > 0
         );
-    }
-}
+    }}
