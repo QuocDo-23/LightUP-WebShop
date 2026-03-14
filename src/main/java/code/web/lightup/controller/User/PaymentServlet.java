@@ -2,9 +2,14 @@ package code.web.lightup.controller.User;
 
 
 import code.web.lightup.dao.ProductDAO;
+import code.web.lightup.model.Address;
+import code.web.lightup.model.Cart.Cart;
 import code.web.lightup.model.Cart.CartItem;
+import code.web.lightup.model.OrderItem;
 import code.web.lightup.model.Payment;
 import code.web.lightup.model.User;
+import code.web.lightup.service.AddressService;
+import code.web.lightup.service.OrderService;
 import code.web.lightup.service.PaymentService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,7 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.core.annotation.Order;
+import code.web.lightup.model.Order;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -24,7 +29,7 @@ public class PaymentServlet extends HttpServlet {
 
     private OrderService orderService;
     private PaymentService paymentService;
-    private addressService addressService;
+    private AddressService addressService;
     private ProductDAO productDAO;
 
     @Override
@@ -32,7 +37,7 @@ public class PaymentServlet extends HttpServlet {
         super.init();
         orderService = new OrderService();
         paymentService = new PaymentService();
-        addressService = new addressService();
+        addressService = new AddressService();
         productDAO = new ProductDAO();
 
     }
@@ -60,7 +65,7 @@ public class PaymentServlet extends HttpServlet {
             String selectedAddressId = request.getParameter("selectedAddressId");
 
             if (selectedAddressId != null && !selectedAddressId.equals("new")) {
-                // Tìm địa chỉ đã chọn
+
                 try {
                     int addressId = Integer.parseInt(selectedAddressId);
                     Address selectedAddress = null;
@@ -76,7 +81,7 @@ public class PaymentServlet extends HttpServlet {
                         request.setAttribute("selectedAddress", selectedAddress);
                     }
                 } catch (NumberFormatException e) {
-                    // Invalid addressId, ignore
+
                 }
             } else if (selectedAddressId != null) {
                 request.setAttribute("isNewAddress", true);
@@ -93,7 +98,7 @@ public class PaymentServlet extends HttpServlet {
             return;
         }
 
-        request.getRequestDispatcher("/payment.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/user/payment.jsp").forward(request, response);
     }
 
     @Override
@@ -104,7 +109,7 @@ public class PaymentServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         try {
-            // Lấy cart từ session
+
             Cart cart = (Cart) session.getAttribute("cart");
             if (cart == null || cart.getTotalItems() == 0) {
                 response.sendRedirect(request.getContextPath() + "/cart");
@@ -204,13 +209,13 @@ public class PaymentServlet extends HttpServlet {
             } else {
 
                 request.setAttribute("error", "Có lỗi xảy ra khi tạo đơn hàng. Vui lòng thử lại.");
-                request.getRequestDispatcher("/payment.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/user/payment.jsp").forward(request, response);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
-            request.getRequestDispatcher("/payment.jsp").forward(request, response);
+            request.getRequestDispatcher("/views/user/payment.jsp").forward(request, response);
         }
     }
 }
