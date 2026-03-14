@@ -134,7 +134,7 @@ public class NewsDAO {
     }
 
     /**
-     * Chức năng của admin
+     * CHỨC NĂNG CỦA ADMIN
      */
 
     /**

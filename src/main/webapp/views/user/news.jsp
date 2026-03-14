@@ -68,11 +68,11 @@
                                 <li><fmt:formatDate value="${mainArticle.dateOfPosting}" pattern="dd/MM/yyyy"/></li>
                             </div>
                             <div class="name">
-                                <a href="news-detail?slug=${mainArticle.slug}">${mainArticle.title}</a>
+                                <a href="news_content?slug=${mainArticle.slug}">${mainArticle.title}</a>
                             </div>
                         </div>
                         <div class="title_l">
-                            <a href="news-detail?slug=${mainArticle.slug}"><i class="bi bi-arrow-up-right"></i></a>
+                            <a href="news_content?slug=${mainArticle.slug}"><i class="bi bi-arrow-up-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -93,11 +93,11 @@
                                         <li><fmt:formatDate value="${article.dateOfPosting}" pattern="dd/MM/yyyy"/></li>
                                     </div>
                                     <div class="name">
-                                        <a href="news-detail?slug=${article.slug}">${article.title}</a>
+                                        <a href="news_content?slug=${article.slug}">${article.title}</a>
                                     </div>
                                 </div>
                                 <div class="title_l">
-                                    <a href="news-detail?slug=${article.slug}"><i class="bi bi-arrow-up-right"></i></a>
+                                    <a href="news_content?slug=${article.slug}"><i class="bi bi-arrow-up-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +129,7 @@
                         </div>
                         <div class="article-content">
                             <h2 class="article-title">
-                                <a href="news-detail?slug=${article.slug}">${article.title}</a>
+                                <a href="news_content?slug=${article.slug}">${article.title}</a>
                             </h2>
                             <p class="article-description">${article.description}</p>
                             <div class="article-meta">
@@ -140,7 +140,7 @@
                         </div>
 
                         <div class="title_l">
-                            <a href="news-detail?slug=${article.slug}"><i class="bi bi-arrow-up-right"></i></a>
+                            <a href="news_content?slug=${article.slug}"><i class="bi bi-arrow-up-right"></i></a>
                         </div>
                     </div>
                 </c:forEach>

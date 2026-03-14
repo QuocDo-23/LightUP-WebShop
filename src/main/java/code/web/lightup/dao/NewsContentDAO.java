@@ -51,7 +51,7 @@ public class NewsContentDAO {
      */
     public List<News> getRelatedArticles(int currentArticleId, Integer categoryId, int limit) {
         if (categoryId == null) {
-            // Nếu không có category, lấy bài viết mới nhất
+            // Nếu không có category => lấy bài viết mới nhất
             return jdbi.withHandle(handle ->
                     handle.createQuery(
                                     "SELECT a.*, c.name AS categoryName, " +
@@ -160,5 +160,4 @@ public class NewsContentDAO {
                         .one()
         );
     }
-
 }
