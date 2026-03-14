@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>code.web</groupId>
-    <artifactId>WebGroup9</artifactId>
+    <groupId>code.web.lightup</groupId>
+    <artifactId>LightUp</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>WebGroup9</name>
+    <name>LightUp</name>
     <packaging>war</packaging>
 
 
