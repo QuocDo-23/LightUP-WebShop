@@ -1,0 +1,213 @@
+.container {
+    box-sizing: border-box;
+}
+
+.container * {
+    box-sizing: border-box;
+}
+
+.section_1_contact {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 500px;
+    background-image: url("https://denchum.mauthemewp.com/wp-content/uploads/2022/05/contact-title.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    margin-top: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+.section_1_contact h1 {
+    font-family: 'Monsieur La Doulaise', cursive;
+    font-size: 100px;
+    color: #ddb28c;
+    font-weight: normal;
+    margin-bottom: 0;
+    line-height: 0;
+}
+
+
+.section_1_contact .highlight {
+    color: white;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 90px;
+    font-family: "Literata", sans-serif;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+.content-area {
+    margin: 0 auto;
+    width: 1300px;
+}
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 30px;
+}
+
+.col {
+    background: white;
+    padding: 40px 20px 40px 20px;
+}
+
+/* ====== TIÊU ĐỀ ====== */
+.title-contact-page {
+    color: #a1801b;
+    font-size: 28px;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #a1801b;
+    padding-bottom: 10px;
+}
+
+.des-contact-page {
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.widget-title {
+    font-weight: bold;
+    color: #333;
+    font-size: 18px;
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Danh sách địa chỉ */
+#footer-text li {
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: #333;
+}
+
+#footer-text {
+    padding-left: 20px;
+    padding-bottom: 20px;
+}
+
+.btn a {
+    /*width: 120%;*/
+    background: #a1801b;
+    border: 2px solid #c9a26a;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    padding: 20px;
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    #row-1918689964 {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    #row-1918689964 .col {
+        width: 100%;
+    }
+}
+
+.google-map {
+    width: 100%;
+    height: 400px; /* chiều cao mong muốn */
+    border: 0;
+    border-radius: 6px; /* nếu muốn bo góc */
+    overflow: hidden;
+}
+
+.google-map iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+form label {
+    color: #333;
+    font-weight: 600;
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
+
+form input,
+form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+}
+
+form input:focus,
+form textarea:focus {
+    outline: none;
+    border-color: #a1801b;
+}
+
+form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.btn {
+    margin-top: 25px;
+}
+
+/* CSS gốc của bạn, đã chỉnh lọc */
+.ux-shape-divider {
+    --divider-top-width: 100%;
+    --divider-width: 100%;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    bottom: 0; /* Đặt divider ở dưới cùng của section */
+}
+
+.ux-shape-divider svg {
+    display: block;
+    position: relative;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    height: 150px;
+    width: 100%; /* Đảm bảo width đầy đủ, trừ khi override */
+}
+
+.ux-shape-divider--bottom svg {
+    width: calc(var(--divider-width) + 2px); /* Giữ nguyên như bạn cung cấp */
+}
+
+/* Thêm fill cho SVG để có màu (bạn có thể thay đổi) */
+.ux-shape-fill {
+    fill: #ffffff; /* Màu nền cho phần dưới divider (khớp với body) */
+}

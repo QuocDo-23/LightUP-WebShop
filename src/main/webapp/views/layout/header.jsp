@@ -72,7 +72,7 @@
 
                 <!-- LIÊN HỆ -->
                 <li>
-                    <a href="${pageContext.request.contextPath}/contact.jsp"
+                    <a href="${pageContext.request.contextPath}/contact"
                        class="${pageContext.request.requestURI.contains('/contact') ? 'active' : ''}">
                         LIÊN HỆ
                     </a>
