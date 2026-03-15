@@ -46,4 +46,20 @@ public class NewsService {
     public List<NewsContent> getContentByArticleId(int articleId) {
         return newsContentDAO.getContentByArticleId(articleId);
     }
+
+    public List<News> searchArticles(String searchKeyword, int limit, int offset) {
+        return newsDAO.searchArticles(searchKeyword, limit, offset);
+    }
+
+    public int insertArticle(News news) {
+        return newsDAO.insertArticle(news);
+    }
+
+    public int updateArticle(News news) {
+        return  newsDAO.updateArticle(news);
+    }
+
+    public int deleteArticle(int articleId) {
+        return  newsDAO.deleteArticle(articleId);
+    }
 }
