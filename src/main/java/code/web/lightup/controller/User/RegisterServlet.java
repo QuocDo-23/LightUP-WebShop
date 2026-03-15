@@ -76,7 +76,7 @@ public class RegisterServlet extends HttpServlet {
 
         if (success) {
             request.setAttribute("success", "Đăng ký thành công! Vui lòng đăng nhập.");
-            response.sendRedirect("/views/user/login.jsp?success=registered");
+            response.sendRedirect("login?success=registered");
         } else {
             request.setAttribute("error", "Đã xảy ra lỗi. Vui lòng thử lại.");
             request.getRequestDispatcher("/views/user/register.jsp").forward(request, response);

@@ -7,6 +7,7 @@ import code.web.lightup.model.OrderItem;
 import code.web.lightup.model.Order;
 
 import java.util.List;
+import java.util.Map;
 
 public class OrderService {
     private final OrderDAO orderDAO;
@@ -47,7 +48,6 @@ public class OrderService {
         return orderDAO.getOrderItemsByOrderId(orderId);
 
     }
-
     public OrderItem getOrderItemById(int itemId) {
         return orderDAO.getOrderItemById(itemId);
     }
@@ -62,4 +62,20 @@ public class OrderService {
     public int countOrdersByUserId(int userId) {
         return orderDAO.countOrdersByUserId(userId);
     }
+    public int getOrderCountByStatus(String status) {
+        return orderDAO.getOrderCountByStatus(status);
+    }
+
+    public double getCurrentMonthRevenue() {
+        return orderDAO.getCurrentMonthRevenue();
+    }
+
+    public int getCurrentMonthOrderCount() {
+        return orderDAO.getCurrentMonthOrderCount();
+    }
+    public List<Map<String, Object>> getTopSellingProducts(int limit) {
+        return orderDAO.getTopSellingProducts(limit);
+    }
+
+
 }

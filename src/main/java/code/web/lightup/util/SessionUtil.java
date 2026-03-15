@@ -34,12 +34,11 @@ public class SessionUtil {
     public static boolean isAdmin(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
-            String role = (String) session.getAttribute("userRole");
-            return "Admin".equals(role);
+            User user = (User) session.getAttribute("user");
+            return user != null && "Admin".equalsIgnoreCase(user.getRoleName());
         }
         return false;
     }
-
     /**
      * Lấy user ID từ session
      */
