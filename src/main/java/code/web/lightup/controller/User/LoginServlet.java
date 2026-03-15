@@ -64,7 +64,7 @@ public class LoginServlet extends HttpServlet {
             } else if ("cart".equals(redirect)) {
                 redirectUrl = contextPath + "/cart";
             } else if ("Admin".equals(user.getRoleName())) {
-                redirectUrl = contextPath + "/admin/dashboard";
+                redirectUrl = contextPath + "/views/admin/dashboard.jsp";
             } else {
                 redirectUrl = contextPath + "/";
             }
