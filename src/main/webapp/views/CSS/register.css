@@ -334,3 +334,9 @@ button#login:hover i {
     color: #fff;
     box-shadow: 0 0 1rem rgba(192, 155, 91, 0.6);
 }
+.alert {
+    padding: 5px;
+    background: #ff00004d;
+    border-radius: 5px;
+    color: red;
+}

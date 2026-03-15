@@ -184,7 +184,7 @@ public class ProductDAO {
     }
 
     /**
-     * Lấy 8 sản phẩm đầu tiên theo category (dùng cho trang products)
+     * Lấy 8 sản phẩm đầu tiên theo category
      */
     public List<ProductWithDetails> getTop8ProductsByCategory(int categoryId) {
         return jdbi.withHandle(handle ->
@@ -213,7 +213,6 @@ public class ProductDAO {
 
     /**
      * Đếm tổng số sản phẩm theo category
-     * Dùng để kiểm tra có hiển thị "Xem thêm" hay không
      */
     public int countProductsByCategory(int categoryId) {
         return jdbi.withHandle(handle ->
@@ -352,7 +351,6 @@ public class ProductDAO {
                     .mapTo(int.class)
                     .one();
 
-            // thêm Product_Detail
             handle.createUpdate(
                             "INSERT INTO Product_Detail (product_id, description, material, voltage, dimensions, " +
                                     "type, color, style, warranty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
@@ -388,7 +386,6 @@ public class ProductDAO {
     public boolean updateProduct(ProductWithDetails product) {
         return jdbi.inTransaction(handle -> {
 
-            // sửa Product
             int productRows = handle.createUpdate(
                             "UPDATE Product SET name = ?, category_id = ?, price = ?, inventory_quantity = ?, discount_id = ? WHERE id = ?")
                     .bind(0, product.getName())
