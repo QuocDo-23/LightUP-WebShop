@@ -46,4 +46,36 @@ public class NewsService {
     public List<NewsContent> getContentByArticleId(int articleId) {
         return newsContentDAO.getContentByArticleId(articleId);
     }
+
+    public List<News> searchArticles(String searchKeyword, int limit, int offset) {
+        return newsDAO.searchArticles(searchKeyword, limit, offset);
+    }
+
+    public int insertArticle(News news) {
+        return newsDAO.insertArticle(news);
+    }
+
+    public int updateArticle(News news) {
+        return  newsDAO.updateArticle(news);
+    }
+
+    public int deleteArticle(int articleId) {
+        return  newsDAO.deleteArticle(articleId);
+    }
+
+    public int getNextDisplayOrder(int articleId) {
+        return  newsContentDAO.getNextDisplayOrder(articleId);
+    }
+
+    public boolean insertContent(NewsContent content) {
+        return newsContentDAO.insertContent(content);
+    }
+
+    public boolean updateContent(NewsContent content) {
+        return newsContentDAO.updateContent(content);
+    }
+
+    public boolean deleteContent(int contentId) {
+        return  newsContentDAO.deleteContent(contentId);
+    }
 }
