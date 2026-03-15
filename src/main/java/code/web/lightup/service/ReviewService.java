@@ -48,4 +48,8 @@ public class ReviewService {
     public ReviewStatistics getAdminReviewStatistics() {
         return reviewDAO.getAdminReviewStatistics();
     }
+
+    public boolean hasOrderReview(int orderId){
+        return reviewDAO.hasOrderReview(orderId);
+    }
 }
