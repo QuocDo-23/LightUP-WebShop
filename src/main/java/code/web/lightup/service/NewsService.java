@@ -62,4 +62,20 @@ public class NewsService {
     public int deleteArticle(int articleId) {
         return  newsDAO.deleteArticle(articleId);
     }
+
+    public int getNextDisplayOrder(int articleId) {
+        return  newsContentDAO.getNextDisplayOrder(articleId);
+    }
+
+    public boolean insertContent(NewsContent content) {
+        return newsContentDAO.insertContent(content);
+    }
+
+    public boolean updateContent(NewsContent content) {
+        return newsContentDAO.updateContent(content);
+    }
+
+    public boolean deleteContent(int contentId) {
+        return  newsContentDAO.deleteContent(contentId);
+    }
 }
