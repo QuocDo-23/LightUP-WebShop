@@ -7,7 +7,7 @@
         LightAdmin
     </div>
 
-    <a href="${pageContext.request.contextPath}/views/admin/dashboard"
+    <a href="${pageContext.request.contextPath}/admin/dashboard"
        class="menu-item <c:if test='${currentPage eq "dashboard"}'>active</c:if>">
         📊 Tổng Quan
     </a>

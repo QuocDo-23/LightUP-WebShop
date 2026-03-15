@@ -77,4 +77,40 @@ public class ProductService {
         }
         return result;
     }
+    public List<ProductWithDetails> getProductsWithPagination(String search, Integer categoryId, String status, int offset, int limit) {
+        return productDAO.getProductsWithPagination(search, categoryId, status, offset, limit);
+    }
+    public int countProductsWithFilter(String search, Integer categoryId, String status) {
+        return productDAO
+                .countProductsWithFilter(search, categoryId, status);
+    }
+
+    public int getTotalProductCount() {
+        return productDAO.getTotalProductCount();
+    }
+
+    public int getProductCountByStatus(String status) {
+        return productDAO.getProductCountByStatus(status);
+    }
+
+
+    public int getLowStockProductCount(int threshold) {
+        return productDAO.getLowStockProductCount(threshold);
+    }
+
+    public int getOutOfStockProductCount() {
+        return productDAO.getOutOfStockProductCount();
+    }
+    public boolean insertProduct(ProductWithDetails product) {
+        return productDAO.insertProduct(product);
+    }
+    public boolean updateProduct(ProductWithDetails product) {
+        return productDAO.updateProduct(product);
+    }
+    public boolean deleteProduct(int productId) {
+        return productDAO.deleteProduct(productId);
+    }
+
+
+
 }

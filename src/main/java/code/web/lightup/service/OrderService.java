@@ -76,6 +76,16 @@ public class OrderService {
     public List<Map<String, Object>> getTopSellingProducts(int limit) {
         return orderDAO.getTopSellingProducts(limit);
     }
+    public List<Order> getOrdersWithPagination(int page, int pageSize, String status, String searchKeyword, String sortBy, String sortOrder
+                                                ) {
+        return orderDAO.getOrdersWithPagination(page, pageSize, status, searchKeyword, sortBy, sortOrder);
+    }
+    public int countOrders(String status, String searchKeyword) {
+        return orderDAO.countOrders(status, searchKeyword);}
+    public Map<String, Integer> getOrderStatusStatistics() {
+        return orderDAO.getOrderStatusStatistics();
+    }
+
 
 
 }
