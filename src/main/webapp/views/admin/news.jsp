@@ -41,7 +41,7 @@
             <div class="table-header">
                 <h2>Danh Sách Tin Tức</h2>
                 <div class="search-box">
-                    <form action="${pageContext.request.contextPath}/views/admin/news" method="get" style="display: flex; gap: 10px;">
+                    <form action="${pageContext.request.contextPath}/admin/news" method="get" style="display: flex; gap: 10px;">
                         <input type="text" name="search" placeholder="Tìm kiếm..." value="${param.search}">
                         <button type="submit" class="btn btn-primary">Tìm</button>
                     </form>

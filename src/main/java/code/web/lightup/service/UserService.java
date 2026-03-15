@@ -53,4 +53,12 @@ public class UserService {
         return userDAO.registerGoogleUser(user);
     }
 
+    public int getTotalCustomerCount() {
+        return userDAO.getTotalCustomerCount();
+    }
+
+
+
+
+
 }

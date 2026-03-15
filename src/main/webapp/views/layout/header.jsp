@@ -79,7 +79,6 @@
                 </li>
             </ul>
 
-            <!-- PHẦN PHẢI -->
             <div class="nav_r" id="nav_r">
                 <div class="search-icon">
                     <form action="#" method="get" id="searchForm" onsubmit="return false;">

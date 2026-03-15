@@ -36,7 +36,7 @@
 
     <div class="link-page">
         <div class="containt_link">
-            <a href="./index.jsp"><i class="bi bi-house"></i> Trang chủ </a>
+            <a href="./"><i class="bi bi-house"></i> Trang chủ </a>
             <span> /</span>
             <a href="products">Sản Phẩm</a>
             <c:if test="${not empty category}">
@@ -322,7 +322,7 @@
     </div>
 
 
-    <jsp:include page="/views/layout/header.jsp"/>
+    <jsp:include page="/views/layout/footer.jsp"/>
 
 
     <a href="#">
