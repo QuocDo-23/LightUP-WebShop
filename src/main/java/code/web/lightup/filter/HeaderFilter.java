@@ -32,7 +32,6 @@ public class HeaderFilter implements Filter {
         if (session != null) {
             User user = (User) session.getAttribute("user");
             if (user != null) {
-                // Đếm đơn chưa giao
                 int pendingOrderCount = orderDAO.countOrdersByUserId(user.getId());
                 request.setAttribute("orderCount", pendingOrderCount);
             }
