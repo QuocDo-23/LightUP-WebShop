@@ -479,6 +479,8 @@
 
 .star-rating span::before {
     content: "★★★★★";
+}
+
 
 .category-header {
     display: flex;
@@ -562,4 +564,4 @@
 
 .cart-icon button i {
     color: white;
-}}
+}
