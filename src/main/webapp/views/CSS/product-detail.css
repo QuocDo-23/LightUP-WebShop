@@ -23,7 +23,6 @@
 .content_img_l .img_down {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    /* padding: 10px; */
     gap: 10px;
     box-sizing: border-box;
 }
@@ -242,7 +241,7 @@
 
 .btn-contact {
     background: white;
-    color: #a1801b; /
+    color: #a1801b;
     border: 2px solid #a1801b;
     width: 100%;
     transition: all 0.3s ease;
@@ -255,6 +254,9 @@
 .btn-contact:hover {
     background: #a1801b;
     color: white;
+}
+a {
+    text-decoration: none;
 }
 
 

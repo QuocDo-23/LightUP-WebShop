@@ -198,7 +198,7 @@
                     <div class="divider"></div>
                 </div>
                 <div class="select_colume">
-                    <img src="https://lotuslighting.vn/wp-content/uploads/2024/09/ldp-row2-img-1.jpg" alt="">
+                    <img src="https://th.bing.com/th/id/R.93f5d0df7e38d33e466095264a03a560?rik=%2fmjCTr4MJTbPHQ&pid=ImgRaw&r=0https://th.bing.com/th/id/R.93f5d0df7e38d33e466095264a03a560?rik=%2fmjCTr4MJTbPHQ&pid=ImgRaw&r=0" alt="">
                     <div class="cont-r">
                         <h2>LightUP được thành lập với niềm đam mê mang ánh sáng và sự ấm áp đến mọi không gian sống.
                             Chúng tôi hiểu rằng ánh sáng không đơn thuần là một nhu cầu thiết yếu, mà còn là yếu tố quan
@@ -322,9 +322,7 @@
 
 </main>
 
-<script src="./JS/products.js"></script>
-<script src="./JS/index.js"></script>
-<script src="./JS/actionButton.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/actionButton.js"></script>
 
 </body>
 </html>
