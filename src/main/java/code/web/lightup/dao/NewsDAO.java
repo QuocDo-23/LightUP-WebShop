@@ -189,7 +189,6 @@ public class NewsDAO {
      */
     public int insertArticle(News article) {
         return jdbi.inTransaction(handle -> {
-            // 1. Insert bài viết (không có cột mainImg)
             int articleId = handle.createUpdate(
                             "INSERT INTO articles (category_id, title, description, date_of_posting, slug, feature) " +
                                     "VALUES (:categoryId, :title, :description, :dateOfPosting, :slug, :feature)"
@@ -203,8 +202,6 @@ public class NewsDAO {
                     .executeAndReturnGeneratedKeys("id")
                     .mapTo(Integer.class)
                     .one();
-
-            // 2. Insert ảnh vào bảng Image nếu có
             if (article.getMainImg() != null && !article.getMainImg().isEmpty()) {
                 handle.createUpdate("INSERT INTO Image (type, ref_id, img) VALUES ('Articles', :refId, :img)")
                         .bind("refId", articleId)
@@ -221,7 +218,6 @@ public class NewsDAO {
      */
     public int updateArticle(News article) {
         return jdbi.inTransaction(handle -> {
-            // 1. Update thông tin bài viết
             int updatedRows = handle.createUpdate(
                             "UPDATE articles SET " +
                                     "category_id = :categoryId, " +
@@ -240,11 +236,7 @@ public class NewsDAO {
                     .bind("feature", article.isFeature())
                     .bind("id", article.getId())
                     .execute();
-
-            // 2. Update ảnh (Xóa ảnh cũ và thêm ảnh mới hoặc update nếu logic cho phép nhiều ảnh)
-            // Ở đây ta giả sử mỗi bài viết chỉ có 1 ảnh chính, ta sẽ update ảnh đó
             if (article.getMainImg() != null && !article.getMainImg().isEmpty()) {
-                // Kiểm tra xem đã có ảnh chưa
                 int imageCount = handle.createQuery("SELECT COUNT(*) FROM Image WHERE type = 'Articles' AND ref_id = :id")
                         .bind("id", article.getId())
                         .mapTo(Integer.class)
@@ -272,12 +264,10 @@ public class NewsDAO {
      */
     public int deleteArticle(int id) {
         return jdbi.inTransaction(handle -> {
-            // 1. Xóa ảnh liên quan
             handle.createUpdate("DELETE FROM Image WHERE type = 'Articles' AND ref_id = :id")
                     .bind("id", id)
                     .execute();
 
-            // 2. Xóa bài viết
             return handle.createUpdate("DELETE FROM articles WHERE id = :id")
                     .bind("id", id)
                     .execute();
