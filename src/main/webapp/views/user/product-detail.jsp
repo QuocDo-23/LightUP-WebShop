@@ -203,7 +203,7 @@
 
 
 
-                <a href="./contact.jsp">
+                <a href="${pageContext.request.contextPath}/contact">
                     <button class="btn btn-contact" style="width: 100%;">
                         LIÊN HỆ
                     </button>
@@ -428,7 +428,7 @@
     <button class="close-btn">✖</button>
     <div class="review-title">Đánh giá sản phẩm</div>
 
-    <form action="review" method="post" id="reviewForm">
+    <form action="${pageContext.request.contextPath}/review" method="post" id="reviewForm">
         <input type="hidden" name="productId" value="${product.id}">
 
         <div class="review-stars">
@@ -499,7 +499,7 @@
         document.querySelector('.review-box').classList.remove('active');
     });
 </script>
-<script src="./JS/product_detail.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/product_detail.js"></script>
 <script src="./JS/index.js"></script>
 <script src="./JS/products.js"></script>
 </body>

@@ -81,7 +81,6 @@ public class AdminProductServlet extends HttpServlet {
 
         List<Category> categories = categoryDAO.getProductCategories();
 
-        // Set attributes cho JSP
         req.setAttribute("products", products);
         req.setAttribute("currentPages", page);
         req.setAttribute("totalPages", totalPages);
@@ -98,6 +97,6 @@ public class AdminProductServlet extends HttpServlet {
         req.setAttribute("categoryParam", categoryIdStr != null ? categoryIdStr : "");
         req.setAttribute("statusParam", status != null ? status : "");
 
-        req.getRequestDispatcher("/views/admin/products.jsp").forward(req, resp);
+        req.getRequestDispatcher("/views/admin/Products/products.jsp").forward(req, resp);
     }
 }
