@@ -3,6 +3,7 @@ package code.web.lightup.service;
 import code.web.lightup.dao.UserDAO;
 import code.web.lightup.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public class UserService {
@@ -57,8 +58,19 @@ public class UserService {
         return userDAO.getTotalCustomerCount();
     }
 
+    public boolean updatePasswordById(int customerId, String hashedPassword) {
+        return userDAO.updatePasswordById(customerId, hashedPassword);
+    }
 
+    public boolean updateUserRole(int customerId, int newRoleId) {
+        return userDAO.updateUserRole(customerId, newRoleId);
+    }
 
+    public boolean updateUserStatus(int customerId, String active) {
+        return userDAO.updateUserStatus(customerId, active);
+    }
 
-
+    public List<User> getAllCustomers() {
+        return userDAO.getAllCustomers();
+    }
 }

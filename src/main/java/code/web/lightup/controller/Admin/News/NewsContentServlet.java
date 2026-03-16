@@ -29,17 +29,6 @@ public class NewsContentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
 
-        // Kiểm tra quyền admin
-        if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-        User admin = (User) session.getAttribute("user");
-        if (admin.getRoleId() != 1) {
-            response.sendRedirect(request.getContextPath() + "/views/user/index.jsp");
-            return;
-        }
-
         String articleIdStr = request.getParameter("articleId");
         if (articleIdStr == null || articleIdStr.isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/views/admin/news.jsp");
