@@ -204,7 +204,7 @@
 </div>
 
 
-<script src="${pageContext.request.contextPath}/JS/admin_orderDetail.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/admin_orderDetail.js"></script>
 
 </body>
 </html>
