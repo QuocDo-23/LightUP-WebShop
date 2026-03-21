@@ -20,7 +20,7 @@
 
             <c:if test="${param.success == 'registered'}">
                 <div class="alert alert-success">
-                    <i class="bi bi-check-circle"></i> Đăng ký thành công! Vui lòng đăng nhập.
+                    Đăng ký thành công! Vui lòng đăng nhập.
                 </div>
             </c:if>
 

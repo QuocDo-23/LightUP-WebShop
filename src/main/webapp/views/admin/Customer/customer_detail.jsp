@@ -94,7 +94,7 @@
                             <span class="info-label">Trạng thái:</span>
                             <span class="info-value">
                                 <c:choose>
-                                    <c:when test="${customer.status == 'banned'}">
+                                    <c:when test="${customer.status == 'banned' or customer.lockUntil != null}">
                                         <span style="color: #e53e3e; font-weight: bold;">Đã khóa</span>
                                     </c:when>
                                     <c:otherwise>
@@ -127,7 +127,7 @@
                             <form action="${pageContext.request.contextPath}/admin/customer-detail" method="post">
                                 <input type="hidden" name="id" value="${customer.id}">
                                 <c:choose>
-                                    <c:when test="${customer.status == 'banned'}">
+                                    <c:when test="${customer.status == 'banned' or customer.lockUntil != null}">
                                         <input type="hidden" name="action" value="unlock">
                                         <button type="submit" style="width: 100%; padding: 8px; background: #38a169; color: white; border: none; border-radius: 4px; cursor: pointer;" onclick="return confirm('Bạn có chắc muốn mở khóa tài khoản này?');">
                                             Mở Khóa

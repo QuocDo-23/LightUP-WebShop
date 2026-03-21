@@ -1,6 +1,7 @@
 package code.web.lightup.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class User {
     private int id;
@@ -14,6 +15,10 @@ public class User {
     private String avatarImg;
     private String roleName;
     private String status;
+    private String authProvider;
+    private int failedAttempts;
+    private LocalDateTime lockUntil;
+
 
     private int orderCount;
     private double totalSpent;
@@ -120,5 +125,29 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getAuthProvider() {
+        return authProvider;
+    }
+
+    public void setAuthProvider(String authProvider) {
+        this.authProvider = authProvider;
+    }
+
+    public int getFailedAttempts() {
+        return failedAttempts;
+    }
+
+    public void setFailedAttempts(int failedAttempts) {
+        this.failedAttempts = failedAttempts;
+    }
+
+    public void setLockUntil(LocalDateTime lockUntil) {
+        this.lockUntil = lockUntil;
+    }
+
+    public LocalDateTime getLockUntil() {
+        return lockUntil;
     }
 }

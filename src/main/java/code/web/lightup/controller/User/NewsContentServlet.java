@@ -26,7 +26,6 @@ public class NewsContentServlet extends HttpServlet {
         News news = null;
 
         try {
-            // Tìm bài viết theo ID hoặc Slug
             if (idParam != null && !idParam.isEmpty()) {
                 int articleId = Integer.parseInt(idParam);
                 news = newsService.getArticleById(articleId);
