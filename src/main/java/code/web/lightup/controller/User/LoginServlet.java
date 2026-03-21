@@ -10,6 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.Optional;
 
 @WebServlet("/login")
@@ -50,9 +54,23 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
+        Optional<User> userInfoOpt = userService.getUserLoginInfo(email);
+        if(userInfoOpt.isPresent()){
+            User userInfor = userInfoOpt.get();
+
+            if(userInfor.getLockUntil() != null && LocalDateTime.now(ZoneOffset.UTC).isBefore(userInfor.getLockUntil()) ) {
+               long  remainng = ChronoUnit.MINUTES.between(LocalDateTime.now(ZoneOffset.UTC), userInfor.getLockUntil());
+                request.setAttribute("error", "Tài khoản bị khóa. Vui lòng thử lại sau " + remainng + " phút.");
+                request.getRequestDispatcher("/views/user/login.jsp").forward(request, response);
+                return;
+            }
+        }
+
         Optional<User> userOpt = userService.login(email, password);
 
         if (userOpt.isPresent()) {
+            userService.resetFailedLoginAttempts(email);
+
             User user = userOpt.get();
             SessionUtil.setUserSession(request, user);
 
@@ -70,7 +88,13 @@ public class LoginServlet extends HttpServlet {
             }
             response.sendRedirect(redirectUrl);
         } else {
-            request.setAttribute("error", "Email hoặc mật khẩu không đúng");
+            userService.recordFailedLoginAttempt(email);
+            Optional<User> updateUser = userService.getUserLoginInfo(email);
+            if(updateUser.isPresent() && updateUser.get().getFailedAttempts() >= 5 ){
+                request.setAttribute("error", "Tài khoản bị khóa do đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút.");
+            }else {
+                request.setAttribute("error", "Email hoặc mật khẩu không đúng.");
+            }
             request.setAttribute("email", email);
             request.getRequestDispatcher("/views/user/login.jsp").forward(request, response);
         }

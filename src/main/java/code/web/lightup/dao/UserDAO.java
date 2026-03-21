@@ -4,6 +4,9 @@ import code.web.lightup.model.User;
 import code.web.lightup.util.BaseDao;
 import code.web.lightup.util.PasswordUtil;
 import org.jdbi.v3.core.Jdbi;
+
+import java.sql.Timestamp;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +72,34 @@ public class UserDAO {
 
         return Optional.empty();
     }
+    /**
+     * Lấy thông tin khóa tài khoản
+     */
+    public Optional<User> getUserLoginInfo(String email) {
+        return jdbi.withHandle(handle ->
+                handle.createQuery(
+                                "SELECT id, email, password, failed_attempts, lock_until, status " +
+                                        "FROM User WHERE email = :email"
+                        )
+                        .bind("email", email)
+                        .map((rs, ctx) -> {
+                            User user = new User();
+                            user.setId(rs.getInt("id"));
+                            user.setEmail(rs.getString("email"));
+                            user.setPassword(rs.getString("password"));
+                            user.setFailedAttempts(rs.getInt("failed_attempts"));
+                            user.setStatus(rs.getString("status"));
+
+                            Timestamp lockUntil = rs.getTimestamp("lock_until");
+                            if (lockUntil != null) {
+                                user.setLockUntil(lockUntil.toInstant()
+                                        .atZone(ZoneOffset.UTC)
+                                        .toLocalDateTime());                            }
+                            return user;
+                        })
+                        .findFirst()
+        );
+    }
 
     /**
      * Kiểm tra email đã tồn tại
@@ -82,6 +113,41 @@ public class UserDAO {
                         .mapTo(Integer.class)
                         .one() > 0
         );
+    }
+    /**
+     * Tăng số lần đăng nhập sai
+     */
+    public void recordFailedAttempt(String email) {
+        jdbi.withHandle(handle -> {
+            handle.createUpdate(
+                            "UPDATE User SET " +
+                                    "failed_attempts = failed_attempts + 1, " +
+                                    "lock_until = CASE " +
+                                    "  WHEN failed_attempts + 1 >= 5 " +
+                                    "  THEN DATE_ADD(UTC_TIMESTAMP(), INTERVAL 15 MINUTE) " +
+                                    "  ELSE lock_until " +
+                                    "END " +
+                                    "WHERE email = :email"
+                    )
+                    .bind("email", email)
+                    .execute();
+            return null;
+        });
+    }
+
+    /**
+     * Reset sau khi đăng nhập thành công
+     */
+    public void resetFailedAttempts(String email) {
+        jdbi.withHandle(handle -> {
+            handle.createUpdate(
+                            "UPDATE User SET failed_attempts = 0, lock_until = NULL " +
+                                    "WHERE email = :email"
+                    )
+                    .bind("email", email)
+                    .execute();
+            return null;
+        });
     }
 
     /**
@@ -210,9 +276,7 @@ public class UserDAO {
         });
     }
 
-    /**
-     * Lấy danh sách tất cả khách hàng (role_id = 2)
-     */
+
     public List<User> getAllCustomers() {
         String sql = "SELECT u.*, " +
                      "COUNT(o.id) as order_count, " +
@@ -327,6 +391,16 @@ public class UserDAO {
             e.printStackTrace();
             return false;
         }
+    }
+    public boolean unlockUser(int userId) {
+        return jdbi.withHandle(handle ->
+                handle.createUpdate(
+                                "UPDATE User SET failed_attempts = 0, lock_until = NULL " +
+                                        "WHERE id = :id"
+                        )
+                        .bind("id", userId)
+                        .execute() > 0
+        );
     }
 
 }

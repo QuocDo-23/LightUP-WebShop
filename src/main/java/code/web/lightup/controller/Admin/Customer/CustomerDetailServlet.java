@@ -81,6 +81,7 @@ public class CustomerDetailServlet extends HttpServlet {
                     userService.updateUserStatus(customerId, "banned");
                 } else if ("unlock".equals(action)) {
                     userService.updateUserStatus(customerId, "active");
+                    userService.unlockUser(customerId);
                 }  else if ("changeRole".equals(action)) {
                     String roleIdStr = request.getParameter("newRoleId");
                     if (roleIdStr != null && !roleIdStr.isEmpty()) {

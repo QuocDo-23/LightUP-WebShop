@@ -69,8 +69,22 @@ public class UserService {
     public boolean updateUserStatus(int customerId, String active) {
         return userDAO.updateUserStatus(customerId, active);
     }
+    public Optional<User> getUserLoginInfo(String email){
+        return userDAO.getUserLoginInfo(email);
+    }
 
     public List<User> getAllCustomers() {
         return userDAO.getAllCustomers();
+    }
+
+    public void resetFailedLoginAttempts(String email) {
+        userDAO.resetFailedAttempts(email);
+    }
+
+    public void recordFailedLoginAttempt(String email) {
+        userDAO.recordFailedAttempt(email);
+    }
+    public boolean unlockUser(int userId) {
+        return userDAO.unlockUser(userId);
     }
 }
