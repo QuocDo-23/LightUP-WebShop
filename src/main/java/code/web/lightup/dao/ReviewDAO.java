@@ -76,9 +76,10 @@ public class ReviewDAO {
     public List<Review> getAllReviews() {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
-                                "SELECT r.*, u.name AS user_name " +
-                                        "FROM Review_Product r " +
-                                        "LEFT JOIN User u ON r.user_id = u.id " +
+                                "SELECT r.*, u.name AS user_name, p.name AS product_name\n" +
+                                        "FROM Review_Product r\n" +
+                                        "LEFT JOIN User u ON r.user_id = u.id\n" +
+                                        "LEFT JOIN Product p ON r.product_id = p.id\n" +
                                         "ORDER BY r.date DESC"
                         )
                         .mapToBean(Review.class)

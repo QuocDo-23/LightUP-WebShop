@@ -12,7 +12,7 @@ public class Review {
     private Timestamp date;
     private String userName;
     private int status;
-
+    private String productName;
 
 
     public int getId() {
@@ -83,6 +83,13 @@ public class Review {
     }
     public void setStatus(int status) {
         this.status = status;
+    }
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }
 

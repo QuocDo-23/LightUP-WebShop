@@ -167,6 +167,7 @@
                     </div>
 
                     <div class="review-content">
+                        <p><b>Sản phẩm:</b> ${r.productName}</p>
                         <p>${r.text}</p>
                     </div>
 
