@@ -73,6 +73,10 @@ public class GoogleCallbackServlet extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/login?error=account_locked");
                     return;
                 }
+                if ("local".equalsIgnoreCase(user.getAuthProvider())) {
+                    response.sendRedirect(request.getContextPath() + "/login?error=email_exists");
+                    return;
+                }
             } else {
                 user = new User();
                 user.setEmail(email);
@@ -85,8 +89,6 @@ public class GoogleCallbackServlet extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/login?error=registration_failed");
                     return;
                 }
-
-
                 user = userService.getUserByEmail(email).orElseThrow();
             }
 

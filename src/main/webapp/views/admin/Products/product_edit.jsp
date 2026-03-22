@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <title>Chỉnh Sửa Sản Phẩm - Quản Lý Đèn</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/adminCSS/admin.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/adminCSS/products_setting.css" >
@@ -34,29 +35,27 @@
         <div class="form-container">
             <div class="form-header">
                 <div>
-                    <h2>✏️ Chỉnh Sửa Sản Phẩm</h2>
+                    <h2> Chỉnh Sửa Sản Phẩm</h2>
                     <div class="product-info-badge">
-                        🆔 ID: #${product.id} • <strong>${product.name}</strong>
+                        ID: #${product.id} • <strong>${product.name}</strong>
                     </div>
                 </div>
-                <a href="${pageContext.request.contextPath}/admin/products" class="btn btn-secondary">
+                <a href="javascript:history.back()" class="btn btn-secondary">
                     ← Quay lại
                 </a>
             </div>
 
-            <!-- Hiển thị thông báo lỗi -->
             <c:if test="${not empty error}">
                 <div class="alert alert-error">
-                    ⚠️ ${error}
+                     ${error}
                 </div>
             </c:if>
 
             <form method="post" action="${pageContext.request.contextPath}/admin/products/edit">
                 <input type="hidden" name="productId" value="${product.id}">
 
-                <!-- PHẦN 1: THÔNG TIN CƠ BẢN -->
                 <div class="form-section">
-                    <div class="form-section-title">📋 Thông Tin Cơ Bản</div>
+                    <div class="form-section-title"><i class="bi bi-person-check"></i>Thông Tin Cơ Bản</div>
 
                     <div class="form-row">
                         <div class="form-group">
@@ -120,7 +119,7 @@
 
                 <!-- PHẦN 2: HÌNH ẢNH -->
                 <div class="form-section">
-                    <div class="form-section-title">🖼️ Hình Ảnh Sản Phẩm</div>
+                    <div class="form-section-title"><i class="bi bi-image"></i> Hình Ảnh Sản Phẩm</div>
 
                     <div class="form-row full">
                         <div class="form-group">
@@ -136,7 +135,6 @@
                                            onchange="previewImages()">
                                 </c:forEach>
 
-                                <!-- Nếu chưa có ảnh -->
                                 <c:if test="${empty product.images}">
                                     <input type="url"
                                            name="imageLinks"
@@ -146,7 +144,7 @@
                                 </c:if>
                             </div>
 
-                            <button type="button" onclick="addImageInput()">➕ Thêm hình ảnh</button>
+                            <button type="button" onclick="addImageInput()"><i class="bi bi-plus-circle"></i> Thêm hình ảnh</button>
 
                             <div class="image-preview-box" id="imagePreviewBox">
                                 <p style="color:#718096">Xem trước hình ảnh sẽ hiển thị ở đây</p>
@@ -157,7 +155,7 @@
 
 
                 <div class="form-section">
-                    <div class="form-section-title">🔧 Chi Tiết Sản Phẩm</div>
+                    <div class="form-section-title"><i class="bi bi-wrench"></i> Chi Tiết Sản Phẩm</div>
 
                     <div class="form-row full">
                         <div class="form-group">
@@ -224,7 +222,7 @@
                     <a href="${pageContext.request.contextPath}/admin/products"
                        class="btn btn-secondary">Hủy</a>
                     <button type="submit" class="btn btn-primary">
-                        💾 Cập Nhật Sản Phẩm
+                        <i class="bi bi-floppy-fill"></i> Cập Nhật Sản Phẩm
                     </button>
                 </div>
             </form>
