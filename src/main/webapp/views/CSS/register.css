@@ -161,9 +161,9 @@ button#login:hover i {
 
 .register-container form input {
     width: 100%;
-    padding: 10px;
     margin-bottom: 15px;
     box-sizing: border-box;
+    font-size: 15px;
 }
 
 .register-container input {
@@ -191,7 +191,7 @@ button#login:hover i {
     overflow: hidden;
     width: 768px;
     max-width: 100%;
-    min-height: 500px;
+    min-height: 550px;
 }
 
 .form-container {
