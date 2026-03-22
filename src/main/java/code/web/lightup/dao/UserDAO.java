@@ -62,6 +62,9 @@ public class UserDAO {
 
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
+                if ("Google".equalsIgnoreCase(user.getAuthProvider())){
+                    return Optional.empty();
+                }
                 if (PasswordUtil.verifyPassword(password, user.getPassword())) {
                     return Optional.of(user);
                 }
@@ -78,7 +81,7 @@ public class UserDAO {
     public Optional<User> getUserLoginInfo(String email) {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
-                                "SELECT id, email, password, failed_attempts, lock_until, status " +
+                                "SELECT id, email, password, failed_attempts, lock_until, auth_provider, status " +
                                         "FROM User WHERE email = :email"
                         )
                         .bind("email", email)
@@ -88,6 +91,7 @@ public class UserDAO {
                             user.setEmail(rs.getString("email"));
                             user.setPassword(rs.getString("password"));
                             user.setFailedAttempts(rs.getInt("failed_attempts"));
+                            user.setAuthProvider(rs.getString("auth_provider"));
                             user.setStatus(rs.getString("status"));
 
                             Timestamp lockUntil = rs.getTimestamp("lock_until");
@@ -375,14 +379,15 @@ public class UserDAO {
         try {
             return jdbi.withHandle(handle -> {
                 int result = handle.createUpdate(
-                                "INSERT INTO User (role_id, name, email, password, avatar_img) " +
-                                        "VALUES (:roleId, :name, :email, :password, :avatar)"
+                                "INSERT INTO User (role_id, name, email, password, avatar_img, auth_provider) " +
+                                        "VALUES (:roleId, :name, :email, :password, :avatar, :provider)"
                         )
                         .bind("roleId", 2)
                         .bind("name", user.getName())
                         .bind("email", user.getEmail())
                         .bind("password", "")
                         .bind("avatar", user.getAvatarImg())
+                        .bind("provider", "google")
                         .execute();
 
                 return result > 0;

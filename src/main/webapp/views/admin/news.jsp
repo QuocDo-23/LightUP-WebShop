@@ -11,6 +11,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png">
     <title>Tin Tức - Quản Lý Đèn</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/adminCSS/admin.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/adminCSS/admin_news.css">
 </head>
 
 <body>
@@ -93,12 +94,14 @@
                                 </td>
 
                                 <td>
-                                    <button class="btn btn-sm btn-edit" onclick="editNews('${article.id}', '${article.title}', '${article.categoryId}', '${article.mainImg}', '${article.description}', '${article.feature}')">Sửa</button>
-                                    <form action="${pageContext.request.contextPath}/views/admin/news" method="post" style="display: inline;" onsubmit="return confirm('Bạn có chắc muốn xóa tin tức này?');">
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="id" value="${article.id}">
-                                        <button type="submit" class="btn btn-sm btn-delete">Xóa</button>
-                                    </form>
+                                   <div class="product-actions">
+                                        <button class="btn btn-sm btn-edit" onclick="editNews('${article.id}', '${article.title}', '${article.categoryId}', '${article.mainImg}', '${article.description}', '${article.feature}')">Sửa</button>
+                                        <form action="${pageContext.request.contextPath}/views/admin/news" method="post" style="display: inline;" onsubmit="return confirm('Bạn có chắc muốn xóa tin tức này?');">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="id" value="${article.id}">
+                                            <button type="submit" class="btn btn-sm btn-delete">Xóa</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         </c:forEach>

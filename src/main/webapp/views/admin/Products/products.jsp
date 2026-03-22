@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <title>Sản Phẩm - Quản Lý Đèn</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/adminCSS/admin.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/adminCSS/admin_products.css">
@@ -197,12 +198,12 @@
                                 <td>
                                     <div class="action-buttons">
                                         <a href="${pageContext.request.contextPath}/admin/products/view?id=${product.id}"
-                                           class="btn btn-sm btn-view" title="Xem chi tiết">👁️</a>
+                                           class="btn btn-sm btn-view" title="Xem chi tiết"><i class="bi bi-eye"></i></a>
                                         <a href="${pageContext.request.contextPath}/admin/products/edit?id=${product.id}"
-                                           class="btn btn-sm btn-edit" title="Chỉnh sửa">✏️</a>
+                                           class="btn btn-sm btn-edit" title="Chỉnh sửa"><i class="bi bi-wrench"></i></a>
                                         <a href="javascript:void(0)"
                                            onclick="if(confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) window.location.href='${pageContext.request.contextPath}/admin/products/delete?id=${product.id}'"
-                                           class="btn btn-sm btn-delete" title="Xóa">🗑️</a>
+                                           class="btn btn-sm btn-delete" title="Xóa"><i class="bi bi-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -216,7 +217,7 @@
                 <div class="pagination">
                     <c:choose>
                         <c:when test="${currentPages > 1}">
-                            <c:url var="prevUrl" value="/Admin/products.jsp">
+                            <c:url var="prevUrl" value="/admin/products">
                                 <c:param name="page" value="${currentPages - 1}"/>
                                 <c:if test="${not empty searchParam}">
                                     <c:param name="search" value="${searchParam}"/>

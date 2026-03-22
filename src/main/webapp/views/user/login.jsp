@@ -15,8 +15,11 @@
 <body>
 <div class="container" id="container">
     <div class="form-container login-container">
-        <form action="login" method="post">
-            <h1>Đăng Nhập</h1>
+        <form action="login" method="post" novalidate>
+            <a class="return-link" href="javascript:void(0)"
+               onclick="window.location.href = (document.referrer && !document.referrer.includes('/register') && !document.referrer.includes('/login')) ? document.referrer : '${pageContext.request.contextPath}/'">
+                <i class="bi bi-arrow-left"></i>
+            </a>            <h1>Đăng Nhập</h1>
 
             <c:if test="${param.success == 'registered'}">
                 <div class="alert alert-success">
@@ -50,7 +53,15 @@
 
             <input type="hidden" name="redirect" value="${param.redirect}">
 
-            <a href="${pageContext.request.contextPath}/views/user/forgot_password.jsp" class="forgot-password">Quên mật khẩu?</a>
+            <div class="content">
+                <div class="checkbox">
+                    <input type="checkbox" id="checkbox">
+                    <label for="checkbox">Ghi nhớ đăng nhập</label>
+                </div>
+            <div class="pass-link">
+                <a href="forgot_password">Quên mật khẩu?</a>
+            </div>
+        </div>
 
             <button type="submit">Đăng Nhập</button>
             <span>Hoặc đăng nhập bằng</span>

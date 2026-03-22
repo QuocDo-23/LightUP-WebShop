@@ -31,15 +31,6 @@ public class AdminAnalyticsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-
-
-        if (user == null || !"Admin".equalsIgnoreCase(user.getRoleName())) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-
 
         List<Map<String, Object>> monthlyRevenue = orderDAO.getMonthlyRevenue(6);
 
@@ -70,7 +61,7 @@ public class AdminAnalyticsServlet extends HttpServlet {
 
         request.setAttribute("currentPage", "analytics");
 
-        request.getRequestDispatcher("/Admin/analytics.jsp")
+        request.getRequestDispatcher("/views/admin/Analytic/analytics.jsp")
                 .forward(request, response);
     }
 }

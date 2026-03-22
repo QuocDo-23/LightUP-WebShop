@@ -25,7 +25,6 @@ h1 {
     letter-spacing: -1.5px;
     margin: 0;
     margin-bottom: 15px;
-    margin-top: 20px;
 }
 
 h1.title {
@@ -71,6 +70,7 @@ h1.title {
 .checkbox {
     display: flex;
     align-items: baseline;
+    gap: 8px
 }
 
 .form-group input {
@@ -397,9 +397,7 @@ button#register:hover i {
     background: #166fe5;
     transform: translateY(-3px);
 }
-form {
-    width: 340px;
-}
+
 .alert  {
     padding: 5px;
     border-radius: 10px;
@@ -412,4 +410,44 @@ form {
 .alert-success {
     background: #f0fdf4;
     color: #065f46;
+}
+a.return-link{
+    font-weight: bold;
+    display: flex;
+    font-size: 30px;
+    padding: 0;
+    margin: 0;
+}
+.checkbox input {
+    display: none;
+}
+
+.checkbox label {
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+}
+
+.checkbox label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #c59d5f;
+    border-radius: 4px;
+}
+
+
+.checkbox input:checked + label::after {
+    content: "✔";
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    font-size: 14px;
+    color: #c59d5f;
+}
+.checkbox label{
+    color: #c59d5f;
 }
