@@ -162,8 +162,6 @@
                     </div>
                 </div>
 
-
-
                 <div class="detail-section">
                     <div style="display: flex; gap: 10px;">
                         <button class="btn btn-update" onclick="showUpdateStatusModal(${order.id})">
@@ -202,7 +200,6 @@
         </div>
     </div>
 </div>
-
 
 <script src="${pageContext.request.contextPath}/views/JS/admin_orderDetail.js"></script>
 
