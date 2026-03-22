@@ -44,7 +44,7 @@
                 <input type="email" name="email" required>
             </div>
 
-            <button type="submit" class="btn-request">Gửi yêu cầu</button>
+            <button type="submit" class="btn-request">Gửi yêu cầu</button> required
 
             <c:if test="${not empty message}">
                 <p style="color:green">${message}</p>
