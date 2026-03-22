@@ -50,7 +50,7 @@
 
             <input type="hidden" name="redirect" value="${param.redirect}">
 
-            <a href="forgot-password" class="forgot-password">Quên mật khẩu?</a>
+            <a href="${pageContext.request.contextPath}/views/user/forgot_password.jsp" class="forgot-password">Quên mật khẩu?</a>
 
             <button type="submit">Đăng Nhập</button>
             <span>Hoặc đăng nhập bằng</span>
