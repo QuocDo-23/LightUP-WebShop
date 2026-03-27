@@ -292,7 +292,7 @@
                                     </div>
 
                                     <div class="star_box_right">
-                                        <a href="#" title="Đánh giá ngay" class="btn-reviews-now">Đánh giá ngay</a>
+                                        <a href="#" class="btn-reviews-now">Đánh giá ngay</a>
                                     </div>
                                 </div>
 
@@ -428,37 +428,72 @@
     <button class="close-btn">✖</button>
     <div class="review-title">Đánh giá sản phẩm</div>
 
-    <form action="${pageContext.request.contextPath}/review" method="post" id="reviewForm">
+    <form action="${pageContext.request.contextPath}/review"
+          method="post"
+          enctype="multipart/form-data"
+          id="reviewForm"
+          style="background:#fff;padding:20px;border-radius:10px">
+
+
         <input type="hidden" name="productId" value="${product.id}">
 
+
         <div class="review-stars">
-            <label>Bạn cảm thấy như thế nào về sản phẩm?</label>
-            <div class="stars">
-                <div class="star-item">
-                    <input type="radio" name="rating" value="1" id="star1" required>
-                    <label for="star1">★ <small>Rất tệ</small></label>
-                </div>
-                <div class="star-item">
-                    <input type="radio" name="rating" value="2" id="star2">
-                    <label for="star2">★ <small>Không tệ</small></label>
-                </div>
-                <div class="star-item">
-                    <input type="radio" name="rating" value="3" id="star3">
-                    <label for="star3">★ <small>Trung bình</small></label>
-                </div>
-                <div class="star-item">
-                    <input type="radio" name="rating" value="4" id="star4">
-                    <label for="star4">★ <small>Tốt</small></label>
-                </div>
-                <div class="star-item">
-                    <input type="radio" name="rating" value="5" id="star5">
-                    <label for="star5">★ <small>Tuyệt vời</small></label>
-                </div>
+            <label style="font-weight:600;">Bạn cảm thấy như thế nào về sản phẩm?</label>
+
+            <div class="stars" style="display:flex;gap:10px;margin-top:10px;">
+
+                <label class="star-item">
+                    <input type="radio" name="rating" value="1" required hidden>
+                    <span>⭐ Rất tệ</span>
+                </label>
+
+                <label class="star-item">
+                    <input type="radio" name="rating" value="2" hidden>
+                    <span>⭐ Không tệ</span>
+                </label>
+
+                <label class="star-item">
+                    <input type="radio" name="rating" value="3" hidden>
+                    <span>⭐ Trung bình</span>
+                </label>
+
+                <label class="star-item">
+                    <input type="radio" name="rating" value="4" hidden>
+                    <span>⭐ Tốt</span>
+                </label>
+
+                <label class="star-item">
+                    <input type="radio" name="rating" value="5" hidden>
+                    <span>⭐ Tuyệt vời</span>
+                </label>
+
             </div>
         </div>
 
-        <textarea name="comment" placeholder="Mời bạn chia sẻ cảm nhận về sản phẩm..." required></textarea>
-        <button type="submit" class="submit-btn">Gửi đánh giá</button>
+
+        <textarea name="comment"
+                  placeholder="Mời bạn chia sẻ cảm nhận về sản phẩm..."
+                  required
+                  style="width:100%;height:100px;margin-top:15px;padding:10px;border:1px solid #ddd;border-radius:6px;">
+    </textarea>
+
+
+        <div style="margin-top:15px;">
+            <label style="cursor:pointer;color:#2563eb;">
+                📷 Chọn ảnh
+                <input type="file" name="image" accept="image/*" hidden>
+            </label>
+
+            <div id="preview" style="margin-top:10px;"></div>
+        </div>
+
+
+        <button type="submit"
+                style="margin-top:15px;width:100%;padding:10px;background:#f59e0b;color:white;border:none;border-radius:6px;">
+            Gửi đánh giá
+        </button>
+
     </form>
 </div>
 
@@ -488,19 +523,10 @@
         }
     }
 
-    document.querySelector('.btn-reviews-now').addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector('.overlay').classList.add('active');
-        document.querySelector('.review-box').classList.add('active');
-    });
 
-    document.querySelector('.close-btn').addEventListener('click', function () {
-        document.querySelector('.overlay').classList.remove('active');
-        document.querySelector('.review-box').classList.remove('active');
-    });
 </script>
 <script src="${pageContext.request.contextPath}/views/JS/product_detail.js"></script>
-<script src="./JS/index.js"></script>
-<script src="./JS/products.js"></script>
+<%--<script src="${pageContext.request.contextPath}/views/JS/index.js"></script>--%>
+<%--<script src="${pageContext.request.contextPath}/views/JS/products.js"></script>--%>
 </body>
 </html>
