@@ -26,7 +26,7 @@
 
 <div class="fp-container">
     <div class="container">
-        <form action="${pageContext.request.contextPath}/forgot-password"
+        <form action="forgot-password"
               method="post"
               class="fp-form">
 
@@ -44,7 +44,7 @@
                 <input type="email" name="email" required>
             </div>
 
-            <button type="submit" class="btn-request">Gửi yêu cầu</button> required
+            <button type="submit" class="btn-request">Gửi yêu cầu</button>
 
             <c:if test="${not empty message}">
                 <p style="color:green">${message}</p>

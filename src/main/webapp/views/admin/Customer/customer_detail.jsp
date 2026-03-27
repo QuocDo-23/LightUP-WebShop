@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <title>Chi Tiết Khách Hàng - Quản Lý Đèn</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/adminCSS/admin.css">
 </head>
@@ -20,8 +21,8 @@
     <div class="main-content">
         <div class="header">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <a href="${pageContext.request.contextPath}/views/admin/customers" style="text-decoration: none; color: #718096; font-size: 20px;">
-                    <i class="bi bi-arrow-left"></i> 🔙
+                <a href="javascript:history.back()" style="text-decoration: none; color: #718096; font-size: 20px;">
+                    <i class="bi bi-arrow-left"></i>
                 </a>
                 <h1>Chi Tiết Khách Hàng: ${customer.name}</h1>
             </div>

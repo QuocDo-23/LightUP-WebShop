@@ -29,6 +29,11 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String errorParam = request.getParameter("error");
+        if ("email_exists".equals(errorParam)) {
+            request.setAttribute("error",
+                    "Email này đã đăng ký bằng mật khẩu. Vui lòng đăng nhập thường.");
+        }
         request.getRequestDispatcher("/views/user/login.jsp").forward(request, response);
     }
 
@@ -50,6 +55,16 @@ public class LoginServlet extends HttpServlet {
 
         if (password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Vui lòng nhập mật khẩu");
+            request.getRequestDispatcher("/views/user/login.jsp").forward(request, response);
+            return;
+        }
+        if (password.length() < 6) {
+            request.setAttribute("error", "Mật khẩu phải có ít nhất 6 ký tự");
+            request.getRequestDispatcher("/views/user/login.jsp").forward(request, response);
+            return;
+        }
+        if ( !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            request.setAttribute("error", "Email không hợp lệ");
             request.getRequestDispatcher("/views/user/login.jsp").forward(request, response);
             return;
         }
@@ -88,11 +103,28 @@ public class LoginServlet extends HttpServlet {
             }
             response.sendRedirect(redirectUrl);
         } else {
-            userService.recordFailedLoginAttempt(email);
-            Optional<User> updateUser = userService.getUserLoginInfo(email);
-            if(updateUser.isPresent() && updateUser.get().getFailedAttempts() >= 5 ){
-                request.setAttribute("error", "Tài khoản bị khóa do đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút.");
-            }else {
+            if (userInfoOpt.isPresent()) {
+                User userInfo = userInfoOpt.get();
+
+                if ("google".equalsIgnoreCase(userInfo.getAuthProvider())) {
+                    request.setAttribute("error",
+                            "Tài khoản này đăng ký qua Google. Vui lòng đăng nhập bằng Google.");
+                    request.setAttribute("email", email);
+                    request.getRequestDispatcher("/views/user/login.jsp").forward(request, response);
+                    return;
+                }
+
+                userService.recordFailedLoginAttempt(email);
+
+                Optional<User> updatedUser = userService.getUserLoginInfo(email);
+                if (updatedUser.isPresent() && updatedUser.get().getFailedAttempts() >= 5) {
+                    request.setAttribute("error",
+                            "Tài khoản bị khóa do đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút.");
+                } else {
+                    request.setAttribute("error", "Email hoặc mật khẩu không đúng.");
+                }
+
+            } else {
                 request.setAttribute("error", "Email hoặc mật khẩu không đúng.");
             }
             request.setAttribute("email", email);

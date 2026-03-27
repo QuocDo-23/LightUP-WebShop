@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="actions-bar">
-                    <a href="${pageContext.request.contextPath}/admin/orders" class="back-btn">
+                    <a href="javascript:history.back()" class="back-btn">
                         <i class="fas fa-arrow-left"></i> Quay lại
                     </a>
                     <c:choose>
