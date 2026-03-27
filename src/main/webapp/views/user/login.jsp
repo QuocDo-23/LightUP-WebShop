@@ -59,7 +59,7 @@
                     <label for="checkbox">Ghi nhớ đăng nhập</label>
                 </div>
             <div class="pass-link">
-                <a href="forgot_password">Quên mật khẩu?</a>
+                <a href="forgot-password">Quên mật khẩu?</a>
             </div>
         </div>
 
