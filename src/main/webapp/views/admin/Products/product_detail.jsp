@@ -93,7 +93,7 @@
                 </div>
             </div>
 
-            <%--        PHẦN 2: Chi Tiết Sản Phẩm--%>
+
             <div class="form-section">
                 <div class="form-section-title">🔧 Chi Tiết Sản Phẩm</div>
 
