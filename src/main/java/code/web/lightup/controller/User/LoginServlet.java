@@ -78,7 +78,7 @@ public class LoginServlet extends HttpServlet {
             User userInfor = userInfoOpt.get();
 
             if(userInfor.getLockUntil() != null && LocalDateTime.now(ZoneOffset.UTC).isBefore(userInfor.getLockUntil()) ) {
-               long  remainng = ChronoUnit.MINUTES.between(LocalDateTime.now(ZoneOffset.UTC), userInfor.getLockUntil());
+                long  remainng = ChronoUnit.MINUTES.between(LocalDateTime.now(ZoneOffset.UTC), userInfor.getLockUntil());
                 request.setAttribute("error", "Tài khoản bị khóa. Vui lòng thử lại sau " + remainng + " phút.");
                 request.getRequestDispatcher("/views/user/login.jsp").forward(request, response);
                 return;
@@ -91,10 +91,19 @@ public class LoginServlet extends HttpServlet {
             userService.resetFailedLoginAttempts(email);
 
             User user = userOpt.get();
+
+            if (SessionUtil.isLoggedIn(request)) {
+                Integer oldUserId = SessionUtil.getUserId(request);
+                Cart currentCart = (Cart) request.getSession().getAttribute("cart");
+                if (oldUserId != null && currentCart != null && !currentCart.getListItem().isEmpty()) {
+                    new CartService().addCartToDb(oldUserId, currentCart);
+                }
+            }
+            Cart guestCart = (Cart) request.getSession().getAttribute("cart");
             SessionUtil.setUserSession(request, user);
 
-            Cart cart = cartService.getCartByUserId(user.getId());
-            request.getSession().setAttribute("cart", cart);
+            Cart mergedCart = cartService.mergeOnLogin(user.getId(), guestCart);
+            request.getSession().setAttribute("cart", mergedCart);
 
 
             String contextPath = request.getContextPath();

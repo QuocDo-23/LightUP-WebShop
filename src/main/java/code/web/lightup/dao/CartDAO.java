@@ -20,17 +20,30 @@ public class CartDAO {
      */
     public int getOrCreateCartId(int userId) {
         return jdbi.inTransaction(handle -> {
-            Optional<Integer> existingId = handle.createQuery(
+            Optional<Integer> activeId = handle.createQuery(
                             "SELECT id FROM Cart WHERE user_id = :uid AND status = 'active' LIMIT 1"
                     )
                     .bind("uid", userId)
                     .mapTo(Integer.class)
                     .findFirst();
 
-            if (existingId.isPresent()) {
-                return existingId.get();
+            if (activeId.isPresent()) {
+                return activeId.get();
             }
 
+            Optional<Integer> anyId = handle.createQuery(
+                            "SELECT id FROM Cart WHERE user_id = :uid ORDER BY id DESC LIMIT 1"
+                    )
+                    .bind("uid", userId)
+                    .mapTo(Integer.class)
+                    .findFirst();
+
+            if (anyId.isPresent()) {
+                handle.createUpdate("UPDATE Cart SET status = 'active' WHERE id = :id")
+                        .bind("id", anyId.get())
+                        .execute();
+                return anyId.get();
+            }
             return handle.createUpdate(
                             "INSERT INTO Cart (user_id, status) VALUES (:uid, 'active')"
                     )
