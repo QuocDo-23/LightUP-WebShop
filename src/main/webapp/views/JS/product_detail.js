@@ -8,17 +8,28 @@ document.addEventListener("DOMContentLoaded", function () {
             const content = document.getElementById("tab-" + targetId);
 
             this.classList.toggle("wd-active");
-            content.classList.toggle("wd-active");
+            if (content) content.classList.toggle("wd-active");
         });
     });
 
     const stars = document.querySelectorAll('.star-item');
 
     stars.forEach((star, index) => {
+
+        star.addEventListener('mouseover', () => {
+            stars.forEach((s, i) => {
+                s.classList.toggle('hovered', i <= index);
+            });
+        });
+
+        star.addEventListener('mouseout', () => {
+            stars.forEach(s => s.classList.remove('hovered'));
+        });
+
         star.addEventListener('click', function () {
 
             const input = this.querySelector('input');
-            input.checked = true;
+            if (input) input.checked = true;
 
             stars.forEach(s => s.classList.remove('active'));
 
@@ -31,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const submitBtn = document.querySelector('#reviewForm button[type="submit"]');
     if (submitBtn) {
         submitBtn.addEventListener('click', function () {
-            const comment = document.querySelector('textarea')?.value;
+            const comment = document.querySelector('#reviewForm textarea')?.value;
             console.log(comment);
         });
     }

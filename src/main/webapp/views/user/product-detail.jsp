@@ -13,11 +13,11 @@
 
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/product-detail.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/sub_login.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/products.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/cart.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/product-detail.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -441,33 +441,36 @@
         <div class="review-stars">
             <label style="font-weight:600;">Bạn cảm thấy như thế nào về sản phẩm?</label>
 
-            <div class="stars" style="display:flex;gap:10px;margin-top:10px;">
-
+            <div class="stars">
                 <label class="star-item">
-                    <input type="radio" name="rating" value="1" required hidden>
-                    <span>⭐ Rất tệ</span>
+                    <input type="radio" name="rating" value="1">
+                    <div class="star-icon">⭐</div>
+                    <div class="star-text">Rất tệ</div>
                 </label>
 
                 <label class="star-item">
-                    <input type="radio" name="rating" value="2" hidden>
-                    <span>⭐ Không tệ</span>
+                    <input type="radio" name="rating" value="2">
+                    <div class="star-icon">⭐</div>
+                    <div class="star-text">Không tệ</div>
                 </label>
 
                 <label class="star-item">
-                    <input type="radio" name="rating" value="3" hidden>
-                    <span>⭐ Trung bình</span>
+                    <input type="radio" name="rating" value="3">
+                    <div class="star-icon">⭐</div>
+                    <div class="star-text">Trung bình</div>
                 </label>
 
                 <label class="star-item">
-                    <input type="radio" name="rating" value="4" hidden>
-                    <span>⭐ Tốt</span>
+                    <input type="radio" name="rating" value="4">
+                    <div class="star-icon">⭐</div>
+                    <div class="star-text">Tốt</div>
                 </label>
 
                 <label class="star-item">
-                    <input type="radio" name="rating" value="5" hidden>
-                    <span>⭐ Tuyệt vời</span>
+                    <input type="radio" name="rating" value="5">
+                    <div class="star-icon">⭐</div>
+                    <div class="star-text">Tuyệt vời</div>
                 </label>
-
             </div>
         </div>
 
