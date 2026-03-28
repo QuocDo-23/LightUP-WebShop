@@ -2,6 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/mini_cart.css">
+
+<jsp:include page="/views/layout/cart-mini.jsp"/>
+
 <nav>
     <div class="nav_head">
         <!-- LOGO -->

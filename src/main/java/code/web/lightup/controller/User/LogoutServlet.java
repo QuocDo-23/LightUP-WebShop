@@ -1,11 +1,14 @@
 package code.web.lightup.controller.User;
 
+import code.web.lightup.model.Cart.Cart;
+import code.web.lightup.service.CartService;
 import code.web.lightup.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -15,6 +18,17 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        if (SessionUtil.isLoggedIn(request)) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                Cart cart = (Cart) session.getAttribute("cart");
+                Integer userId = SessionUtil.getUserId(request);
+                if (cart != null && userId != null && !cart.getListItem().isEmpty()) {
+                    new CartService().addCartToDb(userId, cart);
+                }
+            }
+        }
 
         SessionUtil.clearSession(request);
 

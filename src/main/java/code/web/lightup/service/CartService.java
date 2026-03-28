@@ -35,22 +35,28 @@ public class CartService {
             );
         }
     }
+
     public Cart mergeOnLogin(int userId, Cart guestCart) {
         int cartId = cartDAO.getOrCreateCartId(userId);
 
         Cart mergedCart = loadCartFromDb(userId);
 
-        if (guestCart != null) {
-            for (CartItem guestItem : guestCart.getListItem()) {
-                int pid = guestItem.getProduct().getId();
-                if (mergedCart.get(pid) != null) {
-                    mergedCart.get(pid).updateQuantity(guestItem.getQuantity());
-                } else {
-                    mergedCart.addItem(guestItem.getProduct(), guestItem.getQuantity());
-                }
+        if (guestCart == null || guestCart.getListItem().isEmpty()) {
+            return mergedCart;
+        }
+
+        for (CartItem guestItem : guestCart.getListItem()) {
+            int pid = guestItem.getProduct().getId();
+            if (mergedCart.get(pid) != null) {
+                int dbQty    = mergedCart.get(pid).getQuantity();
+                int guestQty = guestItem.getQuantity();
+                mergedCart.get(pid).setQuantity(Math.max(dbQty, guestQty));
+            } else {
+                mergedCart.addItem(guestItem.getProduct(), guestItem.getQuantity());
             }
         }
-        cartDAO.clearCart(cartId);
+
+        // Lưu giỏ đã merge vào DB (dùng upsert, KHÔNG clearCart trước)
         for (CartItem item : mergedCart.getListItem()) {
             cartDAO.upsertItem(
                     cartId,
