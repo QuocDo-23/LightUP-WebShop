@@ -1,6 +1,8 @@
 package code.web.lightup.controller.User;
 
+import code.web.lightup.model.Cart.Cart;
 import code.web.lightup.model.User;
+import code.web.lightup.service.CartService;
 import code.web.lightup.service.UserService;
 import code.web.lightup.util.SessionUtil;
 import jakarta.servlet.ServletException;
@@ -20,10 +22,12 @@ import java.util.Optional;
 public class LoginServlet extends HttpServlet {
 
     private UserService userService;
+    private CartService cartService;
 
     @Override
     public void init() throws ServletException {
         userService = new UserService();
+        cartService = new CartService();
     }
 
     @Override
@@ -88,6 +92,10 @@ public class LoginServlet extends HttpServlet {
 
             User user = userOpt.get();
             SessionUtil.setUserSession(request, user);
+
+            Cart cart = cartService.getCartByUserId(user.getId());
+            request.getSession().setAttribute("cart", cart);
+
 
             String contextPath = request.getContextPath();
             String redirectUrl;
