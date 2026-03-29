@@ -47,12 +47,17 @@ public class PaymentServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
+
+        Cart cart = (Cart) session.getAttribute("checkoutCart");
+        if (cart == null) {
+            cart = (Cart) session.getAttribute("cart");
+        }
 
         if (cart == null || cart.getTotalItems() == 0) {
             response.sendRedirect(request.getContextPath() + "/cart");
             return;
         }
+        request.setAttribute("cart", cart);
 
 
         User user = (User) session.getAttribute("user");
@@ -109,8 +114,10 @@ public class PaymentServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         try {
-
-            Cart cart = (Cart) session.getAttribute("cart");
+            Cart cart = (Cart) session.getAttribute("checkoutCart");
+            if (cart == null) {
+                cart = (Cart) session.getAttribute("cart");
+            }
             if (cart == null || cart.getTotalItems() == 0) {
                 response.sendRedirect(request.getContextPath() + "/cart");
                 return;
@@ -199,8 +206,15 @@ public class PaymentServlet extends HttpServlet {
                 }
 
 
-                cart.removeAll();
-                session.setAttribute("cart", cart);
+                Cart fullCart = (Cart) session.getAttribute("cart");
+                if (fullCart != null) {
+                    for (CartItem item : cart.getListItem()) {
+                        fullCart.removeItem(item.getProduct().getId());
+                    }
+                    session.setAttribute("cart", fullCart);
+                }
+                // Xoá checkoutCart tạm
+                session.removeAttribute("checkoutCart");
                 session.removeAttribute("checkoutType");
 
                 session.setAttribute("orderId", orderId);
