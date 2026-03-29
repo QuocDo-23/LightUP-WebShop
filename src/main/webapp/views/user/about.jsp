@@ -94,7 +94,7 @@
     <section class="values-section">
         <div class="values-cont">
             <div class="section-header">
-                <h2>GIÁ TRỊ CỐT LỖI</h2>
+                <h2>GIÁ TRỊ CỐT LÕI</h2>
                 <div class="divider"></div>
             </div>
             <div class="values-grid">
@@ -150,7 +150,7 @@
                             <i class="bi bi-award"></i>
                         </div>
                     </div>
-                    <div class="stat-number">30+</div>
+                    <div class="stat-number">2+</div>
                     <div class="stat-label">Năm Thành Lập</div>
                 </div>
 
