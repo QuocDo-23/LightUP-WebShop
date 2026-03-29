@@ -122,19 +122,19 @@
                 <label class="payment-method">
                     <input type="radio" name="shippingMethod" value="standard" form="checkoutForm" checked>
                     <span class="radio"></span>
-                    <span>Giao hàng tiêu chuẩn (3-5 ngày)</span>
+                    <span>Giao hàng tiêu chuẩn (5-7 ngày)</span>
                     <div class="payment-info">
-                        <img src="https://abchome.vn/wp-content/uploads/2021/03/giao-hang.png" alt="">
-                        <span class="fee">Miễn phí</span>
+<%--                        <img src="https://abchome.vn/wp-content/uploads/2021/03/giao-hang.png" alt="">--%>
+                        <span class="fee">70.000₫</span>
                     </div>
                 </label>
                 <label class="payment-method">
                     <input type="radio" name="shippingMethod" value="express" form="checkoutForm">
                     <span class="radio"></span>
-                    <span>Giao hàng nhanh (1-2 ngày)</span>
+                    <span>Giao hàng nhanh (2-3 ngày)</span>
                     <div class="payment-info">
-                        <img src="https://abchome.vn/wp-content/uploads/2021/03/giao-hang.png" alt="">
-                        <span class="fee">30.000₫</span>
+<%--                        <img src="https://abchome.vn/wp-content/uploads/2021/03/giao-hang.png" alt="">--%>
+                        <span class="fee">150.000₫</span>
                     </div>
                 </label>
             </div>

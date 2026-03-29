@@ -2,7 +2,9 @@ package code.web.lightup.controller.User.GoogleLoginController;
 
 
 import code.web.lightup.config.GoogleOAuthConfig;
+import code.web.lightup.model.Cart.Cart;
 import code.web.lightup.model.User;
+import code.web.lightup.service.CartService;
 import code.web.lightup.service.UserService;
 import code.web.lightup.util.SessionUtil;
 import com.google.gson.JsonObject;
@@ -27,10 +29,12 @@ import java.util.Optional;
 public class GoogleCallbackServlet extends HttpServlet {
 
     private UserService userService;
+    private CartService cartService;
 
     @Override
     public void init() throws ServletException {
         userService = new UserService();
+        cartService = new CartService();
     }
 
     @Override
@@ -92,9 +96,11 @@ public class GoogleCallbackServlet extends HttpServlet {
                 user = userService.getUserByEmail(email).orElseThrow();
             }
 
-
+            Cart guestCart = (Cart) request.getSession().getAttribute("cart");
             SessionUtil.setUserSession(request, user);
 
+            Cart mergedCart = cartService.mergeOnLogin(user.getId(), guestCart);
+            request.getSession().setAttribute("cart", mergedCart);
 
             String redirectUrl = getRedirectUrl(request);
             response.sendRedirect(redirectUrl);

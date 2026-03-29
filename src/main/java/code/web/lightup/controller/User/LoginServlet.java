@@ -1,6 +1,8 @@
 package code.web.lightup.controller.User;
 
+import code.web.lightup.model.Cart.Cart;
 import code.web.lightup.model.User;
+import code.web.lightup.service.CartService;
 import code.web.lightup.service.UserService;
 import code.web.lightup.util.SessionUtil;
 import jakarta.servlet.ServletException;
@@ -20,10 +22,12 @@ import java.util.Optional;
 public class LoginServlet extends HttpServlet {
 
     private UserService userService;
+    private CartService cartService;
 
     @Override
     public void init() throws ServletException {
         userService = new UserService();
+        cartService = new CartService();
     }
 
     @Override
@@ -74,7 +78,7 @@ public class LoginServlet extends HttpServlet {
             User userInfor = userInfoOpt.get();
 
             if(userInfor.getLockUntil() != null && LocalDateTime.now(ZoneOffset.UTC).isBefore(userInfor.getLockUntil()) ) {
-               long  remainng = ChronoUnit.MINUTES.between(LocalDateTime.now(ZoneOffset.UTC), userInfor.getLockUntil());
+                long  remainng = ChronoUnit.MINUTES.between(LocalDateTime.now(ZoneOffset.UTC), userInfor.getLockUntil());
                 request.setAttribute("error", "Tài khoản bị khóa. Vui lòng thử lại sau " + remainng + " phút.");
                 request.getRequestDispatcher("/views/user/login.jsp").forward(request, response);
                 return;
@@ -87,7 +91,20 @@ public class LoginServlet extends HttpServlet {
             userService.resetFailedLoginAttempts(email);
 
             User user = userOpt.get();
+
+            if (SessionUtil.isLoggedIn(request)) {
+                Integer oldUserId = SessionUtil.getUserId(request);
+                Cart currentCart = (Cart) request.getSession().getAttribute("cart");
+                if (oldUserId != null && currentCart != null && !currentCart.getListItem().isEmpty()) {
+                    new CartService().addCartToDb(oldUserId, currentCart);
+                }
+            }
+            Cart guestCart = (Cart) request.getSession().getAttribute("cart");
             SessionUtil.setUserSession(request, user);
+
+            Cart mergedCart = cartService.mergeOnLogin(user.getId(), guestCart);
+            request.getSession().setAttribute("cart", mergedCart);
+
 
             String contextPath = request.getContextPath();
             String redirectUrl;

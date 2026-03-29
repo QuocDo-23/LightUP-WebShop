@@ -9,27 +9,29 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.security.core.userdetails.User;
 
 import java.io.IOException;
 
-@WebServlet(name = "RemoveCart", value = "/remove")
-public class RemoveCart extends HttpServlet {
-    private static CartService cartService;
+/**
+ * POST /remove-mini
+ * Xoá sản phẩm khỏi giỏ, forward fragment để AJAX refresh mini cart.
+ */
+@WebServlet(name = "RemoveCartAjax", value = "/remove-mini")
+public class RemoveCartAjax extends HttpServlet {
 
-    public RemoveCart() {
-        cartService = new CartService();
-    }
-
+    private CartService cartService;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public void init() {
+        cartService = new CartService();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        response.setContentType("text/html;charset=UTF-8");
+
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
 
@@ -37,17 +39,19 @@ public class RemoveCart extends HttpServlet {
             try {
                 int productId = Integer.parseInt(request.getParameter("productId"));
                 cart.removeItem(productId);
+                session.setAttribute("cart", cart);
 
                 if (SessionUtil.isLoggedIn(request)) {
                     Integer userId = SessionUtil.getUserId(request);
                     cartService.addCartToDb(userId, cart);
                 }
-
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         }
 
-        response.sendRedirect(request.getContextPath() + "/cart");
+        request.setAttribute("cart", cart);
+        request.getRequestDispatcher("/views/layout/cart-mini-fragment.jsp")
+                .forward(request, response);
     }
 }
