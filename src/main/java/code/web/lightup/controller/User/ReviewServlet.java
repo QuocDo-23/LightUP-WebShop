@@ -87,7 +87,7 @@ public class ReviewServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            // Có thể log lỗi ở đây
+
         }
     }
 }

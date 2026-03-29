@@ -444,31 +444,36 @@
             <div class="stars">
                 <label class="star-item">
                     <input type="radio" name="rating" value="1">
-                    <div class="star-icon">⭐</div>
+                    <div class="star-icon">
+                        <i class="fa fa-star"></i></div>
                     <div class="star-text">Rất tệ</div>
                 </label>
 
                 <label class="star-item">
                     <input type="radio" name="rating" value="2">
-                    <div class="star-icon">⭐</div>
+                    <div class="star-icon">
+                        <i class="fa fa-star"></i></div>
                     <div class="star-text">Không tệ</div>
                 </label>
 
                 <label class="star-item">
                     <input type="radio" name="rating" value="3">
-                    <div class="star-icon">⭐</div>
+                    <div class="star-icon">
+                        <i class="fa fa-star"></i></div>
                     <div class="star-text">Trung bình</div>
                 </label>
 
                 <label class="star-item">
                     <input type="radio" name="rating" value="4">
-                    <div class="star-icon">⭐</div>
+                    <div class="star-icon">
+                        <i class="fa fa-star"></i></div>
                     <div class="star-text">Tốt</div>
                 </label>
 
                 <label class="star-item">
                     <input type="radio" name="rating" value="5">
-                    <div class="star-icon">⭐</div>
+                    <div class="star-icon">
+                        <i class="fa fa-star"></i></div>
                     <div class="star-text">Tuyệt vời</div>
                 </label>
             </div>
