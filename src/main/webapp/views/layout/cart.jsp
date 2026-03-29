@@ -30,8 +30,33 @@
             <p>Giỏ hàng của bạn đang trống</p>
         </c:if>
 
+        <%-- Checkbox chọn tất cả --%>
+        <c:if test="${not empty sessionScope.cart.listItem}">
+            <div class="cart-select-all">
+                <label>
+                    <input type="checkbox" id="chkSelectAll" checked>
+                    <span>Chọn tất cả</span>
+                </label>
+            </div>
+        </c:if>
+
         <c:forEach var="item" items="${sessionScope.cart.listItem}">
-            <div class="cart-item">
+            <div class="cart-item"
+                 data-id="${item.product.id}"
+                 data-price="${item.product.discountedPrice}"
+                 data-qty="${item.quantity}"
+                 data-name="${item.product.name}">
+
+                    <%-- Checkbox chọn sản phẩm --%>
+                <div class="item-check">
+                    <input type="checkbox"
+                           class="chk-item"
+                           value="${item.product.id}"
+                           data-price="${item.product.discountedPrice}"
+                           data-qty="${item.quantity}"
+                           checked>
+                </div>
+
                 <div class="item-image">
                     <img src="${not empty item.product.mainImage ? item.product.mainImage : 'default.jpg'}"
                          alt="${item.product.description}" class="img-main">
@@ -51,14 +76,12 @@
                         </div>
                         <c:if test="${item.product.discountRate > 0}">
                             <div class="discount-badge">
-                                -<fmt:formatNumber
-                                    value="${item.product.discountRate}"/>%
+                                -<fmt:formatNumber value="${item.product.discountRate}"/>%
                             </div>
                         </c:if>
                     </div>
 
                     <div class="quantity">
-
                         <form action="${pageContext.request.contextPath}/update"
                               method="post" style="display:inline;">
                             <input type="hidden" name="productId" value="${item.product.id}">
@@ -77,7 +100,7 @@
                     </div>
                 </div>
 
-                <div class="item-total">
+                <div class="item-total" id="total-${item.product.id}">
                     <fmt:formatNumber value="${item.product.getDiscountedPrice() * item.quantity}" type="number"/>đ
                 </div>
 
@@ -93,24 +116,38 @@
     <div class="cart-right">
         <div class="order-box">
             <h3>Thông tin đơn hàng</h3>
-            <ul>
+
+            <ul id="selected-summary">
                 <c:forEach var="item" items="${sessionScope.cart.listItem}">
-                    <li>
+                    <li class="summary-item"
+                        data-id="${item.product.id}"
+                        data-qty="${item.quantity}">
                             ${item.product.name} - <b>SL: ${item.quantity}</b>
                     </li>
                 </c:forEach>
             </ul>
 
+            <div id="no-selected-msg" style="display:none; color:#999; font-size:13px;">
+                Chưa chọn sản phẩm nào
+            </div>
+
             <div class="total">
                 <span>Tổng tiền:</span>
-                <strong id="total">
+                <strong id="total-display">
                     <fmt:formatNumber value="${sessionScope.cart.totalPrice}" type="number"/>đ
                 </strong>
             </div>
 
-            <a href="${pageContext.request.contextPath}/${not empty sessionScope.user ? 'payment' : 'login?redirect=payment'}">
-                <button class="checkout-btn">THANH TOÁN</button>
-            </a>
+            <c:choose>
+                <c:when test="${not empty sessionScope.user}">
+                    <button class="checkout-btn" id="btnCheckout" onclick="goCheckout()">THANH TOÁN</button>
+                </c:when>
+                <c:otherwise>
+                    <a href="${pageContext.request.contextPath}/login?redirect=payment">
+                        <button class="checkout-btn">THANH TOÁN</button>
+                    </a>
+                </c:otherwise>
+            </c:choose>
         </div>
 
         <div class="order-note">
@@ -130,6 +167,93 @@
 <jsp:include page="footer.jsp"/>
 
 <script src="./JS/index.js"></script>
+<script>
+    var CTX = "${pageContext.request.contextPath}";
+
+    /* ── Tính tổng và cập nhật summary bên phải ── */
+    function capNhatTong() {
+        var items   = document.querySelectorAll(".chk-item");
+        var total   = 0;
+        var summary = document.getElementById("selected-summary");
+        var noMsg   = document.getElementById("no-selected-msg");
+        var allLis  = summary.querySelectorAll(".summary-item");
+
+        // Ẩn/hiện từng dòng trong summary theo checkbox
+        items.forEach(function(chk) {
+            var id  = chk.value;
+            var li  = summary.querySelector(".summary-item[data-id='" + id + "']");
+            if (chk.checked) {
+                var price = parseFloat(chk.dataset.price);
+                var qty   = parseInt(chk.dataset.qty);
+                total += price * qty;
+                if (li) li.style.display = "";
+            } else {
+                if (li) li.style.display = "none";
+            }
+        });
+
+        // Hiển thị tổng tiền
+        document.getElementById("total-display").textContent =
+            total.toLocaleString("vi-VN") + "đ";
+
+        // Thông báo nếu không chọn gì
+        var anyChecked = Array.from(items).some(function(c) { return c.checked; });
+        noMsg.style.display   = anyChecked ? "none"  : "block";
+        summary.style.display = anyChecked ? "block" : "none";
+
+        // Disable nút nếu không chọn gì
+        var btn = document.getElementById("btnCheckout");
+        if (btn) btn.disabled = !anyChecked;
+    }
+
+    /* ── Checkbox chọn tất cả ── */
+    document.getElementById("chkSelectAll").addEventListener("change", function() {
+        document.querySelectorAll(".chk-item").forEach(function(chk) {
+            chk.checked = this.checked;
+        }, this);
+        capNhatTong();
+    });
+
+    /* ── Checkbox từng sản phẩm ── */
+    document.querySelectorAll(".chk-item").forEach(function(chk) {
+        chk.addEventListener("change", function() {
+            var all     = document.querySelectorAll(".chk-item");
+            var checked = document.querySelectorAll(".chk-item:checked");
+            document.getElementById("chkSelectAll").checked = all.length === checked.length;
+            capNhatTong();
+        });
+    });
+
+    /* ── Bấm thanh toán: gửi selectedIds lên server rồi redirect ── */
+    function goCheckout() {
+        var selected = Array.from(document.querySelectorAll(".chk-item:checked"))
+            .map(function(c) { return c.value; });
+
+        if (selected.length === 0) {
+            alert("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
+            return;
+        }
+
+        var params = new URLSearchParams();
+        selected.forEach(function(id) { params.append("selectedIds", id); });
+
+        fetch(CTX + "/checkout-select", {
+            method:  "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body:    params.toString()
+        })
+            .then(function(res) {
+                if (res.ok) {
+                    window.location.href = CTX + "/payment";
+                } else {
+                    alert("Có lỗi xảy ra, vui lòng thử lại!");
+                }
+            });
+    }
+
+    /* Chạy lần đầu để khớp với trạng thái mặc định (tất cả checked) */
+    capNhatTong();
+</script>
 </body>
 
 </html>
