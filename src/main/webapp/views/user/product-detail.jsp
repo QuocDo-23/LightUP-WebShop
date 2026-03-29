@@ -190,8 +190,6 @@
                         <button type="submit" class="btn btn-add-cart">
                             THÊM VÀO GIỎ
                         </button>
-
-
                         <button type="submit"
                                 formmethod="post"
                                 formaction="${pageContext.request.contextPath}/buy-now"
@@ -260,8 +258,11 @@
                                                                       maxFractionDigits="1"/>
                                                     <i class="devvn-star">★</i>
                                                 </span>
-                                            <div class="star-rating">
-                                                <span style="width:${stats.averageRating * 20}%"></span>
+                                            <c:set var="rating" value="${product.review}"/>
+                                            <div class="rating-box">
+                                                <div class="star-rating">
+                                                    <span style="width:${rating * 20}%;"></span>
+                                                </div>
                                             </div>
                                             <strong>Đánh giá trung bình</strong>
                                         </div>
@@ -443,35 +444,35 @@
 
             <div class="stars">
                 <label class="star-item">
-                    <input type="radio" name="rating" value="1">
+                    <input type="radio" name="rating" value="1" required>
                     <div class="star-icon">
                         <i class="fa fa-star"></i></div>
                     <div class="star-text">Rất tệ</div>
                 </label>
 
                 <label class="star-item">
-                    <input type="radio" name="rating" value="2">
+                    <input type="radio" name="rating" value="2" required>
                     <div class="star-icon">
                         <i class="fa fa-star"></i></div>
                     <div class="star-text">Không tệ</div>
                 </label>
 
                 <label class="star-item">
-                    <input type="radio" name="rating" value="3">
+                    <input type="radio" name="rating" value="3" required>
                     <div class="star-icon">
                         <i class="fa fa-star"></i></div>
                     <div class="star-text">Trung bình</div>
                 </label>
 
                 <label class="star-item">
-                    <input type="radio" name="rating" value="4">
+                    <input type="radio" name="rating" value="4" required>
                     <div class="star-icon">
                         <i class="fa fa-star"></i></div>
                     <div class="star-text">Tốt</div>
                 </label>
 
                 <label class="star-item">
-                    <input type="radio" name="rating" value="5">
+                    <input type="radio" name="rating" value="5" required>
                     <div class="star-icon">
                         <i class="fa fa-star"></i></div>
                     <div class="star-text">Tuyệt vời</div>

@@ -16,8 +16,6 @@ public class ReviewDAO {
         this.jdbi = BaseDao.get();
     }
 
-    // ================= USER =================
-
     // Lấy review theo sản phẩm
     public List<Review> getReviewsByProductId(int productId) {
         return jdbi.withHandle(handle ->
@@ -56,7 +54,7 @@ public class ReviewDAO {
 
     // Thêm review
     public int addReview(Review review) {
-        return jdbi.withHandle(handle ->
+        int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(
                                 "INSERT INTO Review_Product(product_id,user_id,text,img,rating,date,status) " +
                                         "VALUES(:productId,:userId,:text,:img,:rating,NOW(),1)"
@@ -68,9 +66,14 @@ public class ReviewDAO {
                         .bind("rating", review.getRating())
                         .execute()
         );
+
+        if (rows > 0) {
+            updateProductReview(review.getProductId());
+        }
+
+        return rows;
     }
 
-    // ================= ADMIN =================
 
     // Lấy toàn bộ review
     public List<Review> getAllReviews() {
@@ -105,7 +108,16 @@ public class ReviewDAO {
 
     // Duyệt / ẩn review
     public int updateReviewStatus(int reviewId, int status) {
-        return jdbi.withHandle(handle ->
+
+        Integer productId = jdbi.withHandle(handle ->
+                handle.createQuery("SELECT product_id FROM Review_Product WHERE id=:id")
+                        .bind("id", reviewId)
+                        .mapTo(Integer.class)
+                        .findOne()
+                        .orElse(null)
+        );
+
+        int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(
                                 "UPDATE Review_Product SET status=:status WHERE id=:id"
                         )
@@ -113,18 +125,37 @@ public class ReviewDAO {
                         .bind("id", reviewId)
                         .execute()
         );
+
+        if (rows > 0 && productId != null) {
+            updateProductReview(productId);
+        }
+
+        return rows;
     }
 
     // Xóa review
-    public int deleteReview(int reviewId) {
-        return jdbi.withHandle(handle ->
-                handle.createUpdate(
-                                "DELETE FROM Review_Product WHERE id=:id"
-                        )
-                        .bind("id", reviewId)
-                        .execute()
-        );
-    }
+        public int deleteReview(int reviewId) {
+
+            Integer productId = jdbi.withHandle(handle ->
+                    handle.createQuery("SELECT product_id FROM Review_Product WHERE id=:id")
+                            .bind("id", reviewId)
+                            .mapTo(Integer.class)
+                            .findOne()
+                            .orElse(null)
+            );
+
+            int rows = jdbi.withHandle(handle ->
+                    handle.createUpdate("DELETE FROM Review_Product WHERE id=:id")
+                            .bind("id", reviewId)
+                            .execute()
+            );
+
+            if (rows > 0 && productId != null) {
+                updateProductReview(productId);
+            }
+
+            return rows;
+        }
 
 
     public ReviewStatistics getAdminReviewStatistics() {
@@ -155,4 +186,20 @@ public class ReviewDAO {
                         .mapTo(Integer.class)
                         .one() > 0
         );
+    }
+    public void updateProductReview(int productId) {
+        jdbi.useHandle(handle ->
+                handle.createUpdate(
+                                "UPDATE Product " +
+                                        "SET review = (" +
+                                        "   SELECT COALESCE(ROUND(AVG(rating),2),0) " +
+                                        "   FROM Review_Product " +
+                                        "   WHERE product_id = :productId AND status = 1" +
+                                        ") " +
+                                        "WHERE id = :productId"
+                        )
+                        .bind("productId", productId)
+                        .execute()
+        );
     }}
+

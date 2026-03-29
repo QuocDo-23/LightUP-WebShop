@@ -6,6 +6,7 @@ import code.web.lightup.model.ReviewStatistics;
 import code.web.lightup.service.ProductService;
 import code.web.lightup.service.ReviewService;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,10 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/review")
+@MultipartConfig(
+        maxFileSize = 5 * 1024 * 1024,
+        maxRequestSize = 10 * 1024 * 1024
+)
 public class ReviewServlet extends HttpServlet {
 
     private ReviewService reviewService;
@@ -44,14 +49,22 @@ public class ReviewServlet extends HttpServlet {
 
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
-            int rating = Integer.parseInt(request.getParameter("rating"));
             String comment = request.getParameter("comment");
+            String ratingParam = request.getParameter("rating");
+
+            if (ratingParam == null || ratingParam.isEmpty()) {
+                response.sendRedirect("product-detail?id=" + productId + "&reviewError=noRating");
+                return;
+            }
+
+            int rating = Integer.parseInt(ratingParam);
 
             if (rating < 1 || rating > 5) {
                 request.setAttribute("error", "Rating phải từ 1 đến 5 sao");
                 request.getRequestDispatcher("product-detail?id=" + productId).forward(request, response);
                 return;
             }
+
 
             Review review = new Review();
             review.setProductId(productId);
@@ -67,16 +80,15 @@ public class ReviewServlet extends HttpServlet {
                 response.sendRedirect("product-detail?id=" + productId + "&reviewSuccess=true");
             } else {
                 request.setAttribute("error", "Không thể gửi đánh giá, vui lòng thử lại");
-                request.getRequestDispatcher("product-detail?id=" + productId).forward(request, response);
+                response.sendRedirect("product-detail?id=" + productId + "&reviewError=invalidRating");
             }
 
         } catch (NumberFormatException e) {
-            request.setAttribute("error", "Dữ liệu không hợp lệ");
-            request.getRequestDispatcher("product-detail").forward(request, response);
+            response.sendRedirect("product-detail");
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Đã xảy ra lỗi khi gửi đánh giá");
-            request.getRequestDispatcher("product-detail").forward(request, response);
+            String productId2 = request.getParameter("productId");
+            response.sendRedirect("product-detail?id=" + productId2 + "&reviewError=true");
         }
     }
 
