@@ -181,6 +181,7 @@
 }
 
 .btn {
+    flex: 1;
     padding: 14px 28px;
     border-radius: 4px;
     font-size: 15px;
@@ -355,6 +356,7 @@ a {
 }
 
 .devvn_perc_rating {
+    display: block;
     height: 100%;
     background: #f5a623;
     border-radius: 20px;
@@ -595,19 +597,17 @@ a {
     display: none;
 }
 
-.star-icon {
+.star-icon i {
     font-size: 20px;
     color: #ccc;
+    transition:  0.2s;
 }
 
 .stars:hover .star-icon {
     color: #ccc;
 }
 
-.star-item:hover .star-icon,
-.star-item:hover ~ .star-item .star-icon {
-    color: #ccc;
-}
+
 
 .star-item:hover {
     transform: scale(1.15);
@@ -618,12 +618,14 @@ a {
 }
 
 .star-item.active {
-    background: #8b6a17;
-    color: white;
+    background: transparent;
     transform: scale(1.05);
 }
+.star-item.hovered .star-icon i {
+    color: #facc15;
+}
 
-.star-item.active .star-icon {
+.star-item.active .star-icon i {
     color: #f59e0b;
 }
 

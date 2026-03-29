@@ -67,7 +67,7 @@ public class AuthFilter implements Filter {
         if (isProtectedResource(path)) {
             HttpSession session = httpRequest.getSession(false);
 
-            if (session == null || session.getAttribute("user") == null) {
+            if (session == null || session.getAttribute("userId") == null) {
 
                 String redirectUrl = contextPath + "/login?redirect=" +
                         java.net.URLEncoder.encode(requestURI, StandardCharsets.UTF_8);

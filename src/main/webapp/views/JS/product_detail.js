@@ -31,7 +31,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const input = this.querySelector('input');
             if (input) input.checked = true;
 
-            stars.forEach(s => s.classList.remove('active'));
+            stars.forEach(s => {
+                s.classList.remove('active');
+                s.classList.remove('hovered');
+            });
 
             for (let i = 0; i <= index; i++) {
                 stars[i].classList.add('active');
