@@ -19,17 +19,25 @@ public class CustomerAdminServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-        List<User> customers = userService.getAllCustomers();
+        String keyword = request.getParameter("keyword");
+
+        List<User> customers;
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            customers = userService.searchCustomers(keyword.trim());
+        } else {
+            customers = userService.getAllCustomers();
+        }
 
         request.setAttribute("customers", customers);
         request.setAttribute("currentPage", "customers");
 
-        request.getRequestDispatcher("/views/admin/Customer/customers.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/admin/Customer/customers.jsp")
+                .forward(request, response);
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);

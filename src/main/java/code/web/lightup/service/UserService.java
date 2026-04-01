@@ -87,4 +87,8 @@ public class UserService {
     public boolean unlockUser(int userId) {
         return userDAO.unlockUser(userId);
     }
+
+    public List<User> searchCustomers(String keyword) {
+        return userDAO.searchCustomers(keyword);
+    }
 }

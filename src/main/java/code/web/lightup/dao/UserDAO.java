@@ -408,4 +408,80 @@ public class UserDAO {
         );
     }
 
+    private Integer tryParseInt(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<User> searchCustomers(String keyword) {
+
+        Integer id = tryParseInt(keyword);
+
+        String sql;
+
+        if (id != null) {
+            sql =
+                    "SELECT u.id, u.name, u.email, u.phone, u.status, " +
+                            "COUNT(o.id) as order_count, " +
+                            "COALESCE(SUM(o.total), 0) as total_spent, " +
+                            "r.name as role_name " +
+                            "FROM user u " +
+                            "LEFT JOIN orders o ON u.id = o.user_id AND o.status != 'cancelled' " +
+                            "LEFT JOIN role r ON u.role_id = r.id " +
+                            "WHERE u.role_id = 2 AND u.id = :id " +
+                            "GROUP BY u.id, u.name, u.email, u.phone, u.status, r.name " +
+                            "ORDER BY u.id DESC";
+
+            return jdbi.withHandle(handle ->
+                    handle.createQuery(sql)
+                            .bind("id", id)
+                            .map((rs, ctx) -> {
+                                User user = new User();
+                                user.setId(rs.getInt("id"));
+                                user.setName(rs.getString("name"));
+                                user.setEmail(rs.getString("email"));
+                                user.setPhone(rs.getString("phone"));
+                                user.setOrderCount(rs.getInt("order_count"));
+                                user.setTotalSpent(rs.getDouble("total_spent"));
+                                user.setStatus(rs.getString("status"));
+                                user.setRoleName(rs.getString("role_name"));
+                                return user;
+                            }).list()
+            );
+
+        } else {
+            sql =
+                    "SELECT u.id, u.name, u.email, u.phone, u.status, " +
+                            "COUNT(o.id) as order_count, " +
+                            "COALESCE(SUM(o.total), 0) as total_spent, " +
+                            "r.name as role_name " +
+                            "FROM user u " +
+                            "LEFT JOIN orders o ON u.id = o.user_id AND o.status != 'cancelled' " +
+                            "LEFT JOIN role r ON u.role_id = r.id " +
+                            "WHERE u.role_id = 2 AND (u.name LIKE :kw OR u.email LIKE :kw) " +
+                            "GROUP BY u.id, u.name, u.email, u.phone, u.status, r.name " +
+                            "ORDER BY u.id DESC";
+
+            return jdbi.withHandle(handle ->
+                    handle.createQuery(sql)
+                            .bind("kw", "%" + keyword + "%")
+                            .map((rs, ctx) -> {
+                                User user = new User();
+                                user.setId(rs.getInt("id"));
+                                user.setName(rs.getString("name"));
+                                user.setEmail(rs.getString("email"));
+                                user.setPhone(rs.getString("phone"));
+                                user.setOrderCount(rs.getInt("order_count"));
+                                user.setTotalSpent(rs.getDouble("total_spent"));
+                                user.setStatus(rs.getString("status"));
+                                user.setRoleName(rs.getString("role_name"));
+                                return user;
+                            }).list()
+            );
+        }
+    }
+
 }
