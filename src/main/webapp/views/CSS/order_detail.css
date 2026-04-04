@@ -511,4 +511,13 @@
         width: 100%;
         justify-content: center;
     }
+
+}
+.btn-update {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-update:hover {
+    background: #1d4ed8;
 }
