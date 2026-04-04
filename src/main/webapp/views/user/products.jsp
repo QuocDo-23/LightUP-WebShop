@@ -336,7 +336,7 @@
 </main>
 
 
-<script src="${pageContext.request.contextPath}/JS/products.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/products.js"></script>
 
 </body>
 </html>
