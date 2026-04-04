@@ -41,10 +41,21 @@
                 <div class="table-header">
                     <h2>Danh Sách Khách Hàng</h2>
                 </div>
+
+                <div class="search-box">
+                    <form>
+                    <input type="text"
+                           id="searchInput"
+                           name="keyword"
+                           placeholder="Tìm ID, tên KH hoặc email..."
+                           value="${param.keyword}">
+                    </form>
+                </div>
+
                 <table>
                     <thead>
                         <tr>
-                            <th>Mã KH</th>
+                            <th>ID</th>
                             <th>Khách Hàng</th>
                             <th>Email</th>
                             <th>Số ĐT</th>
@@ -87,6 +98,8 @@
             </div>
         </div>
     </div>
+
+    <script src="${pageContext.request.contextPath}/views/JS/actionButton.js"></script>
 </body>
 
 </html>
