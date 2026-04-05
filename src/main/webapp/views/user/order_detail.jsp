@@ -95,37 +95,10 @@
                         <span class="info-label">Email:</span>
                         <span class="info-value">${order.recipientEmail}</span>
                     </div>
-                    <c:if test="${order.status == 'pending' || order.status == 'processing'}">
-
-                        <form action="order_detail" method="post" style="margin-top:10px;">
-
-                            <input type="hidden" name="orderId" value="${order.id}">
-
-                            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                                <input type="text" name="house" value="${order.shippingHouseNumber}" placeholder="Số nhà">
-                                <input type="text" name="commune" value="${order.shippingCommune}" placeholder="Phường/Xã">
-                                <input type="text" name="district" value="${order.shippingDistrict}" placeholder="Quận/Huyện">
-                                <input type="text" name="detail" value="${order.shippingAddressDetail}" placeholder="Chi tiết">
-                            </div>
-
-                            <button type="submit" class="btn btn-update" style="margin-top:10px;">
-                                Cập nhật đơn hàng
-                            </button>
-
-                        </form>
-
-                    </c:if>
 
 
-                    <div class="info-row">
-                        <span class="info-label">Địa chỉ giao hàng:</span>
-                        <span class="info-value">
-                            ${order.shippingHouseNumber}, ${order.shippingCommune}, ${order.shippingDistrict}
-                            <c:if test="${not empty order.shippingAddressDetail}">
-                                <br>${order.shippingAddressDetail}
-                            </c:if>
-                        </span>
-                    </div>
+
+
 
 
                     <div class="info-row">
@@ -152,6 +125,72 @@
                             </c:choose>
                         </span>
                     </div>
+                    <div class="info-row">
+                        <span class="info-label">Địa chỉ giao hàng:</span>
+                        <span class="info-value">
+                            ${order.shippingHouseNumber}, ${order.shippingCommune}, ${order.shippingDistrict}
+                            <c:if test="${not empty order.shippingAddressDetail}">
+                                <br>${order.shippingAddressDetail}
+                            </c:if>
+                        </span>
+                    </div>
+                    <c:if test="${order.status == 'pending' || order.status == 'processing'}">
+
+                        <form action="order_detail" method="post" class="inline-form">
+
+                            <input type="hidden" name="orderId" value="${order.id}">
+
+                            <div class="info-row">
+                                <span class="info-label">Cập nhật địa chỉ giao hàng:</span>
+
+                                <div class="inline-edit">
+
+                                    <div class="input-group">
+                                        <label>Số nhà</label>
+                                        <input type="text" name="house" value="${order.shippingHouseNumber}">
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label>Phường / Xã</label>
+                                        <input type="text" name="commune" value="${order.shippingCommune}">
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label>Quận / Huyện</label>
+                                        <input type="text" name="district" value="${order.shippingDistrict}">
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label>Chi tiết</label>
+                                        <input type="text" name="detail" value="${order.shippingAddressDetail}">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="update-actions">
+                                <button type="submit" class="btn btn-update-primary">
+                                    Cập nhật
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </c:if>
+
+                    <c:if test="${order.status != 'pending' && order.status != 'processing'}">
+
+                        <div class="info-row">
+                            <span class="info-label">Địa chỉ giao hàng:</span>
+                            <span class="info-value">
+            ${order.shippingHouseNumber}, ${order.shippingCommune}, ${order.shippingDistrict}
+            <c:if test="${not empty order.shippingAddressDetail}">
+                <br>${order.shippingAddressDetail}
+            </c:if>
+        </span>
+                        </div>
+
+                    </c:if>
                 </div>
             </div>
 
