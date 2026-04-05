@@ -95,6 +95,28 @@
                         <span class="info-label">Email:</span>
                         <span class="info-value">${order.recipientEmail}</span>
                     </div>
+                    <c:if test="${order.status == 'pending' || order.status == 'processing'}">
+
+                        <form action="order_detail" method="post" style="margin-top:10px;">
+
+                            <input type="hidden" name="orderId" value="${order.id}">
+
+                            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                                <input type="text" name="house" value="${order.shippingHouseNumber}" placeholder="Số nhà">
+                                <input type="text" name="commune" value="${order.shippingCommune}" placeholder="Phường/Xã">
+                                <input type="text" name="district" value="${order.shippingDistrict}" placeholder="Quận/Huyện">
+                                <input type="text" name="detail" value="${order.shippingAddressDetail}" placeholder="Chi tiết">
+                            </div>
+
+                            <button type="submit" class="btn btn-update" style="margin-top:10px;">
+                                Cập nhật đơn hàng
+                            </button>
+
+                        </form>
+
+                    </c:if>
+
+
                     <div class="info-row">
                         <span class="info-label">Địa chỉ giao hàng:</span>
                         <span class="info-value">
@@ -104,6 +126,8 @@
                             </c:if>
                         </span>
                     </div>
+
+
                     <div class="info-row">
                         <span class="info-label">Phương thức thanh toán:</span>
                         <span class="info-value">
@@ -131,7 +155,7 @@
                 </div>
             </div>
 
-            <!-- Danh sách sản phẩm -->
+
             <div class="order-products-section">
                 <h2>Sản phẩm trong đơn hàng</h2>
                 <div class="products-list">
@@ -160,7 +184,7 @@
                 </div>
             </div>
 
-            <!-- Tổng tiền -->
+
             <div class="order-total-section">
                 <div class="total-row">
                     <span class="total-label">Tổng tiền hàng:</span>
@@ -176,7 +200,7 @@
                 </div>
             </div>
 
-            <!-- Nút hành động -->
+
             <div class="action-buttons">
                 <c:if test="${order.status == 'pending' || order.status == 'processing'}">
                     <a href="cancel-order?id=${order.id}"
@@ -201,7 +225,7 @@
 </main>
 
 <script>
-    // Hiển thị thông báo nếu có
+
     <c:if test="${not empty sessionScope.successMessage}">
         alert("${sessionScope.successMessage}");
         <c:remove var="successMessage" scope="session" />

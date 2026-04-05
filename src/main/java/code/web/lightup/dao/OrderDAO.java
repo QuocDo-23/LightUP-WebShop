@@ -43,9 +43,7 @@ public class OrderDAO {
                 .orElse(-1));
     }
 
-    /**
-     * Lấy order theo ID
-     */
+
     public Order getOrderById(int orderId) {
         String sql = "SELECT * FROM orders WHERE id = ?";
 
@@ -77,9 +75,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Lấy tất cả orders của user
-     */
+
     public List<Order> getOrdersByUserId(int userId) {
         String sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC, id DESC";
 
@@ -110,9 +106,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Cập nhật trạng thái order
-     */
+
     public boolean updateOrderStatus(int orderId, String status) {
         String sql = "UPDATE orders SET status = ? WHERE id = ?";
 
@@ -125,9 +119,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Xóa order
-     */
+
     public boolean deleteOrder(int orderId) {
         String sql = "DELETE FROM orders WHERE id = ?";
 
@@ -139,9 +131,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Lấy tất cả orders (cho admin)
-     */
+
     public List<Order> getAllOrders() {
         String sql = "SELECT * FROM orders ORDER BY order_date DESC";
 
@@ -171,9 +161,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Insert order item mới
-     */
+
     public boolean insertOrderItem(OrderItem item) {
         String sql = "INSERT INTO order_details (order_id, product_id, product_name, img, product_material, " +
                 "price, quantity, subtotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -193,9 +181,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Lấy tất cả items của một order
-     */
+
     public List<OrderItem> getOrderItemsByOrderId(int orderId) {
         String sql = "SELECT * FROM order_details WHERE order_id = ?";
 
@@ -219,9 +205,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Lấy order item theo ID
-     */
+
     public OrderItem getOrderItemById(int itemId) {
         String sql = "SELECT * FROM order_details WHERE id = ?";
 
@@ -246,9 +230,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Xóa order item
-     */
+
     public boolean deleteOrderItem(int itemId) {
         String sql = "DELETE FROM order_details WHERE id = ?";
 
@@ -260,9 +242,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Xóa tất cả items của order
-     */
+
     public boolean deleteOrderItemsByOrderId(int orderId) {
         String sql = "DELETE FROM order_details WHERE order_id = ?";
 
@@ -274,9 +254,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Đếm số đơn hàng chưa giao của user
-     */
+
     public int countOrdersByUserId(int userId) {
         String sql = "SELECT COUNT(*) FROM orders WHERE user_id = ? AND status != 'delivered' AND status != 'cancelled'";
 
@@ -289,9 +267,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Lấy tổng doanh thu
-     */
+
     public double getTotalRevenue() {
         String sql = "SELECT COALESCE(SUM(total), 0) FROM orders WHERE status != 'cancelled'";
 
@@ -303,9 +279,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Đếm tổng số đơn hàng
-     */
+
     public int getTotalOrderCount() {
         String sql = "SELECT COUNT(*) FROM orders";
 
@@ -317,9 +291,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Đếm đơn hàng theo trạng thái
-     */
+
     public int getOrderCountByStatus(String status) {
         String sql = "SELECT COUNT(*) FROM orders WHERE status = ?";
 
@@ -332,9 +304,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Đếm đơn hàng hôm nay
-     */
+
     public int getTodayOrderCount() {
         String sql = "SELECT COUNT(*) FROM orders WHERE DATE(order_date) = CURDATE()";
 
@@ -346,9 +316,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Lấy doanh thu tháng hiện tại
-     */
+
     public double getCurrentMonthRevenue() {
         String sql = "SELECT COALESCE(SUM(total), 0) FROM orders " +
                 "WHERE MONTH(order_date) = MONTH(CURDATE()) " +
@@ -363,9 +331,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Đếm đơn hàng tháng hiện tại
-     */
+
     public int getCurrentMonthOrderCount() {
         String sql = "SELECT COUNT(*) FROM orders " +
                 "WHERE MONTH(order_date) = MONTH(CURDATE()) " +
@@ -379,9 +345,6 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Lấy top sản phẩm bán chạy
-     */
     public List<Map<String, Object>> getTopSellingProducts(int limit) {
 
         String sql = """
@@ -424,9 +387,7 @@ public class OrderDAO {
     }
 
 
-    /**
-     * Lấy đơn hàng gần đây
-     */
+
     public List<Order> getRecentOrders(int limit) {
         String sql = "SELECT * FROM orders ORDER BY order_date DESC, id DESC LIMIT ?";
 
@@ -453,9 +414,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Lấy doanh thu theo tháng
-     */
+
     public List<Map<String, Object>> getMonthlyRevenue(int months) {
         String sql = "SELECT DATE_FORMAT(order_date, '%Y-%m') as month, " +
                 "SUM(total) as revenue, COUNT(*) as order_count " +
@@ -479,7 +438,7 @@ public class OrderDAO {
         });
     }
 
-    // ================== HÀM MỚI - NÂNG CẤP CHO ADMIN ==================
+
 
     /**
      * Lấy danh sách đơn hàng có phân trang và lọc (PHÂN TRANG TẠI DAO)
@@ -494,17 +453,16 @@ public class OrderDAO {
      */
     public List<Order> getOrdersWithPagination(int page, int pageSize, String status,
                                                String searchKeyword, String sortBy, String sortOrder) {
-        // Tính offset
+
         int offset = (page - 1) * pageSize;
 
-        // Build query động
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT o.*, u.name as user_name, u.email as user_email ");
         sql.append("FROM orders o ");
         sql.append("LEFT JOIN user u ON o.user_id = u.id ");
         sql.append("WHERE 1=1 ");
 
-        // Thêm điều kiện lọc
+
         List<Object> params = new ArrayList<>();
         if (status != null && !status.isEmpty() && !status.equals("all")) {
             sql.append("AND o.status = ? ");
@@ -516,7 +474,7 @@ public class OrderDAO {
             String likeKeyword = "%" + searchKeyword.trim() + "%";
             params.add(likeKeyword);
             params.add(likeKeyword);
-            // Thử parse keyword thành số cho ID
+
             try {
                 int orderId = Integer.parseInt(searchKeyword.trim());
                 params.add(orderId);
@@ -525,7 +483,7 @@ public class OrderDAO {
             }
         }
 
-        // Thêm sắp xếp
+
         if (sortBy == null || sortBy.isEmpty()) {
             sortBy = "order_date";
         }
@@ -570,9 +528,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Đếm tổng số đơn hàng (cho phân trang)
-     */
+
     public int countOrders(String status, String searchKeyword) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT COUNT(*) FROM orders o ");
@@ -608,9 +564,7 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Kiểm tra đơn hàng đã có đánh giá chưa
-     */
+
     public boolean hasOrderReview(int orderId) {
         String sql = "SELECT COUNT(*) FROM review_order WHERE order_id = ?";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -619,9 +573,7 @@ public class OrderDAO {
                 .one() > 0);
     }
 
-    /**
-     * Lấy đánh giá đơn hàng theo order_id
-     */
+
     public Map<String, Object> getOrderReview(int orderId) {
         String sql = "SELECT ro.*, u.name as user_name " +
                 "FROM review_order ro " +
@@ -647,9 +599,7 @@ public class OrderDAO {
         );
     }
 
-    /**
-     * Lấy thống kê theo trạng thái đơn hàng
-     */
+
     public Map<String, Integer> getOrderStatusStatistics() {
         String sql = "SELECT status, COUNT(*) as count FROM orders GROUP BY status";
 
@@ -664,7 +614,7 @@ public class OrderDAO {
                         .list()
         );
 
-        // Đảm bảo có đủ các status
+
         stats.putIfAbsent("pending", 0);
         stats.putIfAbsent("processing", 0);
         stats.putIfAbsent("shipped", 0);
@@ -674,9 +624,7 @@ public class OrderDAO {
         return stats;
     }
 
-    /**
-     * Cập nhật nhiều đơn hàng cùng lúc (bulk update)
-     */
+
     public int bulkUpdateOrderStatus(List<Integer> orderIds, String newStatus) {
         if (orderIds == null || orderIds.isEmpty()) {
             return 0;
@@ -695,9 +643,6 @@ public class OrderDAO {
         });
     }
 
-    /**
-     * Xuất dữ liệu đơn hàng (cho export Excel/CSV)
-     */
     public List<Order> exportOrders(String status, String fromDate, String toDate) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT o.*, u.name as user_name, u.email as user_email ");
@@ -777,6 +722,20 @@ public class OrderDAO {
                 e.printStackTrace();
                 return false;
             }
+        });
+    }
+    public boolean updateShippingAddress(int orderId, String house, String commune, String district, String detail) {
+        String sql = "UPDATE orders SET shipping_house_number = ?, shipping_commune = ?, shipping_district = ?, shipping_address_detail = ? WHERE id = ?";
+
+        return jdbi.withHandle(handle -> {
+            int rows = handle.createUpdate(sql)
+                    .bind(0, house)
+                    .bind(1, commune)
+                    .bind(2, district)
+                    .bind(3, detail)
+                    .bind(4, orderId)
+                    .execute();
+            return rows > 0;
         });
     }
 }

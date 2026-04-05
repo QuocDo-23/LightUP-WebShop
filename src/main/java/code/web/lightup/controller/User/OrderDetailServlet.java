@@ -95,5 +95,60 @@ public class OrderDetailServlet extends HttpServlet {
             e.printStackTrace();
             response.sendRedirect("orders");
         }
+
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
+
+        try {
+            int orderId = Integer.parseInt(request.getParameter("orderId"));
+            String house = request.getParameter("house");
+            String commune = request.getParameter("commune");
+            String district = request.getParameter("district");
+            String detail = request.getParameter("detail");
+            if (house == null || house.trim().isEmpty()
+                    || commune == null || commune.trim().isEmpty()
+                    || district == null || district.trim().isEmpty()) {
+
+                response.sendRedirect("order_detail?id=" + orderId + "&error=empty_address");
+                return;
+            }
+
+            Order order = orderDAO.getOrderById(orderId);
+            if (order == null) {
+                response.sendRedirect("orders");
+                return;
+            }
+
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+
+            if (user == null || order.getUserId() != user.getId()) {
+                response.sendRedirect("orders");
+                return;
+            }
+
+
+
+            if (!order.getStatus().equals("pending") && !order.getStatus().equals("processing")) {
+                response.sendRedirect("order_detail?id=" + orderId + "&error=not_allowed");
+                return;
+            }
+
+            boolean updated = orderDAO.updateShippingAddress(orderId, house, commune, district, detail);
+
+            if (updated) {
+                response.sendRedirect("order_detail?id=" + orderId + "&success=updated");
+            } else {
+                response.sendRedirect("order_detail?id=" + orderId + "&error=fail");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("orders");
+        }
     }
 }

@@ -536,6 +536,6 @@
 </script>
 <script src="${pageContext.request.contextPath}/views/JS/product_detail.js"></script>
 <%--<script src="${pageContext.request.contextPath}/views/JS/index.js"></script>--%>
-<%--<script src="${pageContext.request.contextPath}/views/JS/products.js"></script>--%>
+<script src="${pageContext.request.contextPath}/views/JS/products.js"></script>
 </body>
 </html>

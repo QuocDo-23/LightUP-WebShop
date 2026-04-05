@@ -85,7 +85,9 @@ public class OrderService {
     public Map<String, Integer> getOrderStatusStatistics() {
         return orderDAO.getOrderStatusStatistics();
     }
-
+    public boolean updateShippingAddress(int orderId, String house, String commune, String district, String detail) {
+        return orderDAO.updateShippingAddress(orderId, house, commune, district, detail);
+    }
 
 
 }

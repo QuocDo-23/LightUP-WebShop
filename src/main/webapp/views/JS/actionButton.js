@@ -40,3 +40,24 @@ function slideProducts(dir) {
 }
 
 showPage(0);
+
+// tìm kiếm khách hàng cho admin
+const input = document.getElementById("searchInput");
+const form = document.getElementById("searchForm");
+
+let timeout=null;
+
+input.addEventListener("input", function () {
+    clearTimeout(timeout);
+
+    const value = input.value.trim();
+
+    if (value === "") {
+        window.location.href = form.action;
+        return;
+    }
+
+    timeout = setTimeout(() => {
+        form.submit();
+    }, 400);
+});

@@ -204,10 +204,10 @@
                                                     <td>
                                                         <span class="status-badge
                                                             <c:choose>
-                                                                <c:when test="${o.status == 'pending'}">status-pending</c:when>
-                                                                <c:when test="${o.status == 'shipping'}">status-shipping</c:when>
-                                                                <c:when test="${o.status == 'delivered'}">status-delivered</c:when>
-                                                                <c:when test="${o.status == 'cancelled'}">status-cancelled</c:when>
+                                                                <c:when test="${o.status == 'Đã nhận'}">status-pending</c:when>
+                                                                <c:when test="${o.status == 'Đang vận chuyển'}">status-shipping</c:when>
+                                                                <c:when test="${o.status == 'Đã giao hàng'}">status-delivered</c:when>
+                                                                <c:when test="${o.status == 'Hủy đơn'}">status-cancelled</c:when>
                                                             </c:choose>
                                                         ">
                                                             ${o.status}
