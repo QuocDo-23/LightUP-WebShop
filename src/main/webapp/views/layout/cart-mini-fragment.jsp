@@ -2,10 +2,7 @@
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<%--
-    Fragment này được render bởi AddCartAjax.java (forward).
-    AJAX nhận HTML thô và nhét thẳng vào #mini-cart-body.
---%>
+
 
 <c:choose>
     <c:when test="${empty cart || empty cart.listItem}">
