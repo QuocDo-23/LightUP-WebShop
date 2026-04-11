@@ -50,14 +50,30 @@ public class ReviewServlet extends HttpServlet {
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
             String comment = request.getParameter("comment");
+
+
             String ratingParam = request.getParameter("rating");
 
-            if (ratingParam == null || ratingParam.isEmpty()) {
-                response.sendRedirect("product-detail?id=" + productId + "&reviewError=noRating");
-                return;
+            String parentIdParam = request.getParameter("parentId");
+            Integer parentId = null;
+
+            if (parentIdParam != null && !parentIdParam.isEmpty()) {
+                parentId = Integer.parseInt(parentIdParam);
             }
 
-            int rating = Integer.parseInt(ratingParam);
+// chỉ check rating khi là comment cha
+            if (parentId == null) {
+                if (ratingParam == null || ratingParam.isEmpty()) {
+                    response.sendRedirect("product-detail?id=" + productId + "&reviewError=noRating");
+                    return;
+                }
+            }
+
+            int rating = 5;
+
+            if (parentId == null) {
+                rating = Integer.parseInt(ratingParam);
+            }
 
             if (rating < 1 || rating > 5) {
                 request.setAttribute("error", "Rating phải từ 1 đến 5 sao");
@@ -71,6 +87,7 @@ public class ReviewServlet extends HttpServlet {
             review.setUserId(userId);
             review.setRating(rating);
             review.setText(comment);
+            review.setParentId(parentId);
 
             boolean success = reviewService.addReview(review);
 
@@ -102,4 +119,5 @@ public class ReviewServlet extends HttpServlet {
 
         }
     }
+
 }

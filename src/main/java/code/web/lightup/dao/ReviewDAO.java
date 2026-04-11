@@ -23,7 +23,7 @@ public class ReviewDAO {
                                 "SELECT r.*, u.name AS user_name " +
                                         "FROM Review_Product r " +
                                         "LEFT JOIN User u ON r.user_id = u.id " +
-                                        "WHERE r.product_id = :productId " +
+                                        "WHERE r.product_id = :productId AND r.parent_id IS NULL "+
                                         "ORDER BY r.date DESC"
                         )
                         .bind("productId", productId)
@@ -56,14 +56,15 @@ public class ReviewDAO {
     public int addReview(Review review) {
         int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(
-                                "INSERT INTO Review_Product(product_id,user_id,text,img,rating,date,status) " +
-                                        "VALUES(:productId,:userId,:text,:img,:rating,NOW(),1)"
+                                "INSERT INTO Review_Product(product_id,user_id,text,img,rating,date,status,parent_id) " +
+                                        "VALUES(:productId,:userId,:text,:img,:rating,NOW(),1,:parentId)"
                         )
                         .bind("productId", review.getProductId())
                         .bind("userId", review.getUserId())
                         .bind("text", review.getText())
                         .bind("img", review.getImg())
                         .bind("rating", review.getRating())
+                        .bind("parentId", review.getParentId())
                         .execute()
         );
 
@@ -201,5 +202,22 @@ public class ReviewDAO {
                         .bind("productId", productId)
                         .execute()
         );
+
+    }
+    public List<Review> getRepliesByParentId(int parentId) {
+        return jdbi.withHandle(handle ->
+                handle.createQuery(
+                                "SELECT r.*, u.name AS user_name " +
+                                        "FROM Review_Product r " +
+                                        "LEFT JOIN User u ON r.user_id = u.id " +
+                                        "WHERE r.parent_id = :parentId " +
+                                        "ORDER BY r.date ASC"
+                        )
+                        .bind("parentId", parentId)
+                        .mapToBean(Review.class)
+                        .list()
+        );
     }}
+
+
 
