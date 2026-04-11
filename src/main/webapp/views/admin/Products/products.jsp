@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <title>Sản Phẩm - Quản Lý Đèn</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/adminCSS/admin.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/adminCSS/admin_products.css">
@@ -73,6 +74,7 @@
                     <form method="get" action="${pageContext.request.contextPath}/admin/products"
                           style="display: flex; gap: 10px; flex-wrap: wrap;" autocomplete="off">
                         <div class="search-box">
+                            <i class="fas fa-search"></i>
                             <input type="text" name="search" placeholder="Tìm kiếm sản phẩm..."
                                    value="<c:out value='${searchParam}'/>">
                         </div>
@@ -97,7 +99,7 @@
                                 Hết hàng
                             </option>
                         </select>
-                        <button type="submit" class="btn btn-primary">🔍 Lọc</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i>Lọc</button>
                         <a href="${pageContext.request.contextPath}/admin/products/add" class="btn btn-primary">
                             ➕ Thêm Sản Phẩm
                         </a>
