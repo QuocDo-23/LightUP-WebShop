@@ -1,6 +1,7 @@
 package code.web.lightup.model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Review {
     private int id;
@@ -13,6 +14,7 @@ public class Review {
     private String userName;
     private int status;
     private String productName;
+    private Integer parentId;
 
 
     public int getId() {
@@ -90,6 +92,22 @@ public class Review {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+    private List<Review> replies;
+
+    public List<Review> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<Review> replies) {
+        this.replies = replies;
     }
 }
 
