@@ -1,0 +1,117 @@
+plugins {
+    id 'java'
+    id 'war'
+    id 'org.hidetake.ssh' version '2.11.2'
+}
+
+group = 'code.web.lightup'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Servlet API
+    providedCompile 'jakarta.servlet:jakarta.servlet-api:6.1.0'
+
+    // JUnit 5
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.13.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.13.2'
+
+    // Database
+    implementation 'org.jdbi:jdbi3-core:3.45.1'
+    implementation 'com.mysql:mysql-connector-j:8.4.0'
+
+    // Spring Security
+    implementation 'org.springframework.security:spring-security-core:6.5.4'
+
+    // JSP / JSTL
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
+
+    // Google API / OAuth2
+    implementation 'com.google.api-client:google-api-client:2.2.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
+    implementation 'com.google.apis:google-api-services-oauth2:v2-rev20200213-2.0.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Mail
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
+    implementation 'com.sun.activation:jakarta.activation:2.0.1'
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+//// ==================== SSH CONFIG ====================
+//
+//remotes {
+//    host {
+//        host = '192.168.58.148'   // IP Ubuntu
+//        user = 'lightup'
+//        password = '1'             // Change this to your actual password
+//    }
+//}
+//
+//ssh.settings {
+//    knownHosts = allowAnyHosts
+//}
+//
+//// ==================== TASKS ====================
+//
+//// Upload WAR lên server
+//task docker_upload_file_to_server {
+//    dependsOn build
+//    doLast {
+//        println 'begin docker_upload_file_to_server'
+//        ssh.run {
+//            session(remotes.host) {
+//
+//                execute 'mkdir -p /usr/deploy'
+//
+//                remove '/usr/deploy/lightup.war', ignoreError: true
+//                remove '/usr/deploy/lightup/', ignoreError: true
+//
+//                put from: "${project.projectDir}/build/libs/LightUP-WebShop-1.0-SNAPSHOT.war",
+//                        into: '/usr/deploy/lightup.war'
+//            }
+//        }
+//    }
+//}
+//
+//// Start Docker Tomcat
+//task docker_app_start {
+//    dependsOn docker_upload_file_to_server
+//    doLast {
+//        println 'begin docker_app_start'
+//        ssh.run {
+//            session(remotes.host) {
+//
+//                execute 'docker stop tomcat9', ignoreError: true
+//                execute 'docker rm tomcat9', ignoreError: true
+//
+//                execute 'docker run -d ' +
+//                        '--name tomcat9 ' +
+//                        '-v /usr/deploy:/usr/local/tomcat/webapps ' +
+//                        '-p 80:8080 ' +
+//                        'tomcat:9.0'
+//            }
+//        }
+//    }
+//}
+//
+//// Deploy tổng (full deployment)
+//task docker_deploy {
+//    dependsOn docker_app_start
+//}

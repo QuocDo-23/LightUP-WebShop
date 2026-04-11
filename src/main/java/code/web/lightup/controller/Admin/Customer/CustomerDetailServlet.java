@@ -78,7 +78,7 @@ public class CustomerDetailServlet extends HttpServlet {
                 int customerId = Integer.parseInt(idStr);
 
                 if ("lock".equals(action)) {
-                    userService.updateUserStatus(customerId, "banned");
+                    userService.updateUserStatus(customerId, "locked");
                 } else if ("unlock".equals(action)) {
                     userService.updateUserStatus(customerId, "active");
                     userService.unlockUser(customerId);
