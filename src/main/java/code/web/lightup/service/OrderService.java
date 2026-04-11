@@ -88,6 +88,9 @@ public class OrderService {
     public boolean updateShippingAddress(int orderId, String house, String commune, String district, String detail) {
         return orderDAO.updateShippingAddress(orderId, house, commune, district, detail);
     }
+    public int bulkUpdateOrderStatus(List<Integer> orderIds, String newStatus){
+        return orderDAO.bulkUpdateOrderStatus(orderIds, newStatus);
+    }
 
 
 }

@@ -58,7 +58,7 @@
                 <div class="stat-label">Đang xử lý</div>
                 <div class="stat-value">${statusStats['processing']}</div>
             </div>
-            <div class="stat-card ${status == 'shipped' ? 'active' : ''}" onclick="filterByStatus('shipping')">
+            <div class="stat-card ${status == 'shipped' ? 'active' : ''}" onclick="filterByStatus('shipped')">
                 <div class="stat-label">Đang giao</div>
                 <div class="stat-value">${statusStats['shipped']}</div>
             </div>
@@ -144,7 +144,7 @@
                 <option value="">-- Chọn trạng thái --</option>
                 <option value="pending">Chờ xác nhận</option>
                 <option value="processing">Đang xử lý</option>
-                <option value="shipping">Đang giao</option>
+                <option value="shipped">Đang giao</option>
                 <option value="delivered">Đã giao</option>
                 <option value="cancelled">Hủy</option>
             </select>
@@ -299,7 +299,6 @@
                         <i class="fas fa-angle-right"></i>
                     </a>
 
-                    <!-- Last page -->
                     <a href="?page=${totalPages}&pageSize=${pageSize}&status=${status}&search=${searchKeyword}&sortBy=${sortBy}&sortOrder=${sortOrder}"
                        class="${currentPages == totalPages ? 'disabled' : ''}">
                         <i class="fas fa-angle-double-right"></i>
@@ -376,7 +375,7 @@
 </div>
 
 
-<script src="${pageContext.request.contextPath}/JS/admin-orders.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/admin-orders.js"></script>
 
 </body>
 
