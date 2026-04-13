@@ -17,7 +17,14 @@ public class ReviewService {
 
 
     public List<Review> getReviewsByProductId(int productId) {
-        return reviewDAO.getReviewsByProductId(productId);
+        List<Review> parents = reviewDAO.getReviewsByProductId(productId);
+
+        for (Review r : parents) {
+            List<Review> replies = reviewDAO.getRepliesByParentId(r.getId());
+            r.setReplies(replies);
+        }
+
+        return parents;
     }
 
     public ReviewStatistics getReviewStatistics(int productId) {
