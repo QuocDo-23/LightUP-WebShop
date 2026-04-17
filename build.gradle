@@ -48,6 +48,10 @@ dependencies {
     // Mail
     implementation 'com.sun.mail:jakarta.mail:2.0.1'
     implementation 'com.sun.activation:jakarta.activation:2.0.1'
+
+
+    //Json
+    implementation 'org.json:json:20240303'
 }
 
 tasks.test {
