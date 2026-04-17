@@ -1,5 +1,6 @@
 package code.web.lightup.controller.User.FacebookController;
 
+import code.web.lightup.config.FacebookOAuthConfig;
 import code.web.lightup.model.Cart.Cart;
 import code.web.lightup.model.User;
 import code.web.lightup.service.CartService;
@@ -19,17 +20,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-
 @WebServlet("/facebook-callback")
 public class FacebookCallbackServlet extends HttpServlet {
-    private static final String APP_ID       = "key_ID";
-    private static final String APP_SECRET   = "key_Secret";
-    private static final String REDIRECT_URI = "http://localhost:8080/LightUp_war/facebook-callback";
-
-    private static final String TOKEN_URL =
-            "https://graph.facebook.com/v19.0/oauth/access_token";
-    private static final String GRAPH_URL =
-            "https://graph.facebook.com/v19.0/me?fields=id,name,email,picture.type(large)";
 
     private UserService userService;
     private CartService cartService;
@@ -50,6 +42,15 @@ public class FacebookCallbackServlet extends HttpServlet {
             return;
         }
 
+        String state        = request.getParameter("state");
+        String sessionState = (String) request.getSession().getAttribute("fb_oauth_state");
+        request.getSession().removeAttribute("fb_oauth_state");
+
+        if (state == null || !state.equals(sessionState)) {
+            response.sendRedirect(request.getContextPath() + "/login?error=invalid_state");
+            return;
+        }
+
         String code = request.getParameter("code");
         if (code == null || code.isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/login?error=facebook_error");
@@ -57,8 +58,8 @@ public class FacebookCallbackServlet extends HttpServlet {
         }
 
         try {
-
-            String accessToken = exchangeCodeForToken(code);
+            String redirectUri = FacebookOAuthConfig.getRedirectUri(request);
+            String accessToken = exchangeCodeForToken(code, redirectUri);
             if (accessToken == null) {
                 response.sendRedirect(request.getContextPath() + "/login?error=facebook_token");
                 return;
@@ -73,14 +74,13 @@ public class FacebookCallbackServlet extends HttpServlet {
             String fbId    = fbUser.optString("id");
             String name    = fbUser.optString("name");
             String email   = fbUser.optString("email", "");
-            String picture = fbUser
-                    .optJSONObject("picture") != null
-                    ? fbUser.getJSONObject("picture")
-                    .optJSONObject("data") != null
-                    ? fbUser.getJSONObject("picture").getJSONObject("data").optString("url", "")
-                    : ""
-                    : "";
-
+            String picture = "";
+            if (fbUser.optJSONObject("picture") != null
+                    && fbUser.getJSONObject("picture").optJSONObject("data") != null) {
+                picture = fbUser.getJSONObject("picture")
+                        .getJSONObject("data")
+                        .optString("url", "");
+            }
 
             if (email.isEmpty()) {
                 email = fbId + "@facebook.com";
@@ -92,13 +92,19 @@ public class FacebookCallbackServlet extends HttpServlet {
             if (existingUser.isPresent()) {
                 user = existingUser.get();
 
-                if (user.getAuthProvider() == null
-                        || (!user.getAuthProvider().equalsIgnoreCase("facebook")
-                        && !user.getAuthProvider().equalsIgnoreCase("google"))) {
-                    response.sendRedirect(request.getContextPath()
-                            + "/login?error=email_exists");
+                if ("locked".equalsIgnoreCase(user.getStatus())) {
+                    response.sendRedirect(request.getContextPath() + "/login?error=account_locked");
                     return;
                 }
+
+                String provider = user.getAuthProvider();
+                if (provider == null
+                        || (!provider.equalsIgnoreCase("facebook")
+                        &&  !provider.equalsIgnoreCase("google"))) {
+                    response.sendRedirect(request.getContextPath() + "/login?error=email_exists");
+                    return;
+                }
+
             } else {
                 User newUser = new User();
                 newUser.setName(name);
@@ -114,31 +120,12 @@ public class FacebookCallbackServlet extends HttpServlet {
                 user = userService.getUserByEmail(email).orElseThrow();
             }
 
-            if ("locked".equalsIgnoreCase(user.getStatus())) {
-                response.sendRedirect(request.getContextPath() + "/login?error=account_locked");
-                return;
-            }
-
-            Cart guestCart = (Cart) request.getSession().getAttribute("cart");
+            Cart guestCart  = (Cart) request.getSession().getAttribute("cart");
             SessionUtil.setUserSession(request, user);
             Cart mergedCart = cartService.mergeOnLogin(user.getId(), guestCart);
             request.getSession().setAttribute("cart", mergedCart);
 
-
-            String contextPath = request.getContextPath();
-            String fbRedirect  = (String) request.getSession().getAttribute("fbRedirect");
-            request.getSession().removeAttribute("fbRedirect");
-
-            String redirectUrl;
-            if ("payment".equals(fbRedirect)) {
-                redirectUrl = contextPath + "/payment";
-            } else if ("cart".equals(fbRedirect)) {
-                redirectUrl = contextPath + "/cart";
-            } else if (SessionUtil.isAdmin(request)) {
-                redirectUrl = contextPath + "/admin/dashboard";
-            } else {
-                redirectUrl = contextPath + "/";
-            }
+            String redirectUrl = SessionUtil.getFacebookPostLoginRedirect(request );
             response.sendRedirect(redirectUrl);
 
         } catch (Exception e) {
@@ -147,13 +134,13 @@ public class FacebookCallbackServlet extends HttpServlet {
         }
     }
 
-    private String exchangeCodeForToken(String code) throws IOException {
-        String params = "client_id="     + URLEncoder.encode(APP_ID,       StandardCharsets.UTF_8)
-                + "&client_secret=" + URLEncoder.encode(APP_SECRET,   StandardCharsets.UTF_8)
-                + "&redirect_uri="  + URLEncoder.encode(REDIRECT_URI,  StandardCharsets.UTF_8)
-                + "&code="          + URLEncoder.encode(code,          StandardCharsets.UTF_8);
+    private String exchangeCodeForToken(String code, String redirectUri) throws IOException {
+        String params = "client_id="     + URLEncoder.encode(FacebookOAuthConfig.APP_ID,     StandardCharsets.UTF_8)
+                + "&client_secret=" + URLEncoder.encode(FacebookOAuthConfig.APP_SECRET, StandardCharsets.UTF_8)
+                + "&redirect_uri="  + URLEncoder.encode(redirectUri,                    StandardCharsets.UTF_8)
+                + "&code="          + URLEncoder.encode(code,                           StandardCharsets.UTF_8);
 
-        URL url = new URL(TOKEN_URL + "?" + params);
+        URL url = new URL(FacebookOAuthConfig.TOKEN_URL + "?" + params);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
 
@@ -165,8 +152,8 @@ public class FacebookCallbackServlet extends HttpServlet {
     }
 
     private JSONObject fetchFacebookProfile(String accessToken) throws IOException {
-        URL url = new URL(GRAPH_URL + "&access_token="
-                + URLEncoder.encode(accessToken, StandardCharsets.UTF_8));
+        URL url = new URL(FacebookOAuthConfig.GRAPH_URL
+                + "&access_token=" + URLEncoder.encode(accessToken, StandardCharsets.UTF_8));
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
 

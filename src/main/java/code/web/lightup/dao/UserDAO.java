@@ -62,12 +62,11 @@ public class UserDAO {
 
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
-                if ("Google".equalsIgnoreCase(user.getAuthProvider())){
+                String provider = user.getAuthProvider();
+                if ("Google".equalsIgnoreCase(provider) || "Facebook".equalsIgnoreCase(provider))
                     return Optional.empty();
-                }
-                if (PasswordUtil.verifyPassword(password, user.getPassword())) {
+                if (PasswordUtil.verifyPassword(password, user.getPassword()))
                     return Optional.of(user);
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,22 +181,22 @@ public class UserDAO {
                                         "FROM User u " +
                                         "LEFT JOIN Role r ON u.role_id = r.id " +
                                         "WHERE u.email = :email"
-                            )
-                            .bind("email", email)
-                            .mapToBean(User.class)
-                            .findFirst()
-            ).map(user -> {
-                String statusSql = "SELECT status FROM user WHERE email = :email";
-                String status = jdbi.withHandle(handle ->
-                    handle.createQuery(statusSql)
+                        )
                         .bind("email", email)
-                        .mapTo(String.class)
-                        .findOne()
-                        .orElse("active")
-                );
-                user.setStatus(status);
-                return user;
-            });
+                        .mapToBean(User.class)
+                        .findFirst()
+        ).map(user -> {
+            String statusSql = "SELECT status FROM user WHERE email = :email";
+            String status = jdbi.withHandle(handle ->
+                    handle.createQuery(statusSql)
+                            .bind("email", email)
+                            .mapTo(String.class)
+                            .findOne()
+                            .orElse("active")
+            );
+            user.setStatus(status);
+            return user;
+        });
     }
 
     /**
@@ -283,55 +282,55 @@ public class UserDAO {
 
     public List<User> getAllCustomers() {
         String sql = "SELECT u.*, " +
-                     "COUNT(o.id) as order_count, " +
-                     "COALESCE(SUM(o.total), 0) as total_spent, " +
-                     "u.status, " +
-                     "r.name as role_name " +
-                     "FROM user u " +
-                     "LEFT JOIN orders o ON u.id = o.user_id AND o.status != 'cancelled' " +
-                     "LEFT JOIN role r ON u.role_id = r.id " +
-                     "WHERE u.role_id = 2 " +
-                     "GROUP BY u.id, u.status, r.name " +
-                     "ORDER BY u.id DESC";
+                "COUNT(o.id) as order_count, " +
+                "COALESCE(SUM(o.total), 0) as total_spent, " +
+                "u.status, " +
+                "r.name as role_name " +
+                "FROM user u " +
+                "LEFT JOIN orders o ON u.id = o.user_id AND o.status != 'cancelled' " +
+                "LEFT JOIN role r ON u.role_id = r.id " +
+                "WHERE u.role_id = 2 " +
+                "GROUP BY u.id, u.status, r.name " +
+                "ORDER BY u.id DESC";
 
-        return jdbi.withHandle(handle -> 
-            handle.createQuery(sql)
-                .map((rs, ctx) -> {
-                    User user = new User();
-                    user.setId(rs.getInt("id"));
-                    user.setRoleId(rs.getInt("role_id"));
-                    user.setName(rs.getString("name"));
-                    user.setEmail(rs.getString("email"));
-                    user.setPhone(rs.getString("phone"));
-                    user.setGender(rs.getString("gender"));
-                    if (rs.getDate("date_of_birth") != null) {
-                        user.setDateOfBirth(rs.getDate("date_of_birth").toLocalDate());
-                    }
-                    user.setAvatarImg(rs.getString("avatar_img"));
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .map((rs, ctx) -> {
+                            User user = new User();
+                            user.setId(rs.getInt("id"));
+                            user.setRoleId(rs.getInt("role_id"));
+                            user.setName(rs.getString("name"));
+                            user.setEmail(rs.getString("email"));
+                            user.setPhone(rs.getString("phone"));
+                            user.setGender(rs.getString("gender"));
+                            if (rs.getDate("date_of_birth") != null) {
+                                user.setDateOfBirth(rs.getDate("date_of_birth").toLocalDate());
+                            }
+                            user.setAvatarImg(rs.getString("avatar_img"));
 
-                    user.setOrderCount(rs.getInt("order_count"));
-                    user.setTotalSpent(rs.getDouble("total_spent"));
+                            user.setOrderCount(rs.getInt("order_count"));
+                            user.setTotalSpent(rs.getDouble("total_spent"));
 
-                    user.setStatus(rs.getString("status"));
-                    user.setRoleName(rs.getString("role_name"));
+                            user.setStatus(rs.getString("status"));
+                            user.setRoleName(rs.getString("role_name"));
 
-                    return user;
-                })
-                .list()
+                            return user;
+                        })
+                        .list()
         );
     }
-    
+
     /**
      * Cập nhật trạng thái tài khoản user (Khóa/Mở khóa)
      */
     public boolean updateUserStatus(int userId, String status) {
         String sql = "UPDATE user SET status = :status WHERE id = :id";
-        
-        return jdbi.withHandle(handle -> 
-            handle.createUpdate(sql)
-                .bind("status", status)
-                .bind("id", userId)
-                .execute() > 0
+
+        return jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("status", status)
+                        .bind("id", userId)
+                        .execute() > 0
         );
     }
 
@@ -340,12 +339,12 @@ public class UserDAO {
      */
     public boolean updatePasswordById(int userId, String newHashedPassword) {
         String sql = "UPDATE user SET password = :password WHERE id = :id";
-        
-        return jdbi.withHandle(handle -> 
-            handle.createUpdate(sql)
-                .bind("password", newHashedPassword)
-                .bind("id", userId)
-                .execute() > 0
+
+        return jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("password", newHashedPassword)
+                        .bind("id", userId)
+                        .execute() > 0
         );
     }
 
@@ -354,12 +353,12 @@ public class UserDAO {
      */
     public boolean updateUserRole(int userId, int newRoleId) {
         String sql = "UPDATE user SET role_id = :newRoleId WHERE id = :userId";
-        
-        return jdbi.withHandle(handle -> 
-            handle.createUpdate(sql)
-                .bind("newRoleId", newRoleId)
-                .bind("userId", userId)
-                .execute() > 0
+
+        return jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("newRoleId", newRoleId)
+                        .bind("userId", userId)
+                        .execute() > 0
         );
     }
     public boolean checkEmailExists(String email) {
@@ -373,7 +372,7 @@ public class UserDAO {
         ) > 0;
     }
     /**
-     * Đăng ký user từ Google OAuth (không cần password)
+     * Đăng ký user từ Google OAuth
      */
     public boolean registerGoogleUser(User user) {
         try {
@@ -392,6 +391,25 @@ public class UserDAO {
 
                 return result > 0;
             });
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Đăng ký user từ Facebook OAuth
+     */
+    public boolean registerFacebookUser(User user) {
+        try {
+            return jdbi.withHandle(handle ->
+                    handle.createUpdate(
+                                    "INSERT INTO User (role_id, name, email, password, avatar_img, auth_provider) " +
+                                            "VALUES (:roleId, :name, :email, :password, :avatar, :provider)")
+                            .bind("roleId", 2).bind("name", user.getName()).bind("email", user.getEmail())
+                            .bind("password", "").bind("avatar", user.getAvatarImg()).bind("provider", "facebook")
+                            .execute() > 0
+            );
         } catch (Exception e) {
             e.printStackTrace();
             return false;

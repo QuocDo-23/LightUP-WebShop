@@ -91,4 +91,6 @@ public class UserService {
     public List<User> searchCustomers(String keyword) {
         return userDAO.searchCustomers(keyword);
     }
+    public boolean registerFacebookUser(User user) { return userDAO.registerFacebookUser(user); }
+
 }
