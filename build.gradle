@@ -57,65 +57,68 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+war {
+    archiveFileName = 'lightup.war'
+}
 
-//// ==================== SSH CONFIG ====================
-//
-//remotes {
-//    host {
-//        host = '192.168.58.148'   // IP Ubuntu
-//        user = 'lightup'
-//        password = '1'             // Change this to your actual password
-//    }
-//}
-//
-//ssh.settings {
-//    knownHosts = allowAnyHosts
-//}
-//
-//// ==================== TASKS ====================
-//
-//// Upload WAR lên server
-//task docker_upload_file_to_server {
-//    dependsOn build
-//    doLast {
-//        println 'begin docker_upload_file_to_server'
-//        ssh.run {
-//            session(remotes.host) {
-//
-//                execute 'mkdir -p /usr/deploy'
-//
-//                remove '/usr/deploy/lightup.war', ignoreError: true
-//                remove '/usr/deploy/lightup/', ignoreError: true
-//
-//                put from: "${project.projectDir}/build/libs/LightUP-WebShop-1.0-SNAPSHOT.war",
-//                        into: '/usr/deploy/lightup.war'
-//            }
-//        }
-//    }
-//}
-//
-//// Start Docker Tomcat
-//task docker_app_start {
-//    dependsOn docker_upload_file_to_server
-//    doLast {
-//        println 'begin docker_app_start'
-//        ssh.run {
-//            session(remotes.host) {
-//
-//                execute 'docker stop tomcat9', ignoreError: true
-//                execute 'docker rm tomcat9', ignoreError: true
-//
-//                execute 'docker run -d ' +
-//                        '--name tomcat9 ' +
-//                        '-v /usr/deploy:/usr/local/tomcat/webapps ' +
-//                        '-p 80:8080 ' +
-//                        'tomcat:9.0'
-//            }
-//        }
-//    }
-//}
-//
-//// Deploy tổng (full deployment)
-//task docker_deploy {
-//    dependsOn docker_app_start
-//}
+// ==================== SSH CONFIG ====================
+remotes {
+    host {
+        host = '192.168.110.194'
+        user = 'lightup'
+        password = 'quoc@23092005'
+    }
+}
+
+ssh.settings {
+    knownHosts = allowAnyHosts
+}
+
+// ==================== TASKS ====================
+
+task docker_upload_file_to_server {
+    dependsOn build
+    notCompatibleWithConfigurationCache("Old SSH plugin not compatible with Configuration Cache")
+
+    doLast {
+        println 'begin docker_upload_file_to_server'
+        project.ssh.run {
+            session(project.remotes.host) {
+                execute 'mkdir -p /usr/deploy'
+
+                execute 'rm -f /usr/deploy/lightup.war'
+                execute 'rm -rf /usr/deploy/lightup'
+
+                put from: "${project.projectDir}/build/libs/lightup.war",
+                        into: '/usr/deploy/lightup.war'
+            }
+        }
+    }
+}
+
+task docker_app_start {
+    dependsOn docker_upload_file_to_server
+    notCompatibleWithConfigurationCache("Old SSH plugin not compatible with Configuration Cache")
+
+    doLast {
+        println 'begin docker_app_start'
+        project.ssh.run {
+            session(project.remotes.host) {
+                execute 'docker stop tomcat10', ignoreError: true
+                execute 'docker rm tomcat10', ignoreError: true
+                execute 'docker run -d ' +
+                        '--name tomcat10 ' +
+                        '--network my-network ' +
+                        '-v /usr/deploy:/usr/local/tomcat/webapps ' +
+                        '-p 80:8080 ' +
+                        'tomcat:10.1'
+            }
+        }
+    }
+}
+
+task docker_deploy {
+    dependsOn docker_app_start
+    notCompatibleWithConfigurationCache("Old SSH plugin not compatible with Configuration Cache")
+}
+
