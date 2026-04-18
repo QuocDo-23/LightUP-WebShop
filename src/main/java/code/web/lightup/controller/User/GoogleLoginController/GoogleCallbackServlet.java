@@ -102,7 +102,7 @@ public class GoogleCallbackServlet extends HttpServlet {
             Cart mergedCart = cartService.mergeOnLogin(user.getId(), guestCart);
             request.getSession().setAttribute("cart", mergedCart);
 
-            String redirectUrl = getRedirectUrl(request);
+            String redirectUrl = SessionUtil.getGooglePostLoginRedirect(request);
             response.sendRedirect(redirectUrl);
 
         } catch (Exception e) {
@@ -157,16 +157,5 @@ public class GoogleCallbackServlet extends HttpServlet {
         }
     }
 
-    private String getRedirectUrl(HttpServletRequest request) {
-        String contextPath = request.getContextPath();
-        String redirect = (String) request.getSession().getAttribute("oauth_redirect");
 
-        if ("payment".equals(redirect)) {
-            return contextPath + "/payment";
-        } else if ("cart".equals(redirect)) {
-            return contextPath + "/cart";
-        } else {
-            return contextPath + "/";
-        }
-    }
 }

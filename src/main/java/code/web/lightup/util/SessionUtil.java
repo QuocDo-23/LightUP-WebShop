@@ -71,4 +71,29 @@ public class SessionUtil {
             session.invalidate();
         }
     }
+    public static String getPostLoginRedirect(HttpServletRequest request, String redirectKey) {
+        String contextPath = request.getContextPath();
+        HttpSession session = request.getSession(false);
+
+        String redirect = session != null ? (String) session.getAttribute(redirectKey) : null;
+        if (session != null) {
+            session.removeAttribute(redirectKey);
+        }
+
+        if ("payment".equals(redirect)) {
+            return contextPath + "/payment";
+        } else if ("cart".equals(redirect)) {
+            return contextPath + "/cart";
+        } else if (SessionUtil.isAdmin(request)) {
+            return contextPath + "/admin/dashboard";
+        } else {
+            return contextPath + "/";
+        }
+    }
+    public static String getGooglePostLoginRedirect(HttpServletRequest request) {
+        return getPostLoginRedirect(request, "oauth_redirect");
+    }
+    public static String getFacebookPostLoginRedirect(HttpServletRequest request) {
+        return getPostLoginRedirect(request, "fbRedirect");
+    }
 }
