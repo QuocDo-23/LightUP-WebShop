@@ -53,7 +53,7 @@
           <element id="library" level="project" name="Gradle: io.grpc:grpc-context:1.27.2" />
         </element>
       </element>
-      <element id="javaee-facet-resources" facet="LightUp.main/web/Web Gradle : LightUp-1.0-SNAPSHOT.war" />
+      <element id="javaee-facet-resources" facet="LightUp.main/web/Web Gradle : lightup.war" />
     </root>
   </artifact>
 </component>
