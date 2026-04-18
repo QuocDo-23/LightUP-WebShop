@@ -668,3 +668,53 @@ textarea:focus {
 .summary-inner {
     width: 670px;
 }
+.reply-btn{
+    border:none;
+    background:none;
+    color:#ee4d2d;
+    cursor:pointer;
+    margin-left:15px;
+    font-weight:600;
+}
+
+.reply-form{
+    margin-top:12px;
+    margin-left:55px;
+}
+
+.reply-form textarea{
+    width:100%;
+    min-height:70px;
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    resize:none;
+}
+
+.reply-form button{
+    margin-top:8px;
+    background:#ee4d2d;
+    color:#fff;
+    border:none;
+    padding:8px 16px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.reply-list{
+    margin-left:55px;
+    margin-top:12px;
+}
+
+.reply-item{
+    background:#f8f8f8;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:8px;
+}
+
+.admin-tag{
+    color:#ee4d2d;
+    font-size:12px;
+    margin-left:8px;
+}

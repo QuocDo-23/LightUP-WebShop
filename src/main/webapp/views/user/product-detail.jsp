@@ -164,7 +164,8 @@
                     <div class="quantity-section">
                         <label class="quantity-label">Số lượng</label>
                         <div class="quantity-control">
-                            <button type="button" class="qty-btn qty-decrease" onclick="decreaseQty()" aria-label="Giảm số lượng">
+                            <button type="button" class="qty-btn qty-decrease" onclick="decreaseQty()"
+                                    aria-label="Giảm số lượng">
                                 <span>−</span>
                             </button>
                             <input
@@ -177,7 +178,8 @@
                                     aria-label="Số lượng sản phẩm"
                                     readonly
                             >
-                            <button type="button" class="qty-btn qty-increase" onclick="increaseQty()" aria-label="Tăng số lượng">
+                            <button type="button" class="qty-btn qty-increase" onclick="increaseQty()"
+                                    aria-label="Tăng số lượng">
                                 <span>+</span>
                             </button>
                         </div>
@@ -198,7 +200,6 @@
                         </button>
                     </div>
                 </form>
-
 
 
                 <a href="${pageContext.request.contextPath}/contact">
@@ -271,22 +272,27 @@
                                     <div class="star_box_left">
                                         <div class="reviews_bar">
                                             <c:forEach var="star" begin="1" end="5">
-                                                <c:set var="starReversed" value="${6 - star}"/>
+                                                <c:set var="starReversed" value="${6-star}"/>
+
                                                 <div class="devvn_review_row">
-                                                    <span class="devvn_stars_value">${starReversed}<i
-                                                            class="devvn-star">★</i></span>
+                                                 <span class="devvn_stars_value">
+                                                     ${starReversed}<i class="devvn-star">★</i>
+                                                 </span>
                                                     <span class="devvn_rating_bar">
-                                                            <span style="background-color: #eee"
-                                                                  class="devvn_scala_rating">
-                                                                <span class="devvn_perc_rating"
-                                                                      style="width: ${stats.getPercentage(starReversed)}%; background-color: #f5a623"></span>
-                                                            </span>
-                                                        </span>
+                                                    <span class="devvn_scala_rating">
+                                                    <span class="devvn_perc_rating"
+                                                          style="width:${stats.getPercentage(starReversed)}%">
+                                                </span>
+                                                    </span>
+                                                 </span>
+
                                                     <span class="devvn_num_reviews">
-                                                            <b><fmt:formatNumber
-                                                                    value="${stats.getPercentage(starReversed)}"
-                                                                    maxFractionDigits="0"/>%</b>
-                                                        </span>
+                                                    <b>
+                                                        <fmt:formatNumber
+                                                                value="${stats.getPercentage(starReversed)}"
+                                                                maxFractionDigits="0"/>%
+                                                    </b>
+                                                </span>
                                                 </div>
                                             </c:forEach>
                                         </div>
@@ -321,12 +327,51 @@
                                                     </div>
 
                                                     <div class="devvn_review_bottom">
-                                                        <time class="woocommerce-review__published-date"
-                                                              datetime="${review.date}">
+                                                        <time class="woocommerce-review__published-date">
                                                             <fmt:formatDate value="${review.date}"
                                                                             pattern="dd/MM/yyyy"/>
                                                         </time>
+
+                                                        <button type="button"
+                                                                class="reply-btn"
+                                                                onclick="toggleReply(${review.id})">
+                                                            Trả lời
+                                                        </button>
                                                     </div>
+
+                                                    <div class="reply-form" id="reply-${review.id}"
+                                                         style="display:none;">
+                                                        <form action="${pageContext.request.contextPath}/review"
+                                                              method="post">
+
+                                                            <input type="hidden" name="productId" value="${product.id}">
+                                                            <input type="hidden" name="parentId" value="${review.id}">
+                                                            <input type="hidden" name="rating" value="5">
+
+                                                            <textarea name="comment" required></textarea>
+
+                                                            <button type="submit">Gửi phản hồi</button>
+                                                        </form>
+                                                    </div>
+                                                    <c:if test="${not empty review.replies}">
+                                                        <div class="reply-list">
+                                                            <c:forEach var="child" items="${review.replies}">
+                                                                <div class="reply-item">
+
+                                                                    <strong>${child.userName}</strong>
+                                                                    <span class="admin-tag">Phản hồi</span>
+
+                                                                    <p>${child.text}</p>
+
+                                                                    <small>
+                                                                        <fmt:formatDate value="${child.date}"
+                                                                                        pattern="dd/MM/yyyy HH:mm"/>
+                                                                    </small>
+
+                                                                </div>
+                                                            </c:forEach>
+                                                        </div>
+                                                    </c:if>
                                                 </div>
                                             </div>
                                         </li>
@@ -421,7 +466,6 @@
         <i class="bi bi-chevron-up"></i>
     </button>
 </a>
-
 
 
 <div class="overlay"></div>
@@ -537,5 +581,23 @@
 <script src="${pageContext.request.contextPath}/views/JS/product_detail.js"></script>
 <%--<script src="${pageContext.request.contextPath}/views/JS/index.js"></script>--%>
 <script src="${pageContext.request.contextPath}/views/JS/products.js"></script>
+<script>
+    function toggleReply(id) {
+
+        document.querySelectorAll('.reply-form').forEach(box => {
+            if (box.id !== 'reply-' + id) {
+                box.style.display = 'none';
+            }
+        });
+
+        let form = document.getElementById("reply-" + id);
+
+        if (form.style.display === "none" || form.style.display === "") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    }
+</script>
 </body>
 </html>
