@@ -339,18 +339,71 @@
                                                         </button>
                                                     </div>
 
-                                                    <div class="reply-form" id="reply-${review.id}"
-                                                         style="display:none;">
+                                                    <div class="reply-box-style" id="reply-${review.id}" style="display:none;">
+
+                                                        <div class="reply-title-row">
+                                                            <div class="reply-title-text">
+                                                                TRẢ LỜI ĐẾN ${review.userName}
+                                                            </div>
+
+                                                            <button type="button"
+                                                                    class="reply-cancel-btn"
+                                                                    onclick="toggleReply(${review.id})">
+                                                                ×
+                                                            </button>
+                                                        </div>
+
                                                         <form action="${pageContext.request.contextPath}/review"
-                                                              method="post">
+                                                              method="post"
+                                                              enctype="multipart/form-data">
 
                                                             <input type="hidden" name="productId" value="${product.id}">
                                                             <input type="hidden" name="parentId" value="${review.id}">
                                                             <input type="hidden" name="rating" value="5">
 
-                                                            <textarea name="comment" required></textarea>
+                                                            <textarea name="comment"
+                                                                      id="replyText-${review.id}"
+                                                                      required
+                                                                      placeholder="Mời bạn chia sẻ thêm một số cảm nhận..."
+                                                                      oninput="countReplyText(${review.id})"></textarea>
 
-                                                            <button type="submit">Gửi phản hồi</button>
+                                                            <div class="reply-media-row">
+
+                                                                <label class="reply-upload-btn">
+                                                                    📷 Chọn ảnh
+                                                                    <input type="file"
+                                                                           name="replyImage"
+                                                                           accept="image/*"
+                                                                           hidden>
+                                                                </label>
+
+                                                                <label class="reply-upload-btn video-btn">
+                                                                    🎬 Chọn video
+                                                                    <input type="file"
+                                                                           name="replyVideo"
+                                                                           accept="video/*"
+                                                                           hidden>
+                                                                </label>
+
+                                                                <span class="reply-char-count"
+                                                                      id="replyCount-${review.id}">
+                                                                    0 ký tự (Tối thiểu 10)
+                                                                </span>
+
+                                                            </div>
+
+                                                            <div class="reply-input-group">
+                                                                <input type="text" placeholder="Họ tên*" />
+                                                                <input type="text" placeholder="Số điện thoại*" />
+                                                                <input type="email" placeholder="Email *" />
+                                                            </div>
+
+                                                            <div class="reply-submit-center">
+                                                                <button type="submit" class="reply-main-submit">
+                                                                    GỬI ĐÁNH GIÁ
+                                                                </button>
+                                                            </div>
+
                                                         </form>
                                                     </div>
                                                     <c:if test="${not empty review.replies}">
@@ -584,7 +637,7 @@
 <script>
     function toggleReply(id) {
 
-        document.querySelectorAll('.reply-form').forEach(box => {
+        document.querySelectorAll('.reply-box-style').forEach(box => {
             if (box.id !== 'reply-' + id) {
                 box.style.display = 'none';
             }
@@ -597,6 +650,13 @@
         } else {
             form.style.display = "none";
         }
+    }
+</script>
+<script>
+    function countReplyText(id){
+        let txt = document.getElementById("replyText-" + id).value.length;
+        document.getElementById("replyCount-" + id).innerText =
+            txt + " ký tự (Tối thiểu 10)";
     }
 </script>
 </body>
