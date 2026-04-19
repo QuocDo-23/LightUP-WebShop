@@ -27,6 +27,8 @@
                             and not pageContext.request.requestURI.contains('/contact')
                             and not pageContext.request.requestURI.contains('/login')
                             and not pageContext.request.requestURI.contains('/cart')
+                            and not pageContext.request.requestURI.contains('product-detail')
+                            and not pageContext.request.requestURI.contains('cate_products')
                             ? 'active' : ''}">
                         TRANG CHỦ
                     </a>
@@ -43,7 +45,10 @@
                 <!-- SẢN PHẨM -->
                 <li>
                     <a href="${pageContext.request.contextPath}/products"
-                       class="${pageContext.request.requestURI.contains('/products') ? 'active' : ''}">
+                       class="${pageContext.request.requestURI.contains('/products')
+                                    or pageContext.request.requestURI.contains('product-detail')
+                                    or pageContext.request.requestURI.contains('cate_products')
+                                    ? 'active' : ''}">
                         SẢN PHẨM <i class="bi bi-caret-down-fill"></i>
                     </a>
 
