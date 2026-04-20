@@ -20,29 +20,28 @@
                      id="previewAvatar">
             </c:when>
             <c:when test="${not empty sessionScope.user.avatarImg}">
-                <img src="${pageContext.request.contextPath}/images/${sessionScope.user.avatarImg}"
+                <img src="${pageContext.request.contextPath}${sessionScope.user.avatarImg}"
                      alt="Avatar"
                      class="profile-pic"
                      id="previewAvatar">
             </c:when>
             <c:otherwise>
-                <img src="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png"
+                <img src="https://ui-avatars.com/api/?name=${sessionScope.user.name}&background=cccccc&color=555555&size=110"
                      alt="Avatar"
                      class="profile-pic"
                      id="previewAvatar">
             </c:otherwise>
         </c:choose>
 
-        <form id="avatarForm" action="${pageContext.request.contextPath}/update-avatar"
-              method="post" enctype="multipart/form-data" >
-            <div class="cont">
-                <label class="edit-avatar-btn">
-                    Chỉnh Sửa Ảnh
-                    <input type="file" name="avatarFile" accept="image/*" id="avatarInput"
-                           onchange="handleImageSelect(event)">
-                </label>
-            </div>
-        </form>
+        <div class="cont">
+            <label class="edit-avatar-btn">
+                Chỉnh Sửa Ảnh
+                <input type="file" name="avatar"
+                       accept="image/jpeg,image/png,image/webp,image/gif"
+                       id="avatarInputSidebar"
+                       onchange="handleImageSelect(event)">
+            </label>
+        </div>
     </div>
 
     <a href="profile" class="menu-item ${activeTab == 'profile' ? 'active' : ''}">

@@ -45,34 +45,6 @@
 
                     <h2 class="section-title">Thông Tin Cá Nhân</h2>
 
-                    <%-- =====cập nhat avt===== --%>
-                    <div class="avatar-section">
-                        <div class="avatar-wrapper" onclick="document.getElementById('avatarInput').click()" title="Nhấn để đổi ảnh đại diện">
-
-                            <img id="avatarPreview"
-                                 class="avatar-img"
-                                 src="<c:choose>
-                                        <c:when test='${not empty user.avatarImg}'>${pageContext.request.contextPath}${user.avatarImg}</c:when>
-                                        <c:otherwise>https://ui-avatars.com/api/?name=${user.name}&background=cccccc&color=555555&size=110</c:otherwise>
-                                      </c:choose>"
-                                 alt="Ảnh đại diện">
-
-                            <div class="avatar-overlay">
-                                <i class="bi bi-camera"></i>
-                                <span>Đổi ảnh</span>
-                            </div>
-
-                            <div class="avatar-spinner" id="avatarSpinner">
-                                <div class="spinner-ring"></div>
-                            </div>
-                        </div>
-
-                        <input type="file" id="avatarInput" name="avatar"
-                               accept="image/jpeg,image/png,image/webp,image/gif">
-
-                        <span class="avatar-hint">JPG, PNG, WEBP, GIF · Tối đa 5MB<br>Nhấn vào ảnh để thay đổi</span>
-                    </div>
-
                     <form action="${pageContext.request.contextPath}/profile" method="post">
                         <input type="hidden" name="action" value="updateProfile">
 
