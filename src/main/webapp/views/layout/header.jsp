@@ -132,11 +132,11 @@
                                                      id="previewAvatar">
                                             </c:when>
                                             <c:when test="${not empty sessionScope.user.avatarImg}">
-                                                <img src="${pageContext.request.contextPath}/images/${sessionScope.user.avatarImg}"
+                                                <img src="${pageContext.request.contextPath}${sessionScope.user.avatarImg}"
                                                      alt="Avatar">
                                             </c:when>
                                             <c:otherwise>
-                                                <img src="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png"
+                                                <img src="https://ui-avatars.com/api/?name=${sessionScope.user.name}&background=cccccc&color=555555&size=110"
                                                      alt="Avatar">
                                             </c:otherwise>
                                         </c:choose>
