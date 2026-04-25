@@ -64,7 +64,7 @@ war {
 // ==================== SSH CONFIG ====================
 remotes {
     host {
-        host = '192.168.110.194'
+        host = '192.168.110.190'
         user = 'lightup'
         password = 'quoc@23092005'
     }

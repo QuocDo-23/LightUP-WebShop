@@ -1,7 +1,9 @@
 package code.web.lightup.controller.User.CartController;
 
 import code.web.lightup.model.Cart.Cart;
+import code.web.lightup.model.ProductWithDetails;
 import code.web.lightup.service.CartService;
+import code.web.lightup.service.ProductService;
 import code.web.lightup.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,13 +14,16 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.userdetails.User;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet(name = "UpdateCart", value = "/update")
 public class UpdateCart extends HttpServlet {
     private static CartService cartService;
+    private static ProductService productService;
 
     public UpdateCart() {
         cartService = new CartService();
+        productService = new ProductService();
     }
 
 
@@ -42,7 +47,19 @@ public class UpdateCart extends HttpServlet {
                 if (qty <= 0) {
                     cart.removeItem(productId);
                 } else {
-                    cart.updateItem(productId, qty);
+                    Optional<ProductWithDetails> product = productService.getProductById(productId);
+                    if (product.isPresent()) {
+                        int available = product.get().getInventoryQuantity();
+                        if (qty > available) {
+                            session.setAttribute("errorMsg",
+                                    "Chỉ còn " + available + " sản phẩm trong kho!");
+                            cart.updateItem(productId, available);
+                        } else {
+                            cart.updateItem(productId, qty);
+                        }
+                    } else {
+                        cart.updateItem(productId, qty);
+                    }
                 }
 
                 if (SessionUtil.isLoggedIn(request)) {

@@ -40,6 +40,18 @@ public class AddCart extends HttpServlet {
         Optional<ProductWithDetails> product = productService.getProductById(pID);
 
         if (product.isPresent()) {
+            ProductWithDetails p = product.get();
+            int currentQty = cart.getQuantityOfProduct(pID);
+            int available = p.getInventoryQuantity();
+
+            if(currentQty + quantity > available) {
+                session.setAttribute("errorMsg", "Không đủ hàng trong kho! Chỉ còn " + available + " sản phẩm.");
+                String referer = request.getHeader("Referer");
+                if (referer != null) response.sendRedirect(referer);
+                else response.sendRedirect(request.getContextPath() + "/");
+                return;
+            }
+
             cart.addItem(product.get(), quantity);
             session.setAttribute("cart", cart);
             session.setAttribute("successMsg", "Đã thêm vào giỏ!");

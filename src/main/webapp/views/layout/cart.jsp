@@ -21,10 +21,19 @@
 <jsp:include page="header.jsp"/>
 
 
+
 <main class="cart-page">
     <div class="cart-left">
         <h2>Giỏ hàng của bạn</h2>
         <hr class="line">
+
+        <c:if test="${not empty errorMsg}">
+            <div class="toast">
+                    ${errorMsg}
+            </div>
+
+            <c:remove var="errorMsg" scope="session" />
+        </c:if>
 
         <c:if test="${sessionScope.cart == null || empty sessionScope.cart.listItem}">
             <p>Giỏ hàng của bạn đang trống</p>
@@ -170,7 +179,6 @@
 <script>
     var CTX = "${pageContext.request.contextPath}";
 
-    /* ── Tính tổng và cập nhật summary bên phải ── */
     function capNhatTong() {
         var items   = document.querySelectorAll(".chk-item");
         var total   = 0;
@@ -178,7 +186,6 @@
         var noMsg   = document.getElementById("no-selected-msg");
         var allLis  = summary.querySelectorAll(".summary-item");
 
-        // Ẩn/hiện từng dòng trong summary theo checkbox
         items.forEach(function(chk) {
             var id  = chk.value;
             var li  = summary.querySelector(".summary-item[data-id='" + id + "']");
@@ -192,11 +199,9 @@
             }
         });
 
-        // Hiển thị tổng tiền
         document.getElementById("total-display").textContent =
             total.toLocaleString("vi-VN") + "đ";
 
-        // Thông báo nếu không chọn gì
         var anyChecked = Array.from(items).some(function(c) { return c.checked; });
         noMsg.style.display   = anyChecked ? "none"  : "block";
         summary.style.display = anyChecked ? "block" : "none";
@@ -206,7 +211,6 @@
         if (btn) btn.disabled = !anyChecked;
     }
 
-    /* ── Checkbox chọn tất cả ── */
     document.getElementById("chkSelectAll").addEventListener("change", function() {
         document.querySelectorAll(".chk-item").forEach(function(chk) {
             chk.checked = this.checked;
@@ -214,7 +218,7 @@
         capNhatTong();
     });
 
-    /* ── Checkbox từng sản phẩm ── */
+
     document.querySelectorAll(".chk-item").forEach(function(chk) {
         chk.addEventListener("change", function() {
             var all     = document.querySelectorAll(".chk-item");
@@ -224,7 +228,6 @@
         });
     });
 
-    /* ── Bấm thanh toán: gửi selectedIds lên server rồi redirect ── */
     function goCheckout() {
         var selected = Array.from(document.querySelectorAll(".chk-item:checked"))
             .map(function(c) { return c.value; });
@@ -251,7 +254,6 @@
             });
     }
 
-    /* Chạy lần đầu để khớp với trạng thái mặc định (tất cả checked) */
     capNhatTong();
 </script>
 </body>
