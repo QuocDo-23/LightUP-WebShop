@@ -20,29 +20,28 @@
                      id="previewAvatar">
             </c:when>
             <c:when test="${not empty sessionScope.user.avatarImg}">
-                <img src="${pageContext.request.contextPath}/images/${sessionScope.user.avatarImg}"
+                <img src="${pageContext.request.contextPath}${sessionScope.user.avatarImg}"
                      alt="Avatar"
                      class="profile-pic"
                      id="previewAvatar">
             </c:when>
             <c:otherwise>
-                <img src="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png"
+                <img src="https://ui-avatars.com/api/?name=${sessionScope.user.name}&background=cccccc&color=555555&size=110"
                      alt="Avatar"
                      class="profile-pic"
                      id="previewAvatar">
             </c:otherwise>
         </c:choose>
 
-        <form id="avatarForm" action="${pageContext.request.contextPath}/update-avatar"
-              method="post" enctype="multipart/form-data" >
-            <div class="cont">
-                <label class="edit-avatar-btn">
-                    Chỉnh Sửa Ảnh
-                    <input type="file" name="avatarFile" accept="image/*" id="avatarInput"
-                           onchange="handleImageSelect(event)">
-                </label>
-            </div>
-        </form>
+        <div class="cont">
+            <label class="edit-avatar-btn">
+                Chỉnh Sửa Ảnh
+                <input type="file" name="avatar"
+                       accept="image/jpeg,image/png,image/webp,image/gif"
+                       id="avatarInputSidebar"
+                       onchange="handleImageSelect(event)">
+            </label>
+        </div>
     </div>
 
     <a href="profile" class="menu-item ${activeTab == 'profile' ? 'active' : ''}">
@@ -58,6 +57,7 @@
         <i class="bi bi-box-arrow-right"></i> Đăng Xuất
     </a>
 </div>
+
 <div id="confirmOverlay" class="confirm-overlay" style="display: none;">
     <div class="confirm-dialog">
         <div class="confirm-icon">
@@ -79,31 +79,34 @@
 
 <script>
     let selectedFile = null;
+    let originalAvatarSrc = null;
 
     function handleImageSelect(event) {
         const file = event.target.files[0];
         if (!file) return;
 
-        if (file.size > 10 * 1024 * 1024) {
-            alert('File quá lớn! Tối đa 10MB.');
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Chi chap nhan file JPG, PNG, WEBP, GIF!');
             event.target.value = '';
             return;
         }
 
-        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-        if (!validTypes.includes(file.type)) {
-            alert('Chỉ chấp nhận file JPG, PNG, GIF!');
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Anh khong duoc vuot qua 5MB!');
             event.target.value = '';
             return;
         }
 
         selectedFile = file;
 
+        const preview = document.getElementById('previewAvatar');
+        originalAvatarSrc = preview.src;
         const reader = new FileReader();
-        reader.onload = function() {
-            document.getElementById('previewAvatar').src = reader.result;
+        reader.onload = function () {
+            preview.src = reader.result;
             showConfirmDialog();
-        }
+        };
         reader.readAsDataURL(file);
     }
 
@@ -120,6 +123,9 @@
     }
 
     function cancelUpload() {
+        if (originalAvatarSrc) {
+            document.getElementById('previewAvatar').src = originalAvatarSrc;
+        }
         document.getElementById('avatarInput').value = '';
         selectedFile = null;
         hideConfirmDialog();
@@ -127,7 +133,37 @@
 
     function confirmAndSubmit() {
         hideConfirmDialog();
-        document.getElementById('avatarForm').submit();
+        if (!selectedFile) return;
+
+        const formData = new FormData();
+        formData.append('avatar', selectedFile);
+
+        fetch('${pageContext.request.contextPath}/upload-avatar', {
+            method: 'POST',
+            body: formData
+        })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                if (data.success) {
+                    document.getElementById('previewAvatar').src = data.avatarUrl + '?t=' + Date.now();
+                    alert(data.message);
+                } else {
+                    if (originalAvatarSrc) {
+                        document.getElementById('previewAvatar').src = originalAvatarSrc;
+                    }
+                    alert(data.message || 'Upload thất bại.');
+                }
+            })
+            .catch(function () {
+                if (originalAvatarSrc) {
+                    document.getElementById('previewAvatar').src = originalAvatarSrc;
+                }
+                alert('Có lỗi xảy ra khi kết nối server.');
+            });
+
+        document.getElementById('avatarInputSidebar').value = '';
+        selectedFile = null;
+        originalAvatarSrc = null;
     }
 
     setTimeout(() => {

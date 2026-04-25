@@ -45,34 +45,6 @@
 
                     <h2 class="section-title">Thông Tin Cá Nhân</h2>
 
-                    <%-- =====cập nhat avt===== --%>
-                    <div class="avatar-section">
-                        <div class="avatar-wrapper" onclick="document.getElementById('avatarInput').click()" title="Nhấn để đổi ảnh đại diện">
-
-                            <img id="avatarPreview"
-                                 class="avatar-img"
-                                 src="<c:choose>
-                                        <c:when test='${not empty user.avatarImg}'>${pageContext.request.contextPath}${user.avatarImg}</c:when>
-                                        <c:otherwise>https://ui-avatars.com/api/?name=${user.name}&background=cccccc&color=555555&size=110</c:otherwise>
-                                      </c:choose>"
-                                 alt="Ảnh đại diện">
-
-                            <div class="avatar-overlay">
-                                <i class="bi bi-camera"></i>
-                                <span>Đổi ảnh</span>
-                            </div>
-
-                            <div class="avatar-spinner" id="avatarSpinner">
-                                <div class="spinner-ring"></div>
-                            </div>
-                        </div>
-
-                        <input type="file" id="avatarInput" name="avatar"
-                               accept="image/jpeg,image/png,image/webp,image/gif">
-
-                        <span class="avatar-hint">JPG, PNG, WEBP, GIF · Tối đa 5MB<br>Nhấn vào ảnh để thay đổi</span>
-                    </div>
-
                     <form action="${pageContext.request.contextPath}/profile" method="post">
                         <input type="hidden" name="action" value="updateProfile">
 
@@ -137,81 +109,13 @@
 
 <script>
     window.onload = function () {
-        const message = document.querySelector('.message');
+        const message = document.getElementById('flashMessage');
         if (message) {
             setTimeout(function () {
                 message.style.display = 'none';
             }, 5000);
         }
     };
-
-    function showToast(msg, type) {
-        const toast = document.getElementById('avatarToast');
-        toast.textContent = msg;
-        toast.className = 'avatar-toast ' + type + ' show';
-        clearTimeout(toast._timer);
-        toast._timer = setTimeout(function () {
-            toast.classList.remove('show');
-        }, 3500);
-    }
-
-    document.getElementById('avatarInput').addEventListener('change', function () {
-        const file = this.files[0];
-        if (!file) return;
-
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-        if (!allowedTypes.includes(file.type)) {
-            showToast('Hình ảnh không hợp lệ.   ', 'error');
-            this.value = '';
-            return;
-        }
-        if (file.size > 5 * 1024 * 1024) {
-            showToast('Ảnh không được vượt quá 5MB.', 'error');
-            this.value = '';
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById('avatarPreview').src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-
-        const spinner = document.getElementById('avatarSpinner');
-        spinner.classList.add('active');
-
-        const formData = new FormData();
-        formData.append('avatar', file);
-
-        fetch('${pageContext.request.contextPath}/upload-avatar', {
-            method: 'POST',
-            body: formData
-        })
-            .then(function (res) { return res.json(); })
-            .then(function (data) {
-                spinner.classList.remove('active');
-                if (data.success) {
-                    document.getElementById('avatarPreview').src = data.avatarUrl + '?t=' + Date.now();
-                    showToast(data.message, 'success');
-                } else {
-                    showToast(data.message || 'Upload thất bại.', 'error');
-                }
-            })
-            .catch(function () {
-                spinner.classList.remove('active');
-                showToast('Có lỗi xảy ra khi kết nối server.', 'error');
-            });
-
-        this.value = '';
-    });
-
-    function showAddAddressForm() {
-        document.getElementById('addAddressForm').style.display = 'block';
-    }
-
-    function hideAddAddressForm() {
-        document.getElementById('addAddressForm').style.display = 'none';
-    }
 </script>
 </body>
 </html>
