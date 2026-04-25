@@ -1,7 +1,9 @@
-package code.web.lightup.controller.User.CartController;
+package code.web.lightup.controller.User.Minicart;
 
 import code.web.lightup.model.Cart.Cart;
+import code.web.lightup.model.ProductWithDetails;
 import code.web.lightup.service.CartService;
+import code.web.lightup.service.ProductService;
 import code.web.lightup.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,19 +13,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.Optional;
 
-/**
- * POST /remove-mini
- * Xoá sản phẩm khỏi giỏ, forward fragment để AJAX refresh mini cart.
- */
-@WebServlet(name = "RemoveCartAjax", value = "/remove-mini")
-public class RemoveCartAjax extends HttpServlet {
+
+@WebServlet(name = "UpdateCartAjax", value = "/update-mini")
+public class UpdateCartAjax extends HttpServlet {
 
     private CartService cartService;
+    private ProductService productService;
 
     @Override
     public void init() {
         cartService = new CartService();
+        productService = new ProductService();
     }
 
     @Override
@@ -38,7 +40,25 @@ public class RemoveCartAjax extends HttpServlet {
         if (cart != null) {
             try {
                 int productId = Integer.parseInt(request.getParameter("productId"));
-                cart.removeItem(productId);
+                int qty       = Integer.parseInt(request.getParameter("qty"));
+
+                if (qty <= 0) {
+                    cart.removeItem(productId);
+                } else {
+                    Optional<ProductWithDetails> product = productService.getProductById(productId);
+                    if (product.isPresent()) {
+                        int available = product.get().getInventoryQuantity();
+                        if (qty > available) {
+                            cart.updateItem(productId, available);
+                            request.setAttribute("stockWarning",
+                                    "Chỉ còn " + available + " sản phẩm trong kho!");
+                        } else {
+                            cart.updateItem(productId, qty);
+                        }
+                    } else {
+                        cart.updateItem(productId, qty);
+                    }
+                }
                 session.setAttribute("cart", cart);
 
                 if (SessionUtil.isLoggedIn(request)) {
@@ -49,6 +69,7 @@ public class RemoveCartAjax extends HttpServlet {
                 e.printStackTrace();
             }
         }
+
 
         request.setAttribute("cart", cart);
         request.getRequestDispatcher("/views/layout/cart-mini-fragment.jsp")

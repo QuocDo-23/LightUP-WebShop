@@ -1,4 +1,4 @@
-package code.web.lightup.controller.User.CartController;
+package code.web.lightup.controller.User.Minicart;
 
 import code.web.lightup.model.Cart.Cart;
 import code.web.lightup.service.CartService;
@@ -12,12 +12,9 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-/**
- * POST /update-mini
- * Cập nhật số lượng, forward fragment để AJAX refresh mini cart.
- */
-@WebServlet(name = "UpdateCartAjax", value = "/update-mini")
-public class UpdateCartAjax extends HttpServlet {
+
+@WebServlet(name = "RemoveCartAjax", value = "/remove-mini")
+public class RemoveCartAjax extends HttpServlet {
 
     private CartService cartService;
 
@@ -38,13 +35,7 @@ public class UpdateCartAjax extends HttpServlet {
         if (cart != null) {
             try {
                 int productId = Integer.parseInt(request.getParameter("productId"));
-                int qty       = Integer.parseInt(request.getParameter("qty"));
-
-                if (qty <= 0) {
-                    cart.removeItem(productId);
-                } else {
-                    cart.updateItem(productId, qty);
-                }
+                cart.removeItem(productId);
                 session.setAttribute("cart", cart);
 
                 if (SessionUtil.isLoggedIn(request)) {

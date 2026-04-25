@@ -41,7 +41,7 @@ public class BuyNowServlet extends HttpServlet {
         Cart buyNowCart = new Cart();
         buyNowCart.addItem(product.get(), quantity);
 
-        session.setAttribute("cart", buyNowCart);
+        session.setAttribute("checkoutCart", buyNowCart);
         session.setAttribute("checkoutType", "buy-now");
 
         response.sendRedirect(request.getContextPath() + "/payment");

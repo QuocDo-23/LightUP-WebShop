@@ -1,4 +1,4 @@
-package code.web.lightup.controller.User.CartController;
+package code.web.lightup.controller.User.Minicart;
 
 import code.web.lightup.model.Cart.Cart;
 import code.web.lightup.model.ProductWithDetails;
@@ -15,15 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-/**
- * GET /add-cart-ajax?pID=...&quantity=...
- *
- * Luồng:
- *  1. Thêm sản phẩm vào Cart trong session
- *  2. Đặt cart vào request attribute
- *  3. Forward sang cart-mini-fragment.jsp -> trả HTML thô
- *  4. JS nhét HTML vào #mini-cart-body, mở panel, tự đóng sau 3 giây
- */
+
 @WebServlet(name = "AddCartAjax", value = "/add-cart-ajax")
 public class AddCartAjax extends HttpServlet {
 
@@ -52,6 +44,20 @@ public class AddCartAjax extends HttpServlet {
             Optional<ProductWithDetails> product = productService.getProductById(pID);
 
             if (product.isPresent()) {
+
+                ProductWithDetails p = product.get();
+
+                int currentQtyInCart = cart.getQuantityOfProduct(pID);
+                int available = p.getInventoryQuantity();
+
+                if (currentQtyInCart + quantity > available) {
+                    response.setStatus(HttpServletResponse.SC_CONFLICT);
+                    response.getWriter().write(
+                            "<p class='mini-cart-error'>Chỉ còn " + available + " sản phẩm trong kho!</p>"
+                    );
+                    return;
+                }
+
                 cart.addItem(product.get(), quantity);
                 session.setAttribute("cart", cart);
 

@@ -130,4 +130,8 @@ public class Cart implements Serializable {
         }
         return totalPrice;
     }
+    public int getQuantityOfProduct(int productId) {
+        return getListItem().stream().filter(i -> i.getProduct().getId() ==
+                productId).mapToInt(CartItem::getQuantity).findFirst().orElse(0);
+    }
 }
