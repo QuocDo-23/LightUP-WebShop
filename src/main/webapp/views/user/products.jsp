@@ -168,6 +168,19 @@
                                         <img src="${product.hoverImage}" alt="${product.name}" class="img-hover">
                                     </c:if>
                                 </a>
+                                <form action="${pageContext.request.contextPath}/favorite"
+                                      method="post"
+                                      class="favorite-form">
+
+                                    <input type="hidden"
+                                           name="productId"
+                                           value="${product.id}">
+
+                                    <button type="submit" class="favorite-btn">
+                                        <i class="bi bi-heart-fill"></i>
+                                    </button>
+
+                                </form>
                             </div>
 
                             <div class="product-info">
@@ -243,7 +256,21 @@
                                                          alt="${product.name}" class="img-hover">
                                                 </c:if>
                                             </a>
+                                            <form action="${pageContext.request.contextPath}/favorite"
+                                                  method="post"
+                                                  class="favorite-form">
+
+                                                <input type="hidden"
+                                                       name="productId"
+                                                       value="${product.id}">
+
+                                                <button type="submit" class="favorite-btn">
+                                                    <i class="bi bi-heart-fill"></i>
+                                                </button>
+
+                                            </form>
                                         </div>
+
 
                                         <div class="product-info">
                                             <h3 class="product-name">

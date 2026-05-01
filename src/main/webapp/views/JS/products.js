@@ -78,6 +78,44 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    document.querySelectorAll(".favorite-form").forEach(form => {
 
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
 
+            const button = form.querySelector(".favorite-btn");
+
+            const productId =
+                form.querySelector('input[name="productId"]').value;
+
+            fetch(form.action, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "productId=" + encodeURIComponent(productId)
+            })
+                .then(res => res.text())
+                .then(data => {
+                    console.log("SERVER TRA VE:", data);
+
+                    data = data.trim();
+
+                    if (data === "login") {
+                        window.location.href = "/LightUp_war/login";
+                        return;
+                    }
+
+                    if (data === "true") {
+                        button.classList.add("active");
+                    } else if (data === "false") {
+                        button.classList.remove("active");
+                    }
+
+                })
+                .catch(err => console.error(err));
+
+        });
+
+    });
 });
