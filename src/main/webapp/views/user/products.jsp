@@ -21,7 +21,6 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/cart.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/products.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/sub_login.css">
@@ -212,7 +211,6 @@
                                            href="${pageContext.request.contextPath}/add-cart?pID=${product.id}&quantity=1">
                                             <i class="bi bi-cart-check"></i>
                                         </a>
-
                                     </div>
                                 </div>
 
@@ -363,7 +361,7 @@
 </main>
 
 
-<script src="${pageContext.request.contextPath}/views/JS/products.js"></script>
+<%--<script src="${pageContext.request.contextPath}/views/JS/products.js"></script>--%>
 
 </body>
 </html>
