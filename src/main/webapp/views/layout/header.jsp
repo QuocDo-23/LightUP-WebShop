@@ -8,7 +8,7 @@
 
 <nav>
     <div class="nav_head">
-
+        <!-- LOGO -->
         <a href="${pageContext.request.contextPath}/">
             <div class="logo">
                 <img src="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png" alt="Logo">
@@ -18,6 +18,7 @@
         <div class="nav-container">
             <ul class="nav-links">
 
+                <!-- TRANG CHỦ -->
                 <li>
                     <a href="${pageContext.request.contextPath}/"
                        class="${not pageContext.request.requestURI.contains('/products')
@@ -33,7 +34,7 @@
                     </a>
                 </li>
 
-
+                <!-- GIỚI THIỆU -->
                 <li>
                     <a href="${pageContext.request.contextPath}/about"
                        class="${pageContext.request.requestURI.contains('/about') ? 'active' : ''}">
@@ -41,7 +42,7 @@
                     </a>
                 </li>
 
-
+                <!-- SẢN PHẨM -->
                 <li>
                     <a href="${pageContext.request.contextPath}/products"
                        class="${pageContext.request.requestURI.contains('/products')
@@ -70,7 +71,7 @@
                     </div>
                 </li>
 
-
+                <!-- TIN TỨC -->
                 <li>
                     <a href="${pageContext.request.contextPath}/news"
                        class="${pageContext.request.requestURI.contains('/news') ? 'active' : ''}">
@@ -78,7 +79,7 @@
                     </a>
                 </li>
 
-
+                <!-- LIÊN HỆ -->
                 <li>
                     <a href="${pageContext.request.contextPath}/contact"
                        class="${pageContext.request.requestURI.contains('/contact') ? 'active' : ''}">
@@ -103,38 +104,6 @@
                     </form>
 
                     <div id="searchSuggestions" class="search-suggestions"></div>
-                </div>
-
-                <div class="favorite-header">
-                    <a href="${pageContext.request.contextPath}/favorite-list" class="favorite-link">
-                        <i class="bi bi-heart"></i>
-                        <span class="favorite-count">
-                            ${not empty favoriteCount ? favoriteCount : 0}
-                        </span>
-                    </a>
-
-
-                    <div class="favorite-dropdown">
-                        <c:choose>
-                            <c:when test="${empty favoriteList}">
-                                <p style="padding:10px;">Chưa có sản phẩm yêu thích</p>
-                            </c:when>
-
-                            <c:otherwise>
-                                <c:forEach var="f" items="${favoriteList}" begin="0" end="2">
-                                    <div class="favorite-item">
-                                        <img src="${f.mainImage}" alt="${f.name}">
-                                        <span>${f.name}</span>
-                                    </div>
-                                </c:forEach>
-
-                                <a href="${pageContext.request.contextPath}/favorite-list"
-                                   class="view-all">
-                                    Xem tất cả
-                                </a>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
                 </div>
 
                 <div class="icon-group">
