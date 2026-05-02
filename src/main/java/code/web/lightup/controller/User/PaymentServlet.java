@@ -146,7 +146,7 @@ public class PaymentServlet extends HttpServlet {
             boolean saveAddress = "true".equals(request.getParameter("saveAddress"));
 
 
-            double shippingFee = "express".equals(shippingMethod) ? 30000 : 0;
+            double shippingFee = "express".equals(shippingMethod) ? 150000 : 70000;
             double totalAmount = cart.getTotalPrice() + shippingFee;
 
 
