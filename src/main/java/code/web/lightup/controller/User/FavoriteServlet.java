@@ -31,6 +31,12 @@ public class FavoriteServlet extends HttpServlet {
             String pid = request.getParameter("productId");
             System.out.println("PID GUI LEN = " + pid);
 
+
+            if (pid == null || pid.isEmpty()) {
+                response.getWriter().write("error");
+                return;
+            }
+
             int productId = Integer.parseInt(pid);
 
             boolean favorite;
