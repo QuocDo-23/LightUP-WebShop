@@ -181,6 +181,10 @@
     background: #f0f0f0;
     color: #555;
 }
+.btn-reviews-now {
+    background: #8b6a17;
+    color: #ffffff;
+}
 
 .btn-secondary:hover {
     background: #e0e0e0;

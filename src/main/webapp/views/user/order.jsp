@@ -139,7 +139,7 @@
                                                             </button>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <a href="${pageContext.request.contextPath}/order-review?id=${order.id}">
+                                                            <a href="${pageContext.request.contextPath}/order-review?id=${order.id}" class="btn btn-reviews-now">
                                                                 Đánh giá đơn hàng
                                                             </a>
                                                         </c:otherwise>
