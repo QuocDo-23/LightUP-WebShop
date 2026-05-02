@@ -124,7 +124,6 @@
                     <span class="radio"></span>
                     <span>Giao hàng tiêu chuẩn (5-7 ngày)</span>
                     <div class="payment-info">
-<%--                        <img src="https://abchome.vn/wp-content/uploads/2021/03/giao-hang.png" alt="">--%>
                         <span class="fee">70.000₫</span>
                     </div>
                 </label>
@@ -133,7 +132,6 @@
                     <span class="radio"></span>
                     <span>Giao hàng nhanh (2-3 ngày)</span>
                     <div class="payment-info">
-<%--                        <img src="https://abchome.vn/wp-content/uploads/2021/03/giao-hang.png" alt="">--%>
                         <span class="fee">150.000₫</span>
                     </div>
                 </label>
@@ -247,10 +245,9 @@
 <script>
     const baseTotal = ${cart.totalPrice};
 
-
     document.querySelectorAll('input[name="shippingMethod"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            const fee = this.value === 'express' ? 30000 : 0;
+            const fee = this.value === 'express' ? 150000 : 70000;
             document.getElementById('shippingFee').textContent =
                 fee === 0 ? 'Miễn phí' : fee.toLocaleString('vi-VN') + '₫';
             document.getElementById('totalPrice').textContent =
@@ -258,6 +255,7 @@
         });
     });
 
+    document.querySelector('input[name="shippingMethod"]:checked').dispatchEvent(new Event('change'));
 
     function openModal() {
         document.getElementById('addressModal').classList.add('show');
