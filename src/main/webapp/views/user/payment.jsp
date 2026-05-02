@@ -124,7 +124,6 @@
                     <span class="radio"></span>
                     <span>Giao hàng tiêu chuẩn (5-7 ngày)</span>
                     <div class="payment-info">
-<%--                        <img src="https://abchome.vn/wp-content/uploads/2021/03/giao-hang.png" alt="">--%>
                         <span class="fee">70.000₫</span>
                     </div>
                 </label>
@@ -133,7 +132,6 @@
                     <span class="radio"></span>
                     <span>Giao hàng nhanh (2-3 ngày)</span>
                     <div class="payment-info">
-<%--                        <img src="https://abchome.vn/wp-content/uploads/2021/03/giao-hang.png" alt="">--%>
                         <span class="fee">150.000₫</span>
                     </div>
                 </label>
@@ -152,11 +150,21 @@
                 <label class="payment-method">
                     <input type="radio" name="paymentMethod" value="transfer" form="checkoutForm">
                     <span class="radio"></span>
-                    <span>Chuyển khoản ngân hàng</span>
+                    <span>Chuyển khoản ngân hàng (Momo)</span>
                     <div class="payment-info">
-                        <img src="https://png.pngtree.com/png-vector/20190115/ourlarge/pngtree-vector-credit-card-icon-png-image_319822.jpg" alt="">
+                        <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="MoMo" style="width:40px;height:40px;border-radius:8px;">
                     </div>
                 </label>
+
+                <div id="momoPopup">
+                    <p class="momo-title">Quét mã QR để thanh toán qua MoMo</p>
+                    <img id="momoQR"
+                         src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=2|99|0969123456|TEN_CUA_BAN|0|0|0|Thanh%20toan%20don%20hang|transfer_type"
+                         alt="QR MoMo" class="momo-qr">
+                    <p class="momo-info">Số tài khoản MoMo: <strong>0969 123 456</strong></p>
+                    <p class="momo-info">Chủ tài khoản: <strong>TÊN CỦA BẠN</strong></p>
+                    <p class="momo-note">Nội dung chuyển khoản: <strong id="momoContent">Thanh toan don hang</strong></p>
+                </div>
             </div>
         </div>
 
@@ -247,10 +255,9 @@
 <script>
     const baseTotal = ${cart.totalPrice};
 
-
     document.querySelectorAll('input[name="shippingMethod"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            const fee = this.value === 'express' ? 30000 : 0;
+            const fee = this.value === 'express' ? 150000 : 70000;
             document.getElementById('shippingFee').textContent =
                 fee === 0 ? 'Miễn phí' : fee.toLocaleString('vi-VN') + '₫';
             document.getElementById('totalPrice').textContent =
@@ -258,6 +265,7 @@
         });
     });
 
+    document.querySelector('input[name="shippingMethod"]:checked').dispatchEvent(new Event('change'));
 
     function openModal() {
         document.getElementById('addressModal').classList.add('show');
@@ -287,6 +295,32 @@
             alert('Số điện thoại không hợp lệ (phải có 10-11 chữ số)');
             return false;
         }
+    });
+
+    document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const momoPopup = document.getElementById('momoPopup');
+            momoPopup.style.display = this.value === 'transfer' ? 'block' : 'none';
+            if (this.value === 'transfer') updateMomoQR();
+        });
+    });
+
+    function updateMomoQR() {
+        const total = parseInt(document.getElementById('totalPrice').textContent.replace(/\D/g, ''));
+        const phone = document.getElementById('phone').value || '';
+        const content = 'Thanh toan don hang ' + phone;
+        document.getElementById('momoContent').textContent = content;
+
+        const qrData = encodeURIComponent(`2|99|0969123456|TEN_CUA_BAN|${total}|0|0|${content}|transfer_type`);
+        document.getElementById('momoQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${qrData}`;
+    }
+
+    document.querySelectorAll('input[name="shippingMethod"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (document.querySelector('input[name="paymentMethod"]:checked').value === 'transfer') {
+                updateMomoQR();
+            }
+        });
     });
 </script>
 </body>

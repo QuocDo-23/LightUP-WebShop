@@ -63,8 +63,6 @@
                         <!-- Bước 4: Đã giao hàng -->
                         <div class="step ${order.status == 'delivered' ? 'step_complete' : ''}">
                             <i class="bi bi-check2-square"></i>
-                            <c:set var="itemCount" value="${orderItems.size()}" />
-                            <div class="item-quantity">${itemCount}</div>
                             <p>Đã giao hàng</p>
                         </div>
                     </div>
@@ -95,11 +93,6 @@
                         <span class="info-label">Email:</span>
                         <span class="info-value">${order.recipientEmail}</span>
                     </div>
-
-
-
-
-
 
                     <div class="info-row">
                         <span class="info-label">Phương thức thanh toán:</span>
@@ -183,17 +176,15 @@
                         <div class="info-row">
                             <span class="info-label">Địa chỉ giao hàng:</span>
                             <span class="info-value">
-            ${order.shippingHouseNumber}, ${order.shippingCommune}, ${order.shippingDistrict}
-            <c:if test="${not empty order.shippingAddressDetail}">
-                <br>${order.shippingAddressDetail}
-            </c:if>
-        </span>
+                                ${order.shippingHouseNumber}, ${order.shippingCommune}, ${order.shippingDistrict}
+                                <c:if test="${not empty order.shippingAddressDetail}">
+                                    <br>${order.shippingAddressDetail}
+                                </c:if>
+                            </span>
                         </div>
-
                     </c:if>
                 </div>
             </div>
-
 
             <div class="order-products-section">
                 <h2>Sản phẩm trong đơn hàng</h2>

@@ -15,8 +15,6 @@
 
 <body>
 <div class="wrap">
-
-    <!--Header của trang web-->
     <header>
         <a class="co-header" href="${pageContext.request.contextPath}/">
             <img src="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png" alt="logo">
@@ -51,7 +49,7 @@
                                 Thanh toán khi nhận hàng (COD)
                             </c:when>
                             <c:when test="${payment.paymentMethod == 'transfer'}">
-                                Chuyển khoản ngân hàng
+                                Chuyển khoản ngân hàng (Momo)
                             </c:when>
                         </c:choose>
                     </p>
