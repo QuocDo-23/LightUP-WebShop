@@ -21,6 +21,7 @@
 </head>
 
 <body>
+<body>
 <main>
     <jsp:include page="/views/layout/header.jsp"/>
 

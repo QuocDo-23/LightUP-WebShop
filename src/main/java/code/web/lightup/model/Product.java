@@ -11,6 +11,7 @@ public class Product {
     private int inventoryQuantity;
     private BigDecimal review;
     private String status;
+    private String mainImage;
 
     public String getName() {
         return name;
@@ -75,4 +76,8 @@ public class Product {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getMainImage() {return mainImage;}
+
+    public void setMainImage(String mainImage) {this.mainImage = mainImage;}
 }
