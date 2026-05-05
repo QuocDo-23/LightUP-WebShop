@@ -152,14 +152,14 @@
                     <span class="radio"></span>
                     <span>Chuyển khoản ngân hàng (Momo)</span>
                     <div class="payment-info">
-                        <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="MoMo" style="width:40px;height:40px;border-radius:8px;">
+                        <img src="https://developers.momo.vn/v3/assets/images/MOMO-Logo-App-6262c3743a290ef02396a24ea2b66c35.png" alt="MoMo" style="width:40px;height:40px;border-radius:8px;">
                     </div>
                 </label>
 
-                <div id="momoPopup">
+                <div id="momoPopup" style="display:none;">
                     <p class="momo-title">Quét mã QR để thanh toán qua MoMo</p>
                     <img id="momoQR"
-                         src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=2|99|0969123456|TEN_CUA_BAN|0|0|0|Thanh%20toan%20don%20hang|transfer_type"
+                         src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=MOMO+0969123456"
                          alt="QR MoMo" class="momo-qr">
                     <p class="momo-info">Số tài khoản MoMo: <strong>0969 123 456</strong></p>
                     <p class="momo-info">Chủ tài khoản: <strong>TÊN CỦA BẠN</strong></p>
@@ -311,8 +311,8 @@
         const content = 'Thanh toan don hang ' + phone;
         document.getElementById('momoContent').textContent = content;
 
-        const qrData = encodeURIComponent(`2|99|0969123456|TEN_CUA_BAN|${total}|0|0|${content}|transfer_type`);
-        document.getElementById('momoQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${qrData}`;
+        const qrData = encodeURIComponent('MOMO 0969123456 ' + total + ' ' + content);
+        document.getElementById('momoQR').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + qrData;
     }
 
     document.querySelectorAll('input[name="shippingMethod"]').forEach(radio => {
