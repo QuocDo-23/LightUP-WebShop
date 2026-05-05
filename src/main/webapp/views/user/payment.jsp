@@ -258,32 +258,68 @@
     document.querySelectorAll('input[name="shippingMethod"]').forEach(radio => {
         radio.addEventListener('change', function() {
             const fee = this.value === 'express' ? 150000 : 70000;
-            document.getElementById('shippingFee').textContent =
-                fee === 0 ? 'Miễn phí' : fee.toLocaleString('vi-VN') + '₫';
-            document.getElementById('totalPrice').textContent =
-                (baseTotal + fee).toLocaleString('vi-VN') + '₫';
+            document.getElementById('shippingFee').textContent = fee.toLocaleString('vi-VN') + '₫';
+            document.getElementById('totalPrice').textContent = (baseTotal + fee).toLocaleString('vi-VN') + '₫';
+            if (document.querySelector('input[name="paymentMethod"]:checked').value === 'transfer') {
+                loadMoMoQR();
+            }
         });
     });
 
     document.querySelector('input[name="shippingMethod"]:checked').dispatchEvent(new Event('change'));
 
-    function openModal() {
-        document.getElementById('addressModal').classList.add('show');
+    function openModal() { document.getElementById('addressModal').classList.add('show'); }
+    function closeModal() { document.getElementById('addressModal').classList.remove('show'); }
+
+    document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const momoPopup = document.getElementById('momoPopup');
+            if (this.value === 'transfer') {
+                momoPopup.style.display = 'block';
+                loadMoMoQR();
+            } else {
+                momoPopup.style.display = 'none';
+            }
+        });
+    });
+
+    function loadMoMoQR() {
+        const total = parseInt(document.getElementById('totalPrice').textContent.replace(/\D/g, ''));
+        const orderId = 'ORDER' + Date.now();
+
+        document.getElementById('momoQR').src = '';
+        document.getElementById('momoContent').textContent = 'Đang tạo mã QR...';
+
+        const formData = new FormData();
+        formData.append('amount', total);
+        formData.append('orderId', orderId);
+        formData.append('orderInfo', 'Thanh toan don hang ' + orderId);
+
+        fetch('${pageContext.request.contextPath}/momo-payment', {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.payUrl) {
+                    document.getElementById('momoQR').src =
+                        'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(data.payUrl);
+                    document.getElementById('momoContent').textContent = orderId;
+                    document.getElementById('momoPopup').dataset.payUrl = data.payUrl;
+                } else {
+                    document.getElementById('momoContent').textContent = 'Lỗi: ' + (data.message || 'Không tạo được QR');
+                }
+            })
+            .catch(err => {
+                document.getElementById('momoContent').textContent = 'Lỗi kết nối: ' + err.message;
+            });
     }
-
-
-    function closeModal() {
-        document.getElementById('addressModal').classList.remove('show');
-    }
-
-
-
 
     document.getElementById('checkoutForm').addEventListener('submit', function(e) {
         const recipientName = document.getElementById('recipientName').value.trim();
         const phone = document.getElementById('phone').value.trim();
 
-        if (!recipientName || !phone ) {
+        if (!recipientName || !phone) {
             e.preventDefault();
             alert('Vui lòng điền đầy đủ thông tin nhận hàng');
             return false;
@@ -295,32 +331,17 @@
             alert('Số điện thoại không hợp lệ (phải có 10-11 chữ số)');
             return false;
         }
-    });
 
-    document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            const momoPopup = document.getElementById('momoPopup');
-            momoPopup.style.display = this.value === 'transfer' ? 'block' : 'none';
-            if (this.value === 'transfer') updateMomoQR();
-        });
-    });
-
-    function updateMomoQR() {
-        const total = parseInt(document.getElementById('totalPrice').textContent.replace(/\D/g, ''));
-        const phone = document.getElementById('phone').value || '';
-        const content = 'Thanh toan don hang ' + phone;
-        document.getElementById('momoContent').textContent = content;
-
-        const qrData = encodeURIComponent('MOMO 0969123456 ' + total + ' ' + content);
-        document.getElementById('momoQR').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + qrData;
-    }
-
-    document.querySelectorAll('input[name="shippingMethod"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (document.querySelector('input[name="paymentMethod"]:checked').value === 'transfer') {
-                updateMomoQR();
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+        if (paymentMethod === 'transfer') {
+            e.preventDefault();
+            const payUrl = document.getElementById('momoPopup').dataset.payUrl;
+            if (payUrl) {
+                window.location.href = payUrl;
+            } else {
+                alert('Vui lòng chờ mã QR tải xong hoặc thử lại');
             }
-        });
+        }
     });
 </script>
 </body>
