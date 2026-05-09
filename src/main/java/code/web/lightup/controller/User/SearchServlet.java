@@ -55,8 +55,7 @@ public class SearchServlet extends HttpServlet {
             request.setAttribute("searchResults", searchResults);
         }
 
-
-        request.getRequestDispatcher("/views/layout/search.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/layout/search-suggestions.jsp").forward(request, response);
     }
 
 
