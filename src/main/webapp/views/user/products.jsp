@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -168,18 +169,12 @@
                                         <img src="${product.hoverImage}" alt="${product.name}" class="img-hover">
                                     </c:if>
                                 </a>
-                                <form action="${pageContext.request.contextPath}/favorite"
-                                      method="post"
-                                      class="favorite-form">
+                                <form action="${pageContext.request.contextPath}/favorite" method="post" class="favorite-form">
+                                    <input type="hidden" name="productId" value="${product.id}">
 
-                                    <input type="hidden"
-                                           name="productId"
-                                           value="${product.id}">
-
-                                    <button type="submit" class="favorite-btn">
+                                    <button type="submit" class="favorite-btn ${product.favorite ? 'active' : ''}">
                                         <i class="bi bi-heart-fill"></i>
                                     </button>
-
                                 </form>
                             </div>
 
@@ -256,18 +251,12 @@
                                                          alt="${product.name}" class="img-hover">
                                                 </c:if>
                                             </a>
-                                            <form action="${pageContext.request.contextPath}/favorite"
-                                                  method="post"
-                                                  class="favorite-form">
+                                            <form action="${pageContext.request.contextPath}/favorite" method="post" class="favorite-form">
+                                                <input type="hidden" name="productId" value="${product.id}">
 
-                                                <input type="hidden"
-                                                       name="productId"
-                                                       value="${product.id}">
-
-                                                <button type="submit" class="favorite-btn">
+                                                <button type="submit" class="favorite-btn ${product.favorite ? 'active' : ''}">
                                                     <i class="bi bi-heart-fill"></i>
                                                 </button>
-
                                             </form>
                                         </div>
 
@@ -289,7 +278,7 @@
                                                     <span class="current-price">
                                                         <fmt:formatNumber value="${product.discountedPrice}"
                                                                           pattern="#,###"/>₫
-                                                    </span>
+</span>
                                                     <c:if test="${product.hasDiscount()}">
                                                         <span class="old-price">
                                                             <del><fmt:formatNumber value="${product.price}"
@@ -359,9 +348,7 @@
 
 
 </main>
-
-
-<%--<script src="${pageContext.request.contextPath}/views/JS/products.js"></script>--%>
+<script src="${pageContext.request.contextPath}/views/JS/products.js"></script>
 
 </body>
 </html>

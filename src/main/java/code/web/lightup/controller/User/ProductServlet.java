@@ -1,6 +1,7 @@
 package code.web.lightup.controller.User;
 
-
+import code.web.lightup.dao.FavoriteDAO;
+import code.web.lightup.util.SessionUtil;
 import code.web.lightup.model.Category;
 import code.web.lightup.model.ProductWithDetails;
 import code.web.lightup.service.CategoryService;
@@ -18,11 +19,13 @@ public class ProductServlet extends HttpServlet {
 
     private ProductService productService;
     private CategoryService categoryService;
+    private FavoriteDAO favoriteDao;
 
     @Override
     public void init() throws ServletException {
         productService = new ProductService();
         categoryService = new CategoryService();
+        favoriteDao = new FavoriteDAO();
     }
 
     @Override
@@ -38,9 +41,24 @@ public class ProductServlet extends HttpServlet {
 
             List<Category> categories = categoryService.getSubCategories();
 
+            Integer userId = SessionUtil.getUserId(request);
+            Set<Integer> favIds = new HashSet<>();
+            if (userId != null) {
+                favIds = favoriteDao.getFavoriteProductIds(userId);
+            }
+
+
             if (priceRanges != null && priceRanges.length > 0) {
                 List<ProductWithDetails> filteredProducts =
                         productService.filterProductsByPrice(priceRanges);
+
+                if (!favIds.isEmpty()) {
+                    for (ProductWithDetails p : filteredProducts) {
+                        if (favIds.contains(p.getId())) {
+                            p.setFavorite(true);
+                        }
+                    }
+                }
 
                 request.setAttribute("products", filteredProducts);
                 request.setAttribute("categories", categories);
@@ -50,6 +68,14 @@ public class ProductServlet extends HttpServlet {
 
             List<ProductWithDetails> allProducts =
                     productService.getAllProductsWithDetails();
+
+            if (!favIds.isEmpty()) {
+                for (ProductWithDetails p : allProducts) {
+                    if (favIds.contains(p.getId())) {
+                        p.setFavorite(true);
+                    }
+                }
+            }
 
             Map<Integer, List<ProductWithDetails>> productsByCategory = new HashMap<>();
 

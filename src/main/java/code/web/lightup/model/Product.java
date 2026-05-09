@@ -12,6 +12,7 @@ public class Product {
     private BigDecimal review;
     private String status;
     private String mainImage;
+    private boolean favorite;
 
     public String getName() {
         return name;
@@ -80,4 +81,13 @@ public class Product {
     public String getMainImage() {return mainImage;}
 
     public void setMainImage(String mainImage) {this.mainImage = mainImage;}
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
+
 }

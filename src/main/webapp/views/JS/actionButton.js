@@ -13,8 +13,12 @@ const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 
 function updateButtons() {
-    prevBtn.disabled = currentPage === 0;
-    nextBtn.disabled = currentPage === totalPages - 1;
+    if (prevBtn) {
+        prevBtn.disabled = currentPage === 0;
+    }
+    if (nextBtn) {
+        nextBtn.disabled = currentPage === totalPages - 1;
+    }
 }
 
 function showPage(page) {
@@ -39,5 +43,6 @@ function slideProducts(dir) {
     }
 }
 
-showPage(0);
-
+showPage(0);if (products.length > 0) {
+    showPage(0);
+}

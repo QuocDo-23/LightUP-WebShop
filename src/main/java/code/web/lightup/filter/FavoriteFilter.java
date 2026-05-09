@@ -36,7 +36,7 @@ public class FavoriteFilter implements Filter {
 
             if (userId != null) {
                 req.setAttribute("favoriteCount", dao.countFavorite(userId));
-                req.setAttribute("favoriteList", dao.getFavoriteByUserId(userId));
+                req.setAttribute("favoriteIds", dao.getFavoriteByUserId(userId));
             }
 
         } catch (Exception e) {
