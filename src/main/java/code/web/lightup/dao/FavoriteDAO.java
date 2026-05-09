@@ -70,11 +70,18 @@ public class FavoriteDAO {
     public List<Product> getFavoriteByUserId(int userId){
 
         String sql = """
-        SELECT p.id, p.name, p.mainImage, p.price
+        SELECT p.id,
+        p.name,
+        MIN(i.img) AS mainImage,
+        p.price
         FROM favorite_product f
         JOIN product p ON f.product_id = p.id
+        LEFT JOIN image i
+              ON p.id = i.ref_id
+              AND i.type = 'product'
         WHERE f.user_id = ?
-        ORDER BY f.created_at DESC
+        GROUP BY p.id, p.name, p.price
+        ORDER BY p.id DESC
     """;
 
         return jdbi.withHandle(handle ->

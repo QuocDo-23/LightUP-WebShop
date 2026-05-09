@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/mini_cart.css">
 
 <jsp:include page="/views/layout/cart-mini.jsp"/>
@@ -115,24 +115,35 @@
 
 
                     <div class="favorite-dropdown">
-                        <c:choose>
-                            <c:when test="${favoriteList == null or fn:length(favoriteList) == 0}">
-                                <p style="padding:10px;">Chưa có sản phẩm yêu thích</p>
-                            </c:when>
-
-                            <c:otherwise>
-                                <c:forEach var="f" items="${favoriteList}" begin="0" end="2">
-                                    <div class="favorite-item">
-                                        <img src="${f.mainImage}" alt="${f.name}">
-                                        <span>${f.name}</span>
+                        <div class="favorite-dropdown-content">
+                            <c:choose>
+                                <c:when test="${empty favoriteList}">
+                                    <div class="empty-favorite">
+                                        <p>Chưa có sản phẩm yêu thích!</p>
                                     </div>
-                                </c:forEach>
-                                <a href="${pageContext.request.contextPath}/favorite-list"
-                                   class="view-all">
-                                    Xem tất cả
-                                </a>
-                            </c:otherwise>
-                        </c:choose>
+                                </c:when>
+                                <c:otherwise>
+                                    <ul class="favorite-list-items">
+                                        <c:forEach var="fav" items="${favoriteList}">
+                                            <li class="fav-item">
+                                                <a href="product-detail?id=${fav.id}" class="fav-link">
+                                                    <img src="${fav.mainImage}" alt="${fav.name}" class="fav-img">
+                                                    <div class="fav-info">
+                                                        <h4 class="fav-name">${fav.name}</h4>
+                                                        <span class="fav-price">
+                                        <fmt:formatNumber value="${fav.price}" pattern="#,###"/>₫
+                                    </span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </c:forEach>
+                                    </ul>
+                                    <div class="view-all-fav">
+                                        <a href="favorite-page">Xem tất cả</a>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                     </div>
                 </div>
 
