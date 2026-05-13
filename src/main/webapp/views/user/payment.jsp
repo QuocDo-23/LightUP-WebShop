@@ -139,6 +139,7 @@
 
             <div class="payment-section">
                 <h2 class="section-title">Thanh toán</h2>
+
                 <label class="payment-method">
                     <input type="radio" name="paymentMethod" value="cod" form="checkoutForm" checked>
                     <span class="radio"></span>
@@ -147,23 +148,45 @@
                         <img src="https://cdn-icons-png.freepik.com/512/7630/7630510.png" alt="">
                     </div>
                 </label>
+
                 <label class="payment-method">
                     <input type="radio" name="paymentMethod" value="transfer" form="checkoutForm">
                     <span class="radio"></span>
-                    <span>Chuyển khoản ngân hàng (Momo)</span>
+                    <span>Chuyển khoản ngân hàng</span>
                     <div class="payment-info">
-                        <img src="https://developers.momo.vn/v3/assets/images/MOMO-Logo-App-6262c3743a290ef02396a24ea2b66c35.png" alt="MoMo" style="width:40px;height:40px;border-radius:8px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2830/2830284.png" alt="">
                     </div>
                 </label>
 
+                <div class="sub-payment-options" id="subPaymentOptions">
+                    <label class="sub-payment-method">
+                        <input type="radio" name="subPaymentMethod" value="vnpay" checked>
+                        <span class="radio"></span>
+                        <span>Thanh toán VNPay</span>
+                        <img src="https://sandbox.vnpayment.vn/paymentv2/images/ico/vnpay-logo.png" alt="VNPay">
+                    </label>
+                    <label class="sub-payment-method">
+                        <input type="radio" name="subPaymentMethod" value="momo">
+                        <span class="radio"></span>
+                        <span>Thanh toán MoMo</span>
+                        <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png"
+                             alt="MoMo" style="width:36px;height:36px;object-fit:contain;border-radius:6px;margin-left:auto;flex-shrink:0;">
+                    </label>
+                </div>
+
+                <div id="vnpayPopup">
+                    <p class="vnpay-title">Bạn sẽ được chuyển đến cổng thanh toán VNPay</p>
+                    <img class="vnpay-logo"
+                         src="https://sandbox.vnpayment.vn/paymentv2/images/ico/vnpay-logo.png"
+                         alt="VNPay">
+                    <p class="vnpay-info">Hỗ trợ: ATM, Visa, MasterCard, QR Code</p>
+                    <p class="vnpay-info">Nhấn <strong>ĐẶT HÀNG</strong> để tiếp tục thanh toán</p>
+                </div>
+
                 <div id="momoPopup" style="display:none;">
                     <p class="momo-title">Quét mã QR để thanh toán qua MoMo</p>
-                    <img id="momoQR"
-                         src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=MOMO+0969123456"
-                         alt="QR MoMo" class="momo-qr">
-                    <p class="momo-info">Số tài khoản MoMo: <strong>0969 123 456</strong></p>
-                    <p class="momo-info">Chủ tài khoản: <strong>TÊN CỦA BẠN</strong></p>
-                    <p class="momo-note">Nội dung chuyển khoản: <strong id="momoContent">Thanh toan don hang</strong></p>
+                    <img id="momoQR" src="" alt="QR MoMo" class="momo-qr">
+                    <p class="momo-note">Nội dung: <strong id="momoContent">Đang tạo mã QR...</strong></p>
                 </div>
             </div>
         </div>
@@ -260,12 +283,9 @@
             const fee = this.value === 'express' ? 150000 : 70000;
             document.getElementById('shippingFee').textContent = fee.toLocaleString('vi-VN') + '₫';
             document.getElementById('totalPrice').textContent = (baseTotal + fee).toLocaleString('vi-VN') + '₫';
-            if (document.querySelector('input[name="paymentMethod"]:checked').value === 'transfer') {
-                loadMoMoQR();
-            }
+            refreshSubPayment();
         });
     });
-
     document.querySelector('input[name="shippingMethod"]:checked').dispatchEvent(new Event('change'));
 
     function openModal() { document.getElementById('addressModal').classList.add('show'); }
@@ -273,15 +293,38 @@
 
     document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            const momoPopup = document.getElementById('momoPopup');
+            const subOptions = document.getElementById('subPaymentOptions');
             if (this.value === 'transfer') {
-                momoPopup.style.display = 'block';
-                loadMoMoQR();
+                subOptions.classList.add('show');
+                refreshSubPayment();
             } else {
-                momoPopup.style.display = 'none';
+                subOptions.classList.remove('show');
+                document.getElementById('vnpayPopup').style.display = 'none';
+                document.getElementById('momoPopup').style.display = 'none';
             }
         });
     });
+
+    document.querySelectorAll('input[name="subPaymentMethod"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            refreshSubPayment();
+        });
+    });
+
+    function refreshSubPayment() {
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+        if (paymentMethod !== 'transfer') return;
+
+        const sub = document.querySelector('input[name="subPaymentMethod"]:checked').value;
+        if (sub === 'vnpay') {
+            document.getElementById('vnpayPopup').style.display = 'block';
+            document.getElementById('momoPopup').style.display = 'none';
+        } else {
+            document.getElementById('vnpayPopup').style.display = 'none';
+            document.getElementById('momoPopup').style.display = 'block';
+            loadMoMoQR();
+        }
+    }
 
     function loadMoMoQR() {
         const total = parseInt(document.getElementById('totalPrice').textContent.replace(/\D/g, ''));
@@ -324,9 +367,7 @@
             alert('Vui lòng điền đầy đủ thông tin nhận hàng');
             return false;
         }
-
-        const phoneRegex = /^[0-9]{10,11}$/;
-        if (!phoneRegex.test(phone)) {
+        if (!/^[0-9]{10,11}$/.test(phone)) {
             e.preventDefault();
             alert('Số điện thoại không hợp lệ (phải có 10-11 chữ số)');
             return false;
@@ -335,11 +376,36 @@
         const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
         if (paymentMethod === 'transfer') {
             e.preventDefault();
-            const payUrl = document.getElementById('momoPopup').dataset.payUrl;
-            if (payUrl) {
-                window.location.href = payUrl;
+            const sub = document.querySelector('input[name="subPaymentMethod"]:checked').value;
+            const total = parseInt(document.getElementById('totalPrice').textContent.replace(/\D/g, ''));
+            const orderId = 'ORDER' + Date.now();
+
+            if (sub === 'vnpay') {
+                const formData = new FormData();
+                formData.append('amount', total);
+                formData.append('orderId', orderId);
+
+                fetch('${pageContext.request.contextPath}/vnpay-payment', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.payUrl) {
+                            window.location.href = data.payUrl;
+                        } else {
+                            alert('Không thể tạo thanh toán VNPay');
+                        }
+                    })
+                    .catch(err => alert('Lỗi kết nối VNPay: ' + err.message));
+
             } else {
-                alert('Vui lòng chờ mã QR tải xong hoặc thử lại');
+                const payUrl = document.getElementById('momoPopup').dataset.payUrl;
+                if (payUrl) {
+                    window.location.href = payUrl;
+                } else {
+                    alert('Vui lòng chờ mã QR tải xong hoặc thử lại');
+                }
             }
         }
     });
