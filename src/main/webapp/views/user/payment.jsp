@@ -381,24 +381,18 @@
             const orderId = 'ORDER' + Date.now();
 
             if (sub === 'vnpay') {
-                const formData = new FormData();
-                formData.append('amount', total);
-                formData.append('orderId', orderId);
-
-                fetch('${pageContext.request.contextPath}/vnpay-payment', {
-                    method: 'POST',
-                    body: formData
+                fetch('${pageContext.request.contextPath}/vnpay-payment?amount=' + total + '&orderId=' + orderId, {
+                    method: 'POST'
                 })
                     .then(res => res.json())
                     .then(data => {
                         if (data.payUrl) {
                             window.location.href = data.payUrl;
                         } else {
-                            alert('Không thể tạo thanh toán VNPay');
+                            alert('Không thể tạo thanh toán VNPay: ' + (data.error || 'Lỗi không xác định'));
                         }
                     })
                     .catch(err => alert('Lỗi kết nối VNPay: ' + err.message));
-
             } else {
                 const payUrl = document.getElementById('momoPopup').dataset.payUrl;
                 if (payUrl) {
