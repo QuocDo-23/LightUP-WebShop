@@ -139,34 +139,71 @@ public class ProductDAO {
      * Tìm kiếm sản phẩm theo tên
      */
     public List<ProductWithDetails> searchProducts(String keyword) {
-        return jdbi.withHandle(handle ->
-                handle.createQuery(
-                                "SELECT p.*, " +
-                                        "c.name as category_name, " +
-                                        "d.discount_rate, " +
-                                        "pd.description, " +
-                                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image " +
-                                        "FROM Product p " +
-                                        "LEFT JOIN Categories c ON p.category_id = c.id " +
-                                        "LEFT JOIN Discount d ON p.discount_id = d.id " +
-                                        "LEFT JOIN Product_Detail pd ON p.id = pd.product_id " +
-                                        "WHERE p.status = 'active' " +
-                                        "AND (p.name LIKE :keyword OR pd.description LIKE :keyword OR c.name LIKE :keyword) " +
-                                        "ORDER BY " +
-                                        "CASE " +
-                                        "  WHEN p.name LIKE :exactKeyword THEN 1 " +
-                                        "  WHEN p.name LIKE :keyword THEN 2 " +
-                                        "  WHEN pd.description LIKE :keyword THEN 3 " +
-                                        "  ELSE 4 " +
-                                        "END, " +
-                                        "p.review DESC " +
-                                        "LIMIT 5"
-                        )
-                        .bind("keyword", "%" + keyword + "%")
-                        .bind("exactKeyword", keyword + "%")
-                        .mapToBean(ProductWithDetails.class)
-                        .list()
-        );
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
+
+        String trimmedKeyword = keyword.trim();
+        String likeKeyword = "%" + trimmedKeyword + "%";
+
+        try {
+            return jdbi.withHandle(handle ->
+                    handle.createQuery(
+                                    "SELECT " +
+                                            "p.id, p.name, p.price, p.inventory_quantity, p.status, " +
+                                            "p.category_id, p.discount_id, p.review, " +
+                                            "c.name as category_name, " +
+                                            "d.discount_rate, " +
+                                            "pd.description, " +
+                                            "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image " +
+                                            "FROM Product p " +
+                                            "LEFT JOIN Categories c ON p.category_id = c.id " +
+                                            "LEFT JOIN Discount d ON p.discount_id = d.id " +
+                                            "LEFT JOIN Product_Detail pd ON p.id = pd.product_id " +
+                                            "WHERE p.status = 'active' " +
+                                            "AND (" +
+                                            "  p.name LIKE :keyword " +
+                                            "  OR pd.description LIKE :keyword " +
+                                            "  OR c.name LIKE :keyword" +
+                                            ") " +
+                                            "ORDER BY " +
+                                            "CASE " +
+                                            "  WHEN LOWER(p.name) = LOWER(:exactKeyword) THEN 0 " +
+                                            "  WHEN LOWER(p.name) LIKE LOWER(:startKeyword) THEN 1 " +
+                                            "  WHEN LOWER(p.name) LIKE LOWER(:keyword) THEN 2 " +
+                                            "  WHEN LOWER(pd.description) LIKE LOWER(:keyword) THEN 3 " +
+                                            "  WHEN LOWER(c.name) LIKE LOWER(:keyword) THEN 4 " +
+                                            "  ELSE 5 " +
+                                            "END ASC, " +
+                                            "p.review DESC, " +
+                                            "p.id DESC " +
+                                            "LIMIT 100"
+                            )
+                            .bind("keyword", likeKeyword)
+                            .bind("exactKeyword", trimmedKeyword)
+                            .bind("startKeyword", trimmedKeyword + "%")
+                            .map((rs, ctx) -> {
+                                ProductWithDetails product = new ProductWithDetails();
+                                product.setId(rs.getInt("id"));
+                                product.setName(rs.getString("name"));
+                                product.setPrice(rs.getDouble("price"));
+                                product.setDiscountId(rs.getInt("discount_id"));
+                                product.setDiscountRate(rs.getDouble("discount_rate"));
+                                product.setInventoryQuantity(rs.getInt("inventory_quantity"));
+                                product.setCategoryId(rs.getInt("category_id"));
+                                product.setCategoryName(rs.getString("category_name"));
+                                product.setMainImage(rs.getString("main_image"));
+                                product.setDescription(rs.getString("description"));
+                                product.setStatus(rs.getString("status"));
+                                return product;
+                            })
+                            .list()
+            );
+        } catch (Exception e) {
+            System.err.println("Error in searchProducts: " + e.getMessage());
+            e.printStackTrace();
+            return java.util.Collections.emptyList();
+        }
     }
 
     /**

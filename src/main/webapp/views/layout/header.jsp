@@ -89,15 +89,9 @@
 
             <div class="nav_r" id="nav_r">
                 <div class="search-icon">
-                    <form action="#" method="get" id="searchForm" onsubmit="return false;">
-                        <input type="text"
-                               name="q"
-                               placeholder="Tìm kiếm sản phẩm..."
-                               id="searchInput"
-                               value="${param.q}"
-                               autocomplete="off"
-                               oninput="handleSearchInput(this.value)">
-                        <button type="button">
+                    <form action="${pageContext.request.contextPath}/search" method="get" id="searchForm">
+                        <input type="text" name="q" id="searchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+                        <button type="submit">
                             <i class="bi bi-search"></i>
                         </button>
                     </form>
@@ -221,35 +215,5 @@
 
     <c:remove var="successMsg" scope="session" />
 </c:if>
-<script>
-    let searchTimeout;
+<script src="${pageContext.request.contextPath}/views/JS/search_main.js"></script>
 
-    function handleSearchInput(value) {
-        clearTimeout(searchTimeout);
-        const suggestionsDiv = document.getElementById('searchSuggestions');
-
-        if (value.length < 2) {
-            suggestionsDiv.style.display = 'none';
-            return;
-        }
-
-        searchTimeout = setTimeout(() => {
-            fetch('search-suggestions?q=' + encodeURIComponent(value))
-                .then(response => response.text())
-                .then(html => {
-                    suggestionsDiv.innerHTML = html;
-                    suggestionsDiv.style.display = 'block';
-                })
-                .catch(error => {
-                    console.error('Search error:', error);
-                });
-        }, 300);
-    }
-
-    document.addEventListener('click', function(e) {
-        const searchIcon = document.querySelector('.search-icon');
-        if (searchIcon && !searchIcon.contains(e.target)) {
-            document.getElementById('searchSuggestions').style.display = 'none';
-        }
-    });
-</script>

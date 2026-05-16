@@ -2,28 +2,23 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:choose>
-    <c:when test="${empty searchResults}">
-        <div class="no-results">
-            <i class="bi bi-search"></i>
-            <p>Không tìm thấy sản phẩm</p>
-        </div>
-    </c:when>
-    <c:otherwise>
+<c:if test="${not empty searchResults}">
+    <div class="suggestions-list">
         <c:forEach var="product" items="${searchResults}">
-            <a href="product-detail?id=${product.id}" class="suggestion-item">
-                <img src="${not empty product.mainImage ? product.mainImage : 'images/default-product.jpg'}"
+            <a href="${pageContext.request.contextPath}/product-detail?id=${product.id}"
+               class="suggestion-item">
+                <img src="${not empty product.mainImage ? product.mainImage : '/images/default.jpg'}"
                      alt="${product.name}">
                 <div class="suggestion-info">
                     <div class="suggestion-name">${product.name}</div>
                     <div class="suggestion-price">
                         <fmt:formatNumber value="${product.discountedPrice}" pattern="#,###"/>₫
-                        <c:if test="${product.hasDiscount()}">
-                            <del><fmt:formatNumber value="${product.price}" pattern="#,###"/>₫</del>
-                        </c:if>
                     </div>
                 </div>
             </a>
         </c:forEach>
-    </c:otherwise>
-</c:choose>
+    </div>
+</c:if>
+<c:if test="${empty searchResults && not empty param.q}">
+    <div class="no-suggestion">Không tìm thấy sản phẩm phù hợp</div>
+</c:if>
