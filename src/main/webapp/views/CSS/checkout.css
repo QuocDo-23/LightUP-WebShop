@@ -585,3 +585,103 @@ body {
     font-size: 12px;
     color: #888;
 }
+#momoPopup img.momo-logo {
+    width: 40px;
+    height: 40px;
+}
+#vnpayPopup {
+    display: none;
+    margin-top: 12px;
+    padding: 16px;
+    border: 2px solid #005baa;
+    border-radius: 12px;
+    background: #f0f6ff;
+    text-align: center;
+}
+
+#vnpayPopup .vnpay-title {
+    font-weight: 600;
+    color: #005baa;
+    margin-bottom: 8px;
+}
+
+#vnpayPopup .vnpay-logo {
+    width: 120px;
+    margin-bottom: 8px;
+}
+
+#vnpayPopup .vnpay-info {
+    font-size: 13px;
+    color: #555;
+    margin-top: 6px;
+}
+.sub-payment-options {
+    margin-left: 20px;
+    margin-top: 10px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sub-payment-options.show {
+    display: flex;
+}
+
+.sub-payment-method {
+    border: 2px solid #ddd;
+    padding: 12px 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.sub-payment-method:has(input:checked) {
+    border-color: #8b7355;
+    background: #dad2c8;
+    color: #8b7355;
+}
+
+.sub-payment-method input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.sub-payment-method .radio {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.sub-payment-method:has(input:checked) .radio {
+    border-color: #8b7355;
+}
+
+.sub-payment-method:has(input:checked) .radio::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: #8b7355;
+    border-radius: 50%;
+}
+
+.sub-payment-method img {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    margin-left: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+}
