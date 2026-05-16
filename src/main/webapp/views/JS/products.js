@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ── Sắp xếp sản phẩm ──
     document.querySelectorAll('.sort-list li').forEach(item => {
-        item.addEventListener('click', (e) => {
+        item.addEventListener('click', () => {
             const sortType = item.dataset.sort;
             const products = Array.from(document.querySelectorAll('.product-card'));
             const grid = document.querySelector('.product-grid');
@@ -78,44 +78,60 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    document.querySelectorAll(".favorite-form").forEach(form => {
+    // ── FAVORITE (FIX CHUẨN) ──
+    document.addEventListener("click", function (e) {
+        const button = e.target.closest(".favorite-btn");
+        if (!button) return;
 
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
+        e.preventDefault();
 
-            const button = form.querySelector(".favorite-btn");
+        const form = button.closest("form");
 
-            const productId =
-                form.querySelector('input[name="productId"]').value;
+        const productId =
+            form.querySelector('input[name="productId"]').value;
 
-            fetch(form.action, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: "productId=" + encodeURIComponent(productId)
-            })
-                .then(res => res.text())
-                .then(data => {
-                    console.log("SERVER TRA VE:", data);
+        fetch(form.action, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "productId=" + encodeURIComponent(productId)
+        })
+            .then(res => res.text())
+            .then(data => {
 
-                    data = data.trim();
+                console.log("SERVER TRA VE:", data);
 
-                    if (data === "login") {
-                        window.location.href = "/LightUp_war/login";
-                        return;
-                    }
+                data = data.trim();
+
+                if (data === "login") {
+                    window.location.href = "/LightUp_war/login";
+                    return;
+                }
+
+                // đổi màu tim
+                if (data === "true") {
+                    button.classList.add("active");
+                } else {
+                    button.classList.remove("active");
+                }
+
+                // update số trên header
+                const count = document.querySelector(".favorite-count");
+
+                if (count) {
+                    let current = parseInt(count.innerText.replace(/\D/g, "") || "0");
 
                     if (data === "true") {
-                        button.classList.add("active");
-                    } else if (data === "false") {
-                        button.classList.remove("active");
+                        count.innerText = current + 1;
+                    } else {
+                        count.innerText = Math.max(0, current - 1);
                     }
+                }
 
-                })
-                .catch(err => console.error(err));
-
-        });
+            })
+            .catch(err => console.error(err));
 
     });
+
 });

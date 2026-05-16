@@ -114,7 +114,7 @@
                                        name="productId"
                                        value="${product.id}">
 
-                                <button type="submit" class="favorite-btn">
+                                <button type="submit" class="favorite-btn ${product.favorite ? 'active' : ''}">
                                     <i class="bi bi-heart-fill"></i>
                                 </button>
 

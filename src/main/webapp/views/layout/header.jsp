@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/mini_cart.css">
 
 <jsp:include page="/views/layout/cart-mini.jsp"/>
 
 <nav>
     <div class="nav_head">
-        <!-- LOGO -->
+
         <a href="${pageContext.request.contextPath}/">
             <div class="logo">
                 <img src="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png" alt="Logo">
@@ -18,7 +18,6 @@
         <div class="nav-container">
             <ul class="nav-links">
 
-                <!-- TRANG CHỦ -->
                 <li>
                     <a href="${pageContext.request.contextPath}/"
                        class="${not pageContext.request.requestURI.contains('/products')
@@ -34,7 +33,7 @@
                     </a>
                 </li>
 
-                <!-- GIỚI THIỆU -->
+
                 <li>
                     <a href="${pageContext.request.contextPath}/about"
                        class="${pageContext.request.requestURI.contains('/about') ? 'active' : ''}">
@@ -42,7 +41,7 @@
                     </a>
                 </li>
 
-                <!-- SẢN PHẨM -->
+
                 <li>
                     <a href="${pageContext.request.contextPath}/products"
                        class="${pageContext.request.requestURI.contains('/products')
@@ -71,7 +70,7 @@
                     </div>
                 </li>
 
-                <!-- TIN TỨC -->
+
                 <li>
                     <a href="${pageContext.request.contextPath}/news"
                        class="${pageContext.request.requestURI.contains('/news') ? 'active' : ''}">
@@ -79,7 +78,7 @@
                     </a>
                 </li>
 
-                <!-- LIÊN HỆ -->
+
                 <li>
                     <a href="${pageContext.request.contextPath}/contact"
                        class="${pageContext.request.requestURI.contains('/contact') ? 'active' : ''}">
@@ -98,6 +97,48 @@
                     </form>
 
                     <div id="searchSuggestions" class="search-suggestions"></div>
+                </div>
+
+                <div class="favorite-header">
+                    <a href="${pageContext.request.contextPath}/favorite-list" class="favorite-link">
+                        <i class="bi bi-heart"></i>
+                        <span class="favorite-count">
+                            ${not empty favoriteCount ? favoriteCount : 0}
+                        </span>
+                    </a>
+
+
+                    <div class="favorite-dropdown">
+                        <div class="favorite-dropdown-content">
+                            <c:choose>
+                                <c:when test="${empty favoriteList}">
+                                    <div class="empty-favorite">
+                                        <p>Chưa có sản phẩm yêu thích!</p>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <ul class="favorite-list-items">
+                                        <c:forEach var="fav" items="${favoriteList}">
+                                            <li class="fav-item">
+                                                <a href="product-detail?id=${fav.id}" class="fav-link">
+                                                    <img src="${fav.mainImage}" alt="${fav.name}" class="fav-img">
+                                                    <div class="fav-info">
+                                                        <h4 class="fav-name">${fav.name}</h4>
+                                                        <span class="fav-price">
+                                        <fmt:formatNumber value="${fav.price}" pattern="#,###"/>₫
+                                    </span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </c:forEach>
+                                    </ul>
+                                    <div class="view-all-fav">
+                                        <a href="favorite-page">Xem tất cả</a>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="icon-group">

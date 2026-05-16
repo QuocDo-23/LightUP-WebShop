@@ -5,6 +5,7 @@ import code.web.lightup.util.BaseDao;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
+import java.util.Set;
 
 public class FavoriteDAO {
 
@@ -69,11 +70,18 @@ public class FavoriteDAO {
     public List<Product> getFavoriteByUserId(int userId){
 
         String sql = """
-        SELECT p.id, p.name, p.mainImage, p.price
+        SELECT p.id,
+        p.name,
+        MIN(i.img) AS mainImage,
+        p.price
         FROM favorite_product f
         JOIN product p ON f.product_id = p.id
+        LEFT JOIN image i
+              ON p.id = i.ref_id
+              AND i.type = 'product'
         WHERE f.user_id = ?
-        ORDER BY f.created_at DESC
+        GROUP BY p.id, p.name, p.price
+        ORDER BY p.id DESC
     """;
 
         return jdbi.withHandle(handle ->
@@ -90,4 +98,15 @@ public class FavoriteDAO {
                         .list()
         );
     }
+    public Set<Integer> getFavoriteProductIds(int userId) {
+        String sql = "SELECT product_id FROM favorite_product WHERE user_id = ?";
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind(0, userId)
+                        .mapTo(Integer.class)
+                        .set()
+        );
+    }
+
 }
