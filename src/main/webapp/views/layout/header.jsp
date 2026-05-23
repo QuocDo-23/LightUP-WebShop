@@ -99,7 +99,7 @@
                     <div id="searchSuggestions" class="search-suggestions"></div>
                 </div>
 
-                <div class="favorite-header">
+                <div class="favorite-nav">
                     <a href="${pageContext.request.contextPath}/favorite-list" class="favorite-link">
                         <i class="bi bi-heart"></i>
                         <span class="favorite-count">

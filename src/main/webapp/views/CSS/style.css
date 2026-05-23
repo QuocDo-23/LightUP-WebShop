@@ -1497,7 +1497,7 @@ nav {
 }
 /* ===== FAVORITE HEADER ===== */
 
-.favorite-header {
+.favorite-nav {
     position: relative;
     margin-left: 10px;
 }
@@ -1546,7 +1546,7 @@ nav {
     z-index: 999;
 }
 
-.favorite-header:hover .favorite-dropdown {
+.favorite-nav:hover .favorite-dropdown {
     display: block;
 }
 
