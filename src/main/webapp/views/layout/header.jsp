@@ -99,15 +99,13 @@
                     <div id="searchSuggestions" class="search-suggestions"></div>
                 </div>
 
-                <div class="favorite-nav">
+                <div class="favorite-header">
                     <a href="${pageContext.request.contextPath}/favorite-list" class="favorite-link">
                         <i class="bi bi-heart"></i>
                         <span class="favorite-count">
                             ${not empty favoriteCount ? favoriteCount : 0}
                         </span>
                     </a>
-
-
                     <div class="favorite-dropdown">
                         <div class="favorite-dropdown-content">
                             <c:choose>
@@ -133,7 +131,11 @@
                                         </c:forEach>
                                     </ul>
                                     <div class="view-all-fav">
-                                        <a href="favorite-page">Xem tất cả</a>
+                                        <a href="${pageContext.request.contextPath}/favorite-list">
+
+                                            Xem tất cả
+
+                                        </a>
                                     </div>
                                 </c:otherwise>
                             </c:choose>

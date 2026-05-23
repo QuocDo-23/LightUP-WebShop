@@ -27,54 +27,206 @@
 
 <div class="favorite-page">
 
-    <div class="favorite-header">
+    <div class="product-section">
 
-        <h1>SẢN PHẨM YÊU THÍCH</h1>
+        <div class="category-header">
 
-        <p>
-            Bạn đã lưu
-            ${favoriteProducts.size()}
-            sản phẩm
-        </p>
+            <h2 class="sub-title">
+                Sản phẩm yêu thích
+            </h2>
 
-    </div>
+        </div>
 
-    <div class="favorite-grid">
+        <c:choose>
 
-    <c:forEach var="product" items="${favoriteProducts}">
+            <c:when test="${empty favoriteProducts}">
 
-        <div class="product-card">
+                <div class="empty-favorite">
+
+                    <i class="bi bi-heart"></i>
+
+                    <h2>
+                        Bạn chưa có sản phẩm yêu thích
+                    </h2>
+
+                    <p>
+                        Hãy khám phá thêm các sản phẩm của LightUp
+                    </p>
+
+                    <a href="${pageContext.request.contextPath}/products"
+                       class="go-shopping-btn">
+
+                        Xem sản phẩm
+
+                    </a>
+
+                </div>
+
+            </c:when>
+
+            <c:otherwise>
+
+        <div class="product-grid">
+
+            <c:forEach var="product" items="${favoriteProducts}">
+
+
+
+        <div class="product-card"
+             data-product-id="${product.id}">
 
             <div class="product-image">
 
-                <img src="${product.mainImage}"
-                     alt="${product.name}">
+                <a href="${pageContext.request.contextPath}/product-detail?id=${product.id}">
+
+
+                      <img src="${not empty product.mainImage
+                      ? product.mainImage
+                       : 'images/default-product.jpg'}"
+
+                          alt="${product.name}"
+
+                          class="img-main">
+
+                </a>
+
+
+                <form action="${pageContext.request.contextPath}/favorite"
+                      method="post"
+                      class="favorite-form">
+
+                    <input type="hidden"
+                           name="productId"
+                           value="${product.id}">
+
+                    <button type="button"
+                            class="favorite-btn active"
+                            data-remove="true">
+
+                        <i class="bi bi-heart-fill"></i>
+
+                    </button>
+
+                </form>
 
             </div>
 
             <div class="product-info">
 
                 <h3 class="product-name">
-                        ${product.name}
+
+                    <a href="${pageContext.request.contextPath}/product-detail?id=${product.id}">
+
+                            ${product.name}
+
+                    </a>
+
                 </h3>
 
-                <p class="product-price">
+                <div class="product-action">
+
+                    <div class="product-prices">
+
+                <span class="current-price">
+
                     <fmt:formatNumber
                             value="${product.price}"
                             pattern="#,###"/>₫
-                </p>
+
+                </span>
+
+                    </div>
+
+                    <div class="cart-icon">
+
+                        <a class="open-cart"
+                           href="${pageContext.request.contextPath}/add-cart?pID=${product.id}&quantity=1">
+
+                            <i class="bi bi-cart-check"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
 
             </div>
 
+
         </div>
 
-    </c:forEach>
+            </c:forEach>
 
+        </div>
+
+            </c:otherwise>
+
+        </c:choose>
+
+        </div>
     </div>
 
-</div>
 
-<jsp:include page="/views/layout/footer.jsp"/>
 
+
+<script>
+
+    document.querySelectorAll("[data-remove='true']")
+        .forEach(button => {
+
+            button.addEventListener("click", async function (e) {
+
+                e.preventDefault();
+
+                const productCard =
+                    this.closest(".product-card");
+
+                const productId =
+                    productCard.dataset.productId;
+
+                try {
+
+                    const response = await fetch(
+                        "${pageContext.request.contextPath}/favorite",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/x-www-form-urlencoded"
+                            },
+
+                            body:
+                                "productId=" + productId
+                        }
+                    );
+
+                    if (response.ok) {
+
+                        productCard.remove();
+
+                        const countElement =
+                            document.querySelector(".favorite-count");
+
+                        let currentCount =
+                            parseInt(countElement.innerText);
+
+                        countElement.innerText =
+                            Math.max(0, currentCount - 1);
+
+                    }
+
+                } catch (error) {
+
+                    console.log(error);
+
+                }
+
+            });
+
+        });
+
+</script>
+        <jsp:include page="/views/layout/footer.jsp"/>
 </body>
 </html>
