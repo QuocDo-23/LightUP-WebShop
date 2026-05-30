@@ -64,7 +64,11 @@
             </div>
 
             <button type="submit">Đăng Nhập</button>
-            <span>Hoặc đăng nhập bằng</span>
+            <div class="social-divider">
+                <span></span>
+                <p>Hoặc tiếp tục với</p>
+                <span></span>
+            </div>
             <div class="social-buttons">
                 <a href="${pageContext.request.contextPath}/google-login" class="btn btn-google">
                     <svg class="icon" width="20" height="20" viewBox="0 0 24 24">
@@ -78,7 +82,7 @@
 
                 <a href="${pageContext.request.contextPath}/facebook-login
                         <c:if test="${not empty param.redirect}">?redirect=${param.redirect}</c:if>"
-                   class="btn-facebook">
+                   class="btn btn-facebook">
 
                     <svg class="fb-icon" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path fill="#1877F2"

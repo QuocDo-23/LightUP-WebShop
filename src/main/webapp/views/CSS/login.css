@@ -103,7 +103,7 @@ button.ghost {
     font-size: 15px;
     font-weight: 700;
     margin: 10px;
-    padding: 15px 70px;
+    padding: 14px 90px;
     letter-spacing: 1px;
     text-transform: capitalize;
     transition: 0.3s ease-in-out;
@@ -193,6 +193,8 @@ button#register:hover i {
     margin: 8px 0;
     width: 100%;
     transition: 0.3s ease;
+    height: 50px;
+    font-size: 15px;
 }
 
 .login-container input:focus {
@@ -208,8 +210,8 @@ button#register:hover i {
     0 10px 10px rgba(0, 0, 0, 0.22);
     position: relative;
     overflow: hidden;
-    width: 800px;
-    max-width: 100%;
+    width: 950px;
+    max-width: 95%;
     min-height: 550px;
 }
 
@@ -222,7 +224,7 @@ button#register:hover i {
 
 .login-container {
     left: 0;
-    width: 50%;
+    width: 55%;
     z-index: 2;
 }
 
@@ -233,8 +235,8 @@ button#register:hover i {
 .overlay-container {
     position: absolute;
     top: 0;
-    left: 50%;
-    width: 50%;
+    left: 55%;
+    width: 45%;
     height: 100%;
     overflow: hidden;
     transition: transform 0.6s ease-in-out;
@@ -349,27 +351,29 @@ button#register:hover i {
 }
 
 .social-buttons .btn {
-    min-width: 200px;
+    min-width: 190px;
     height: 48px;
-    border-radius: 8px;
+
+    border-radius: 12px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    border: none;
+
+    gap: 10px;
+
+    font-size: 14px;
+    font-weight: 600;
+
     cursor: pointer;
-    padding: 0 16px;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    gap: 12px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #333;
-    background-color: #ffffff;
+
+    transition: all .3s ease;
 }
 
 .social-buttons .btn:hover {
-    box-shadow: 0 6px 14px rgba(0,0,0,0.2);
-    transform: translateY(-1px);
+    transform: translateY(-3px);
+
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
 }
 
 .btn-google {
@@ -389,15 +393,20 @@ button#register:hover i {
     background: #f5f5f5;
     transform: translateY(-3px);
 }
-
 .btn-facebook {
-    background-color: #1877f2;
-}
-.btn-facebook:hover {
-    background: #166fe5;
-    transform: translateY(-3px);
+    background: #fff;
+    color: white !important;
+
+    border: 1px solid #dadce0;
 }
 
+.btn-facebook:hover {
+    background: #f5f5f5;
+}
+.fb-icon {
+    width: 22px;
+    height: 22px;
+}
 .alert  {
     padding: 5px;
     border-radius: 10px;
@@ -450,4 +459,23 @@ a.return-link{
 }
 .checkbox label{
     color: #c59d5f;
+}
+.social-divider{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:15px 0;
+}
+
+.social-divider span{
+    flex:1;
+    height:1px;
+    background:#ddd;
+}
+
+.social-divider p{
+    margin:0;
+    color:#888;
+    font-size:13px;
+    white-space:nowrap;
 }
