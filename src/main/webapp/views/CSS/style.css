@@ -1500,6 +1500,7 @@ nav {
 .favorite-header {
     position: relative;
     margin-left: 10px;
+    padding-bottom: 15px;
 }
 
 .favorite-link {
@@ -1536,8 +1537,7 @@ nav {
 .favorite-dropdown {
     position: absolute;
     top: 45px;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 0;
     width: 260px;
     background: white;
     border-radius: 10px;
