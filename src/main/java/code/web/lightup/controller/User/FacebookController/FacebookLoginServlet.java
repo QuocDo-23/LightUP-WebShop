@@ -19,6 +19,12 @@ public class FacebookLoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        System.out.println("========== FACEBOOK ==========");
+        System.out.println("APP_ID = " + FacebookOAuthConfig.APP_ID);
+        System.out.println("APP_SECRET = " + FacebookOAuthConfig.APP_SECRET);
+        System.out.println("REDIRECT = " + FacebookOAuthConfig.getRedirectUri(request));
+
+
         String state = UUID.randomUUID().toString();
         request.getSession().setAttribute("fb_oauth_state", state);
 
