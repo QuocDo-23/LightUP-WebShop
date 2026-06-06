@@ -111,6 +111,7 @@ public class FacebookCallbackServlet extends HttpServlet {
                 newUser.setEmail(email);
                 newUser.setAvatarImg(picture);
                 newUser.setAuthProvider("facebook");
+                newUser.setFacebookId(fbId);
 
                 boolean created = userService.registerFacebookUser(newUser);
                 if (!created) {

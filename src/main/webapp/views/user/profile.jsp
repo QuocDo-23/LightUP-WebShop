@@ -59,11 +59,26 @@
 
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="email" name="email"
-                                       value="${user.email}"
-                                       placeholder="Nhập email"
-                                       readonly
-                                       style="background-color: #f0f0f0;">
+
+                                <c:choose>
+
+                                    <c:when test="${user.authProvider == 'facebook'}">
+                                        <input type="text"
+                                               value="📘 Đăng nhập bằng Facebook"
+                                               readonly
+                                               class="social-login-input">
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <input type="email"
+                                               name="email"
+                                               value="${user.email}"
+                                               readonly
+                                               class="readonly-input">
+                                    </c:otherwise>
+
+                                </c:choose>
+
                             </div>
                         </div>
 

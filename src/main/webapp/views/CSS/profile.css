@@ -335,6 +335,7 @@ form {
     margin-bottom: 15px;
     border-radius: 8px;
     background: #f9f9f9;
+    position: relative;
 }
 .address-card.default {
     border-color: #28a745;
@@ -363,14 +364,7 @@ form {
     border-radius: 4px;
     cursor: pointer;
 }
-.btn-edit {
-    background: #007bff;
-    color: white;
-}
-.btn-delete {
-    background: #dc3545;
-    color: white;
-}
+
 .btn-default {
     background: #28a745;
     color: white;
@@ -386,47 +380,6 @@ form {
     border-radius: 4px;
     cursor: pointer;
     margin-bottom: 20px;
-}
-.message {
-    padding: 12px 20px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    font-weight: 500;
-}
-.message.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-.message.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-.address-card {
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    background: #f9f9f9;
-    position: relative;
-}
-.address-card.default {
-    border-color: #28a745;
-    background: #e8f5e9;
-}
-.address-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.default-badge {
-    background: #28a745;
-    color: white;
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-size: 12px;
 }
 .address-actions {
     margin-top: 10px;
@@ -447,22 +400,6 @@ form {
 .btn-delete {
     background: #dc3545;
     color: white;
-}
-.btn-default {
-    background: #28a745;
-    color: white;
-}
-.address-section {
-    margin-top: 30px;
-}
-.add-address-btn {
-    background: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-bottom: 20px;
 }
 .form-container {
     display: none;
@@ -588,4 +525,18 @@ form {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+.readonly-input{
+    background-color: #f5f5f5;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.social-login-input{
+    background-color: #eef4ff;
+    border: 2px solid #1877f2;
+    color: #1877f2;
+    font-weight: 600;
+    text-align: center;
+    cursor: not-allowed;
 }
