@@ -163,13 +163,13 @@
                         <input type="radio" name="subPaymentMethod" value="vnpay" checked>
                         <span class="radio"></span>
                         <span>Thanh toán VNPay</span>
-                        <img src="https://sandbox.vnpayment.vn/paymentv2/images/ico/vnpay-logo.png" alt="VNPay">
+                        <img src="https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg" alt="VNPay">
                     </label>
                     <label class="sub-payment-method">
                         <input type="radio" name="subPaymentMethod" value="momo">
                         <span class="radio"></span>
                         <span>Thanh toán MoMo</span>
-                        <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png"
+                        <img src="https://developers.momo.vn/v3/assets/images/MOMO-Logo-App-6262c3743a290ef02396a24ea2b66c35.png"
                              alt="MoMo" style="width:36px;height:36px;object-fit:contain;border-radius:6px;margin-left:auto;flex-shrink:0;">
                     </label>
                 </div>
@@ -177,7 +177,7 @@
                 <div id="vnpayPopup">
                     <p class="vnpay-title">Bạn sẽ được chuyển đến cổng thanh toán VNPay</p>
                     <img class="vnpay-logo"
-                         src="https://sandbox.vnpayment.vn/paymentv2/images/ico/vnpay-logo.png"
+                         src="https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg"
                          alt="VNPay">
                     <p class="vnpay-info">Hỗ trợ: ATM, Visa, MasterCard, QR Code</p>
                     <p class="vnpay-info">Nhấn <strong>ĐẶT HÀNG</strong> để tiếp tục thanh toán</p>

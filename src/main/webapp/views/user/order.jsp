@@ -121,7 +121,7 @@
                                             </div>
                                             <div class="order-actions">
                                                 <c:if test="${order.status == 'pending' || order.status == 'confirmed'}">
-                                                    <a href="cancel-order?id=${order.id}"
+                                                    <a href="${pageContext.request.contextPath}/cancel-order?id=${order.id}"
                                                        class="btn btn-secondary"
                                                        onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?')">
                                                         Hủy Đơn

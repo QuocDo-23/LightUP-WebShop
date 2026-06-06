@@ -278,7 +278,7 @@
                                                     <span class="current-price">
                                                         <fmt:formatNumber value="${product.discountedPrice}"
                                                                           pattern="#,###"/>₫
-</span>
+                                                    </span>
                                                     <c:if test="${product.hasDiscount()}">
                                                         <span class="old-price">
                                                             <del><fmt:formatNumber value="${product.price}"
@@ -309,8 +309,6 @@
             </c:otherwise>
         </c:choose>
 
-
-
         <c:if test="${totalPages > 1}">
             <div class="pagination">
                 <c:if test="${currentPage > 1}">
@@ -335,17 +333,13 @@
         </c:if>
     </div>
 
-
     <jsp:include page="/views/layout/footer.jsp"/>
-
 
     <a href="#">
         <button id="scrollToTopBtn">
             <i class="bi bi-chevron-up"></i>
         </button>
     </a>
-
-
 
 </main>
 <script src="${pageContext.request.contextPath}/views/JS/products.js"></script>

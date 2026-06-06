@@ -582,7 +582,7 @@
                   placeholder="Mời bạn chia sẻ cảm nhận về sản phẩm..."
                   required
                   style="width:100%;height:100px;margin-top:15px;padding:10px;border:1px solid #ddd;border-radius:6px;">
-    </textarea>
+        </textarea>
 
 
         <div style="margin-top:15px;">
@@ -632,7 +632,6 @@
 
 </script>
 <script src="${pageContext.request.contextPath}/views/JS/product_detail.js"></script>
-<%--<script src="${pageContext.request.contextPath}/views/JS/index.js"></script>--%>
 <script src="${pageContext.request.contextPath}/views/JS/products.js"></script>
 <script>
     function toggleReply(id) {
@@ -651,8 +650,7 @@
             form.style.display = "none";
         }
     }
-</script>
-<script>
+
     function countReplyText(id){
         let txt = document.getElementById("replyText-" + id).value.length;
         document.getElementById("replyCount-" + id).innerText =

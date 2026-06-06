@@ -1,15 +1,10 @@
 package code.web.lightup.dao;
 
-
-
 import code.web.lightup.model.OrderItem;
 import code.web.lightup.util.BaseDao;
 import org.jdbi.v3.core.Jdbi;
 import code.web.lightup.model.Order;
-
-
 import java.util.*;
-
 
 public class OrderDAO {
 
@@ -18,7 +13,6 @@ public class OrderDAO {
     public OrderDAO() {
         this.jdbi = BaseDao.get();
     }
-
 
     public int insertOrder(Order order) {
         String sql = "INSERT INTO orders (user_id, recipient_name, recipient_phone, recipient_email, " +
@@ -42,7 +36,6 @@ public class OrderDAO {
                 .findOne()
                 .orElse(-1));
     }
-
 
     public Order getOrderById(int orderId) {
         String sql = "SELECT * FROM orders WHERE id = ?";
@@ -108,15 +101,13 @@ public class OrderDAO {
 
 
     public boolean updateOrderStatus(int orderId, String status) {
-        String sql = "UPDATE orders SET status = ? WHERE id = ?";
-
-        return jdbi.withHandle(handle -> {
-            int rows = handle.createUpdate(sql)
-                    .bind(0, status)
-                    .bind(1, orderId)
-                    .execute();
-            return rows > 0;
-        });
+        String sql = "UPDATE orders SET status = :status WHERE id = :orderId";
+        return jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("status", status)
+                        .bind("orderId", orderId)
+                        .execute() > 0
+        );
     }
 
 
