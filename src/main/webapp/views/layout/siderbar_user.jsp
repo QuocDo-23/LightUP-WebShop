@@ -47,6 +47,9 @@
     <a href="profile" class="menu-item ${activeTab == 'profile' ? 'active' : ''}">
         <i class="bi bi-person"></i> Thông Tin Cá Nhân
     </a>
+    <a href="change-password" class="menu-item ${activeTab == 'changePassword' ? 'active' : ''}">
+        <i class="bi bi-key"></i> Đổi Mật Khẩu
+    </a>
     <a href="orders" class="menu-item ${activeTab == 'orders' ? 'active' : ''}">
         <i class="bi bi-clipboard-check"></i> Đơn Hàng
     </a>
@@ -126,7 +129,7 @@
         if (originalAvatarSrc) {
             document.getElementById('previewAvatar').src = originalAvatarSrc;
         }
-        document.getElementById('avatarInput').value = '';
+        document.getElementById('avatarInputSidebar').value = '';
         selectedFile = null;
         hideConfirmDialog();
     }

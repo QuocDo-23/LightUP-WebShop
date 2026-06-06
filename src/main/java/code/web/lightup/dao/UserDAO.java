@@ -409,10 +409,17 @@ public class UserDAO {
         try {
             return jdbi.withHandle(handle ->
                     handle.createUpdate(
-                                    "INSERT INTO User (role_id, name, email, password, avatar_img, auth_provider) " +
-                                            "VALUES (:roleId, :name, :email, :password, :avatar, :provider)")
-                            .bind("roleId", 2).bind("name", user.getName()).bind("email", user.getEmail())
-                            .bind("password", "").bind("avatar", user.getAvatarImg()).bind("provider", "facebook")
+                                    "INSERT INTO User " +
+                                            "(role_id, name, email, password, avatar_img, auth_provider, facebook_id) " +
+                                            "VALUES " +
+                                            "(:roleId, :name, :email, :password, :avatar, :provider, :facebookId)")
+                            .bind("roleId", 2)
+                            .bind("name", user.getName())
+                            .bind("email", user.getEmail())
+                            .bind("password", "")
+                            .bind("avatar", user.getAvatarImg())
+                            .bind("provider", "facebook")
+                            .bind("facebookId", user.getFacebookId())
                             .execute() > 0
             );
         } catch (Exception e) {
