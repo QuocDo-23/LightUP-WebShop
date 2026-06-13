@@ -89,6 +89,24 @@ public class ProfileServlet extends HttpServlet {
             String gender = request.getParameter("gender");
             String dob = request.getParameter("dob");
 
+            if (phone == null
+                    || !phone.matches("^0\\d{9}$")) {
+
+                request.setAttribute(
+                        "message",
+                        "Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0"
+                );
+
+                request.setAttribute(
+                        "messageType",
+                        "error"
+                );
+
+                doGet(request, response);
+
+                return;
+            }
+
             user.setName(fullName);
             user.setPhone(phone);
             user.setGender(gender);
