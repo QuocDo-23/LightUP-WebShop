@@ -50,7 +50,8 @@
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Họ và Tên</label>
+                                <label>Họ và Tên
+                                    <span class="required">*</span></label>
                                 <input type="text" name="fullName"
                                        value="${user.name}"
                                        placeholder="Nhập họ và tên"
@@ -58,7 +59,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Email</label>
+                                <label>Email
+                                    <span class="required">*</span></label>
 
                                 <c:choose>
 
@@ -84,7 +86,8 @@
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Giới Tính</label>
+                                <label>Giới Tính
+                                    <span class="required">*</span></label>
                                 <select name="gender">
                                     <option value="">Chọn giới tính</option>
                                     <option value="male"   ${user.gender == 'male' ? 'selected' : ''}>Nam</option>
@@ -95,13 +98,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Ngày Sinh</label>
+                                <label>Ngày Sinh
+                                    <span class="required">*</span></label>
                                 <input type="date" name="dob" value="${user.dateOfBirth}" placeholder="Chọn ngày sinh">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Số Điện Thoại</label>
+                            <label>Số Điện Thoại
+                                <span class="required">*</span></label>
                             <input type="tel" name="phone"
                                    value="${user.phone}"
                                    placeholder="Nhập số điện thoại"
