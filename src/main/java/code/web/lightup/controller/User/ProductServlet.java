@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -39,6 +40,22 @@ public class ProductServlet extends HttpServlet {
 
             String[] priceRanges = request.getParameterValues("price");
 
+            HttpSession session = request.getSession();
+
+            if (priceRanges != null && priceRanges.length > 0) {
+
+                session.setAttribute(
+                        "selectedPrices",
+                        priceRanges
+                );
+
+            } else {
+
+                priceRanges =
+                        (String[]) session.getAttribute(
+                                "selectedPrices"
+                        );
+            }
             List<Category> categories = categoryService.getSubCategories();
 
             Integer userId = SessionUtil.getUserId(request);
