@@ -148,14 +148,21 @@
             </div>
 
         </div>
+
     </form>
 
 
     <div class="container product-section">
+        <c:if test="${not empty products}">
+            <div class="product-count-box">
+                Tìm thấy ${totalProducts} sản phẩm phù hợp
+            </div>
+        </c:if>
 
         <c:choose>
 
             <c:when test="${not empty category or not empty products}">
+
                 <div class="product-grid" id="productGrid">
                     <c:forEach var="product" items="${products}">
                         <div class="product-card"

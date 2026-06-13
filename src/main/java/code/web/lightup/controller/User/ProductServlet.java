@@ -51,6 +51,10 @@ public class ProductServlet extends HttpServlet {
             if (priceRanges != null && priceRanges.length > 0) {
                 List<ProductWithDetails> filteredProducts =
                         productService.filterProductsByPrice(priceRanges);
+                request.setAttribute(
+                        "totalProducts",
+                        filteredProducts.size()
+                );
 
                 if (!favIds.isEmpty()) {
                     for (ProductWithDetails p : filteredProducts) {
@@ -69,6 +73,7 @@ public class ProductServlet extends HttpServlet {
             List<ProductWithDetails> allProducts =
                     productService.getAllProductsWithDetails();
 
+
             if (!favIds.isEmpty()) {
                 for (ProductWithDetails p : allProducts) {
                     if (favIds.contains(p.getId())) {
@@ -80,6 +85,8 @@ public class ProductServlet extends HttpServlet {
             Map<Integer, List<ProductWithDetails>> productsByCategory = new HashMap<>();
 
             for (ProductWithDetails product : allProducts) {
+
+
                 int catId = product.getCategoryId();
                 List<ProductWithDetails> list =
                         productsByCategory.computeIfAbsent(catId, k -> new ArrayList<>());
@@ -91,6 +98,7 @@ public class ProductServlet extends HttpServlet {
             }
 
             request.setAttribute("categories", categories);
+
             request.setAttribute("productsByCategory", productsByCategory);
             request.setAttribute("totalProducts", allProducts.size());
             request.getRequestDispatcher("/views/user/products.jsp").forward(request, response);
