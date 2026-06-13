@@ -51,6 +51,7 @@ public class ProductServlet extends HttpServlet {
             if (priceRanges != null && priceRanges.length > 0) {
                 List<ProductWithDetails> filteredProducts =
                         productService.filterProductsByPrice(priceRanges);
+
                 request.setAttribute(
                         "totalProducts",
                         filteredProducts.size()

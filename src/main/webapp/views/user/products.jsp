@@ -130,6 +130,7 @@
                                 Trên 10.000.000₫
                             </label>
                         </li>
+
                     </ul>
                 </div>
             </div>
@@ -159,9 +160,26 @@
             </div>
         </c:if>
 
-        <c:choose>
+        <c:if test="${empty products and not empty param.price}">
+            <div class="empty-product-message">
 
-            <c:when test="${not empty category or not empty products}">
+                <div class="empty-product-title">
+                    <i class="bi bi-search"></i>
+
+                    <p>
+                        Không tìm thấy sản phẩm phù hợp với bộ lọc đã chọn
+                    </p>
+                </div>
+
+                <span>
+        Vui lòng thử khoảng giá khác hoặc nhấn Đặt lại lọc.
+    </span>
+
+            </div>
+        </c:if>
+        <c:choose>
+            <c:when test="${not empty products}">
+
 
                 <div class="product-grid" id="productGrid">
                     <c:forEach var="product" items="${products}">
@@ -229,7 +247,10 @@
                         </div>
                     </c:forEach>
                 </div>
-            </c:when>
+
+        </c:when>
+
+
 
 
             <c:otherwise>
