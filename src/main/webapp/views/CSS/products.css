@@ -596,3 +596,19 @@
 .favorite-btn.active{
     color:#ff2d55;
 }
+.reset-link{
+    text-decoration:none;
+    color:inherit;
+}
+.reset-filter-btn{
+    color: #000;
+    text-decoration: none;
+}
+.reset-filter-btn:visited{
+    color: #000;
+}
+
+.reset-filter-btn:hover{
+    color: #000;
+    text-decoration: none;
+}

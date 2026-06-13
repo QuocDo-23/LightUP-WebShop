@@ -68,11 +68,17 @@
 
 
                 <div class="filter-dropdown">
-                    <button type="submit" class="filter-toggle"
-                            style="background:none;border:none;">
+                    <button type="submit" class="filter-toggle">
                         <i class="bi bi-funnel-fill"></i>
                         <span>Bộ lọc</span>
                     </button>
+                </div>
+                <div class="filter-dropdown">
+                    <a href="${pageContext.request.contextPath}/products"
+                       class="filter-toggle reset-link">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        <span>Đặt lại lọc</span>
+                    </a>
                 </div>
 
 
