@@ -62,6 +62,10 @@ public class ProductDetailServlet extends HttpServlet {
         }
 
         ProductWithDetails product = productOpt.get();
+        int soldQuantity =
+                productService.getSoldQuantityByProductId(
+                        productId
+                );
 
 
         List<Image> images = imageService.getImagesByProductId(productId);
@@ -85,6 +89,7 @@ public class ProductDetailServlet extends HttpServlet {
 
 
         request.setAttribute("product", product);
+        request.setAttribute("soldQuantity", soldQuantity);
         request.setAttribute("images", images);
         request.setAttribute("reviews", reviews);
         request.setAttribute("stats", stats);

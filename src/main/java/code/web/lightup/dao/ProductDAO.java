@@ -599,4 +599,21 @@ public class ProductDAO {
                         .list()
         );
     }
+    public int getSoldQuantityByProductId(int productId) {
+
+        String sql = """
+        SELECT COALESCE(SUM(quantity),0)
+        FROM order_details od
+        JOIN orders o ON od.order_id = o.id
+        WHERE od.product_id = :productId
+        AND o.status != 'cancelled'
+    """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .one()
+        );
+    }
 }

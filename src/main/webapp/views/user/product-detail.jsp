@@ -184,6 +184,7 @@
                             </button>
                         </div>
                         <p class="stock-info">Còn lại: ${product.inventoryQuantity}</p>
+                        <p class="sold-info">Đã bán: ${soldQuantity}</p>
                     </div>
 
 
