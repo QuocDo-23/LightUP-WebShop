@@ -12,6 +12,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/order_detail.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/order_return.css">
+
 </head>
 <body>
 <main>
@@ -32,35 +34,32 @@
                         <c:when test="${order.status == 'shipped'}">Đang giao hàng</c:when>
                         <c:when test="${order.status == 'delivered'}">Đã giao hàng</c:when>
                         <c:when test="${order.status == 'cancelled'}">Đã hủy</c:when>
+                        <c:when test="${order.status == 'returning'}">Đang trả hàng</c:when>
+                        <c:when test="${order.status == 'refunded'}">Đã hoàn tiền</c:when>
                         <c:otherwise>${order.status}</c:otherwise>
                     </c:choose>
                 </span>
             </div>
 
-            <!-- Trạng thái đơn hàng (Progress Bar) -->
-            <c:if test="${order.status != 'cancelled'}">
+            <c:if test="${order.status != 'cancelled' && order.status != 'returning' && order.status != 'refunded'}">
                 <div class="order-status-section">
                     <h2>Trạng thái đơn hàng</h2>
                     <div class="progress-bar">
-                        <!-- Bước 1: Đã nhận đơn -->
                         <div class="step ${order.status == 'pending' || order.status == 'processing' || order.status == 'shipped' || order.status == 'delivered' ? 'step_complete' : ''}">
                             <i class="bi bi-cart-check"></i>
                             <p>Đã nhận đơn</p>
                         </div>
 
-                        <!-- Bước 2: Đã xác nhận -->
-                        <div class="step ${order.status == 'processing' || order.status == 'shipped' || order.status == 'delivered' ? 'step_complete' : ''}">
+                       <div class="step ${order.status == 'processing' || order.status == 'shipped' || order.status == 'delivered' ? 'step_complete' : ''}">
                             <i class="bi bi-box2-heart"></i>
                             <p>Đã xác nhận</p>
                         </div>
 
-                        <!-- Bước 3: Đang vận chuyển -->
                         <div class="step ${order.status == 'shipped' || order.status == 'delivered' ? 'step_complete' : ''}">
                             <i class="bi bi-truck"></i>
                             <p>Đang vận chuyển</p>
                         </div>
 
-                        <!-- Bước 4: Đã giao hàng -->
                         <div class="step ${order.status == 'delivered' ? 'step_complete' : ''}">
                             <i class="bi bi-check2-square"></i>
                             <p>Đã giao hàng</p>
@@ -69,7 +68,6 @@
                 </div>
             </c:if>
 
-            <!-- Thông tin đơn hàng -->
             <div class="order-inf">
                 <h2>Thông tin đơn hàng</h2>
                 <div class="information">
@@ -240,10 +238,51 @@
                     </a>
                 </c:if>
 
-                <c:if test="${order.status == 'delivered'}">
-                    <a href="cart" class="btn btn-reorder">
-                        <i class="bi bi-arrow-repeat"></i> Đánh giá đơn hàng
+
+                <c:if test="${order.status == 'delivered' && !order.hasReview && empty orderReturn}">
+                    <a href="review?orderId=${order.id}" class="btn btn-review">
+                        <i class="bi bi-star"></i> Đánh giá đơn hàng
                     </a>
+                </c:if>
+
+                <c:if test="${order.status == 'delivered' && empty orderReturn}">
+                    <button type="button" class="btn btn-return"
+                            onclick="openReturnModal(${order.id})">
+                        <i class="bi bi-arrow-counterclockwise"></i> Trả hàng
+                    </button>
+                </c:if>
+
+                <c:if test="${not empty orderReturn}">
+                    <span class="btn btn-secondary">
+                        <i class="bi bi-clock-history"></i>
+                        Đã gửi yêu cầu trả hàng
+                    </span>
+                </c:if>
+
+                <c:if test="${not empty orderReturn && orderReturn.status == 'rejected'}">
+                    <button type="button" class="btn btn-return"
+                            onclick="openReturnModal(${order.id})">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        Gửi lại yêu cầu trả hàng
+                    </button>
+                </c:if>
+
+                <c:if test="${not empty orderReturn && orderReturn.status == 'pending'}">
+                    <span class="btn btn-warning">
+                        Yêu cầu trả hàng đang chờ duyệt
+                    </span>
+                </c:if>
+
+                <c:if test="${not empty orderReturn && orderReturn.status == 'approved'}">
+                    <span class="btn btn-info">
+                        Yêu cầu trả hàng đã được duyệt
+                    </span>
+                </c:if>
+
+                <c:if test="${not empty orderReturn && orderReturn.status == 'completed'}">
+                    <span class="btn btn-success">
+                        Đã hoàn tiền
+                    </span>
                 </c:if>
 
                 <a href="orders" class="btn btn-back">
@@ -254,8 +293,11 @@
     </section>
 </main>
 
-<script>
+<%@ include file="../layout/return_modal.jsp" %>
 
+
+
+<script>
     <c:if test="${not empty sessionScope.successMessage}">
         alert("${sessionScope.successMessage}");
         <c:remove var="successMessage" scope="session" />
@@ -266,5 +308,6 @@
         <c:remove var="errorMessage" scope="session" />
     </c:if>
 </script>
+<script src="${pageContext.request.contextPath}/views/JS/return-order.js"></script>
 </body>
 </html>
