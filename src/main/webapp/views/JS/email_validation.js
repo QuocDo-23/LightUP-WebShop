@@ -1,5 +1,5 @@
 /**
- * Dùng cho: login, register, forgot_password, profile, address, payment để validate khi người dùng nhập mail
+ * Dùng cho: login, register, forgot_password, profile, address, payment, contact để validate khi người dùng nhập mail
  */
 (function () {
     function getEmailError(value) {
