@@ -136,6 +136,95 @@
         }
     }
 
+    function checkEmailExists(input, msgEl, email, onResult) {
+        msgEl.style.color   = '#6c757d';
+        msgEl.textContent   = ' ';
+        msgEl.style.display = 'block';
+
+        const ctx = document.querySelector('meta[name="contextPath"]')
+            ? document.querySelector('meta[name="contextPath"]').content
+            : '';
+
+        fetch(ctx + '/check-email?email=' + encodeURIComponent(email), {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                if (data.exists) {
+                    const loginUrl = (ctx || '') + '/login';
+                    showError(input, msgEl,
+                        'Email này đã có tài khoản. '
+                        + '<a href="' + loginUrl + '" '
+                        + 'style="color:#dc3545;font-weight:600;text-decoration:underline;">'
+                        + 'Đăng nhập ngay</a>'
+                    );
+                    onResult(false);
+                } else {
+                    showSuccess(input, msgEl);
+                    onResult(true);
+                }
+            })
+            .catch(function () {
+                showSuccess(input, msgEl);
+                onResult(true);
+            });
+    }
+
+    function attachValidation(input) {
+        const msgEl     = getOrCreateMsgEl(input);
+        const isRegister = !!document.getElementById('registerForm');
+        let touched      = false;
+        let emailValid   = true;
+
+        function validate(onDone) {
+            const val = input.value;
+            if (val.trim() === '') { clearMsg(input, msgEl); emailValid = true; if (onDone) onDone(); return; }
+
+            const err = getEmailError(val);
+            if (err) {
+                showError(input, msgEl, err);
+                emailValid = false;
+                if (onDone) onDone();
+                return;
+            }
+
+            if (isRegister) {
+                checkEmailExists(input, msgEl, val.trim(), function (ok) {
+                    emailValid = ok;
+                    if (onDone) onDone();
+                });
+            } else {
+                showSuccess(input, msgEl);
+                emailValid = true;
+                if (onDone) onDone();
+            }
+        }
+
+        input.addEventListener('blur', function () {
+            touched = true;
+            validate();
+        });
+
+        input.addEventListener('input', function () {
+            if (!touched) return;
+            validate();
+        });
+
+        const form = input.closest('form');
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                if (!touched || !emailValid) {
+                    e.preventDefault();
+                    touched = true;
+                    validate(function () {
+                        if (!emailValid) input.focus();
+                    });
+                }
+            }, { capture: true });
+        }
+    }
+
     function init() {
         document.querySelectorAll('input[type="email"], input[name="email"]').forEach(function (input) {
             if (input.readOnly) return;
