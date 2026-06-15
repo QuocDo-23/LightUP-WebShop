@@ -89,29 +89,39 @@
         errorEl.style.display = 'block';
     }
 
-    function clearError(input, errorEl) {
+    function showSuccess(input, msgEl, msg) {
+        input.style.borderColor = '#28a745';
+        input.style.boxShadow = '0 0 0 2px rgba(40,167,69,.18)';
+        msgEl.style.color = '#28a745';
+        msgEl.textContent = msg;
+        msgEl.style.display = 'block';
+    }
+
+    function clearMsg(input, msgEl) {
         input.style.borderColor = '';
         input.style.boxShadow = '';
-        errorEl.style.display = 'none';
-        errorEl.textContent = '';
+        msgEl.style.display = 'none';
+        msgEl.textContent = '';
     }
 
     function attachValidation(input) {
-        const errorEl = getOrCreateErrorEl(input);
+        const msgEl = getOrCreateMsgEl(input);
         let touched = false;
 
         input.addEventListener('blur', function () {
             touched = true;
+            if (this.value.trim() === '') { clearMsg(this, msgEl); return; }
             const err = getNameError(this.value);
-            if (err) showError(this, errorEl, err);
-            else clearError(this, errorEl);
+            if (err) showError(this, msgEl, err);
+            else showSuccess(this, msgEl);
         });
 
         input.addEventListener('input', function () {
             if (!touched) return;
+            if (this.value.trim() === '') { clearMsg(this, msgEl); return; }
             const err = getNameError(this.value);
-            if (err) showError(this, errorEl, err);
-            else clearError(this, errorEl);
+            if (err) showError(this, msgEl, err);
+            else showSuccess(this, msgEl);
         });
 
         const form = input.closest('form');
@@ -122,10 +132,10 @@
                 if (err) {
                     e.preventDefault();
                     e.stopImmediatePropagation();
-                    showError(input, errorEl, err);
+                    showError(input, msgEl, err);
                     input.focus();
                 } else {
-                    clearError(input, errorEl);
+                    showSuccess(input, msgEl);
                 }
             }, { capture: true });
         }
