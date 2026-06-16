@@ -85,6 +85,7 @@
     function showError(input, errorEl, msg) {
         input.style.borderColor = '#dc3545';
         input.style.boxShadow = '0 0 0 2px rgba(220,53,69,.18)';
+        errorEl.style.color = '#dc3545';
         errorEl.textContent = msg;
         errorEl.style.display = 'block';
     }
@@ -105,7 +106,7 @@
     }
 
     function attachValidation(input) {
-        const msgEl = getOrCreateMsgEl(input);
+        const msgEl = getOrCreateErrorEl(input);
         let touched = false;
 
         input.addEventListener('blur', function () {

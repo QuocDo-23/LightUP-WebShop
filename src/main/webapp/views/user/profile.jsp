@@ -109,9 +109,7 @@
                                 <span class="required">*</span></label>
                             <input type="tel" name="phone"
                                    value="${user.phone}"
-                                   placeholder="Nhập số điện thoại"
-                                   pattern="0[0-9]{9}"
-                                   title="Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0">
+                                   placeholder="Nhập số điện thoại">
                         </div>
 
                         <button type="submit" class="save-btn">Lưu Thay Đổi</button>

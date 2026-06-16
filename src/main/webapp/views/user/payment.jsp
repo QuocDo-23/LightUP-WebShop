@@ -68,7 +68,6 @@
                 <div class="form-group">
                     <input type="tel" name="phone" id="phone"
                            placeholder="Số điện thoại *"
-                           pattern="[0-9]{10,11}"
                            value="${isNewAddress ? '' : (not empty selectedAddress ? selectedAddress.phone : '')}"
                            required>
                 </div>
@@ -87,19 +86,19 @@
 
                 <div class="form-group">
                     <input type="text" name="commune" id="commune"
-                           placeholder="Phường/xã"
+                           placeholder="Phường/xã" required
                            value="${isNewAddress ? '' : (not empty selectedAddress ? selectedAddress.commune : '')}">
                 </div>
 
                 <div class="form-group">
                     <input type="text" name="district" id="district"
-                           placeholder="Quận/Huyện, Tỉnh/Thành phố"
+                           placeholder="Tỉnh/Thành phố" required
                            value="${isNewAddress ? '' : (not empty selectedAddress ? selectedAddress.district : '')}">
                 </div>
 
                 <div class="form-group">
                     <textarea name="addressDetail" id="addressDetail"
-                              placeholder="Ghi chú địa chỉ cụ thể (nếu có) *">${isNewAddress ? '' : (not empty selectedAddress ? selectedAddress.addressDetail : '')}</textarea>
+                              placeholder="Ghi chú địa chỉ cụ thể (nếu có)">${isNewAddress ? '' : (not empty selectedAddress ? selectedAddress.addressDetail : '')}</textarea>
                 </div>
 
                 <c:if test="${not empty sessionScope.user}">
@@ -358,18 +357,24 @@
     }
 
     document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-        const recipientName = document.getElementById('recipientName').value.trim();
-        const phone = document.getElementById('phone').value.trim();
+        const phoneInput = document.getElementById('phone');
+        const nameInput = document.getElementById('recipientName');
+        const phoneValue =
+            document.getElementById('phone').value.trim();
 
-        if (!recipientName || !phone) {
+        if (!/^(03|05|07|08|09)\d{8}$/.test(phoneValue)) {
             e.preventDefault();
-            alert('Vui lòng điền đầy đủ thông tin nhận hàng');
-            return false;
+            alert('Số điện thoại không hợp lệ');
+            return;
         }
-        if (!/^[0-9]{10,11}$/.test(phone)) {
+
+        phoneInput.dispatchEvent(new Event('blur'));
+        nameInput.dispatchEvent(new Event('blur'));
+
+        if ((phoneErr && phoneErr.style.display !== 'none' && phoneErr.textContent.trim() !== '')) {
             e.preventDefault();
-            alert('Số điện thoại không hợp lệ (phải có 10-11 chữ số)');
-            return false;
+            e.stopImmediatePropagation();
+            return;
         }
 
         const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
