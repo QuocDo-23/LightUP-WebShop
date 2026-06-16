@@ -18,8 +18,16 @@ public class Product {
     private LocalDateTime updatedAt;
     private LocalDateTime lastImportDate;
     private LocalDateTime lastSaleDate;
+    private long deadDays;
 
     private int minStock;
+    public long getDeadDays() {
+        return deadDays;
+    }
+
+    public void setDeadDays(long deadDays) {
+        this.deadDays = deadDays;
+    }
 
     public String getName() {
         return name;

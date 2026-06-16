@@ -1,6 +1,6 @@
 package code.web.lightup.controller.Admin.Analytics;
 
-
+import code.web.lightup.dao.AnalyticsDAO;
 import code.web.lightup.dao.OrderDAO;
 import code.web.lightup.dao.UserDAO;
 import code.web.lightup.model.User;
@@ -22,12 +22,14 @@ public class AdminAnalyticsServlet extends HttpServlet {
     private OrderDAO orderDAO;
     private UserDAO userDAO;
     private InventoryDAO inventoryDAO;
+    private AnalyticsDAO analyticsDAO;
 
     @Override
     public void init() {
         orderDAO = new OrderDAO();
         userDAO = new UserDAO();
         inventoryDAO = new InventoryDAO();
+        analyticsDAO = new AnalyticsDAO();
     }
 
     @Override
@@ -56,6 +58,39 @@ public class AdminAnalyticsServlet extends HttpServlet {
 
         int deadStock = inventoryDAO.getDeadStockCount();
 
+
+        int lowStockPage = 1;
+
+        String lowStockPageParam =
+                request.getParameter("lowStockPage");
+
+        if(lowStockPageParam != null){
+
+            lowStockPage =
+                    Integer.parseInt(lowStockPageParam);
+        }
+
+
+
+        int deadStockPage = 1;
+
+        String deadStockPageParam =
+                request.getParameter("deadStockPage");
+
+        if(deadStockPageParam != null){
+
+            deadStockPage =
+                    Integer.parseInt(deadStockPageParam);
+        }
+
+        int limit = 10;
+
+        int lowStockOffset =
+                (lowStockPage - 1) * limit;
+
+        int deadStockOffset =
+                (deadStockPage - 1) * limit;
+
         request.setAttribute("todayImport", todayImport);
 
         request.setAttribute("todaySale", todaySale);
@@ -74,9 +109,68 @@ public class AdminAnalyticsServlet extends HttpServlet {
         request.setAttribute("totalOrders", totalOrders);
         request.setAttribute("totalCustomers", totalCustomers);
         request.setAttribute("processingOrders", processingOrders);
+        request.setAttribute(
+                "todayImports",
+                analyticsDAO.getTodayImports()
+        );
+
+        request.setAttribute(
+                "todaySales",
+                analyticsDAO.getTodaySales()
+        );
 
         request.setAttribute("currentPage", "analytics");
 
+        request.setAttribute(
+                "lowStockProducts",
+                analyticsDAO.getLowStockProducts(
+                        lowStockOffset,
+                        limit
+                )
+        );
+
+        request.setAttribute(
+                "deadStockProducts",
+                analyticsDAO.getDeadStockProducts(
+                        deadStockOffset,
+                        limit
+                )
+        );
+        int totalLowStockProducts =
+                analyticsDAO.countLowStockProducts();
+
+        int totalLowStockPages =
+                (int)Math.ceil(
+                        (double) totalLowStockProducts / limit
+                );
+
+        request.setAttribute(
+                "lowStockPage",
+                lowStockPage
+        );
+
+        request.setAttribute(
+                "totalLowStockPages",
+                totalLowStockPages
+        );
+
+        int totalDeadStockProducts =
+                analyticsDAO.countDeadStockProducts();
+
+        int totalDeadStockPages =
+                (int)Math.ceil(
+                        (double) totalDeadStockProducts / limit
+                );
+
+        request.setAttribute(
+                "deadStockPage",
+                deadStockPage
+        );
+
+        request.setAttribute(
+                "totalDeadStockPages",
+                totalDeadStockPages
+        );
         request.getRequestDispatcher("/views/admin/Analytic/analytics.jsp")
                 .forward(request, response);
     }
