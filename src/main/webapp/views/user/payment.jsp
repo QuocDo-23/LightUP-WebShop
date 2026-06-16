@@ -160,14 +160,13 @@
 
                 <div class="sub-payment-options" id="subPaymentOptions">
                     <label class="sub-payment-method">
-                        <input type="radio" name="subPaymentMethod" value="vnpay" checked>
+                        <input type="radio" name="subPaymentMethod" value="vnpay" form="checkoutForm" checked>
                         <span class="radio"></span>
                         <span>Thanh toán VNPay</span>
                         <img src="https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg" alt="VNPay">
                     </label>
                     <label class="sub-payment-method">
-                        <input type="radio" name="subPaymentMethod" value="momo">
-                        <span class="radio"></span>
+                        <input type="radio" name="subPaymentMethod" value="momo" form="checkoutForm">                        <span class="radio"></span>
                         <span>Thanh toán MoMo</span>
                         <img src="https://developers.momo.vn/v3/assets/images/MOMO-Logo-App-6262c3743a290ef02396a24ea2b66c35.png"
                              alt="MoMo" style="width:36px;height:36px;object-fit:contain;border-radius:6px;margin-left:auto;flex-shrink:0;">
@@ -375,25 +374,15 @@
 
         const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
         if (paymentMethod === 'transfer') {
-            e.preventDefault();
             const sub = document.querySelector('input[name="subPaymentMethod"]:checked').value;
-            const total = parseInt(document.getElementById('totalPrice').textContent.replace(/\D/g, ''));
-            const orderId = 'ORDER' + Date.now();
 
             if (sub === 'vnpay') {
-                fetch('${pageContext.request.contextPath}/vnpay-payment?amount=' + total + '&orderId=' + orderId, {
-                    method: 'POST'
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.payUrl) {
-                            window.location.href = data.payUrl;
-                        } else {
-                            alert('Không thể tạo thanh toán VNPay: ' + (data.error || 'Lỗi không xác định'));
-                        }
-                    })
-                    .catch(err => alert('Lỗi kết nối VNPay: ' + err.message));
-            } else {
+                return true;
+            }
+
+            if (sub === 'momo') {
+                e.preventDefault();
+
                 const payUrl = document.getElementById('momoPopup').dataset.payUrl;
                 if (payUrl) {
                     window.location.href = payUrl;
