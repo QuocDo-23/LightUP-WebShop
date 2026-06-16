@@ -4,8 +4,7 @@
 <head>
     <title>Nhập Kho</title>
 
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/views/CSS/adminCSS/admin.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/adminCSS/admin.css">
 </head>
 
 <body>
@@ -22,7 +21,7 @@
 
             <h2>Phiếu xuất kho</h2>
 
-            <form method="post"
+            <form method="post" class="inventory-form"
                   action="${pageContext.request.contextPath}/admin/inventory/export">
 
                 <div style="margin-bottom:20px">

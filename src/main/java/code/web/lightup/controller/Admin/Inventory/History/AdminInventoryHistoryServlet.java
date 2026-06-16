@@ -22,9 +22,46 @@ public class AdminInventoryHistoryServlet extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
 
+        String keyword =
+                request.getParameter("keyword");
+
+        String type =
+                request.getParameter("type");
+
+        String fromDate =
+                request.getParameter("fromDate");
+
+        String toDate =
+                request.getParameter("toDate");
+
         request.setAttribute(
                 "transactions",
-                inventoryDAO.getRecentTransactions()
+                inventoryDAO.getFilteredTransactions(
+                        keyword,
+                        type,
+                        fromDate,
+                        toDate
+                )
+        );
+
+        request.setAttribute(
+                "keyword",
+                keyword
+        );
+
+        request.setAttribute(
+                "type",
+                type
+        );
+
+        request.setAttribute(
+                "fromDate",
+                fromDate
+        );
+
+        request.setAttribute(
+                "toDate",
+                toDate
         );
 
         request.setAttribute(

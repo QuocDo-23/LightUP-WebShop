@@ -23,6 +23,7 @@
             <h2>Phiếu nhập kho</h2>
 
             <form method="post"
+                  class="inventory-form"
                   action="${pageContext.request.contextPath}/admin/inventory/import">
 
                 <div style="margin-bottom:20px">

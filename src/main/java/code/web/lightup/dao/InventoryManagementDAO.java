@@ -134,4 +134,102 @@ public class InventoryManagementDAO {
                         .list()
         );
     }
+    public List<InventoryTransaction> getTransactionsByType(
+            String type
+    ) {
+
+        String sql = """
+        SELECT
+            it.*,
+            p.name AS product_name
+        FROM inventory_transaction it
+        LEFT JOIN product p
+            ON it.product_id = p.id
+        WHERE it.transaction_type = :type
+        ORDER BY it.created_at DESC
+        """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("type", type)
+                        .mapToBean(InventoryTransaction.class)
+                        .list()
+        );
+    }
+    public List<InventoryTransaction> getFilteredTransactions(
+            String keyword,
+            String type,
+            String fromDate,
+            String toDate
+    ) {
+
+        StringBuilder sql = new StringBuilder("""
+        SELECT
+            it.*,
+            p.name AS product_name
+        FROM inventory_transaction it
+        LEFT JOIN product p
+            ON it.product_id = p.id
+        WHERE 1=1
+        """);
+
+        if(keyword != null && !keyword.isBlank()){
+            sql.append("""
+            AND p.name LIKE :keyword
+            """);
+        }
+
+        if(type != null && !type.isBlank()){
+            sql.append("""
+            AND it.transaction_type = :type
+            """);
+        }
+
+        if(fromDate != null && !fromDate.isBlank()){
+            sql.append("""
+            AND DATE(it.created_at) >= :fromDate
+            """);
+        }
+
+        if(toDate != null && !toDate.isBlank()){
+            sql.append("""
+            AND DATE(it.created_at) <= :toDate
+            """);
+        }
+
+        sql.append("""
+        ORDER BY it.created_at DESC
+        """);
+
+        return jdbi.withHandle(handle -> {
+
+            var query =
+                    handle.createQuery(sql.toString());
+
+            if(keyword != null && !keyword.isBlank()){
+                query.bind(
+                        "keyword",
+                        "%" + keyword + "%"
+                );
+            }
+
+            if(type != null && !type.isBlank()){
+                query.bind("type", type);
+            }
+
+            if(fromDate != null && !fromDate.isBlank()){
+                query.bind("fromDate", fromDate);
+            }
+
+            if(toDate != null && !toDate.isBlank()){
+                query.bind("toDate", toDate);
+            }
+
+            return query
+                    .mapToBean(
+                            InventoryTransaction.class
+                    )
+                    .list();
+        });
+    }
 }

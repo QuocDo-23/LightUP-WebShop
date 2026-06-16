@@ -19,7 +19,15 @@
 
     <div class="main-content">
 
-        <h1>⚠️ Cảnh Báo Kho</h1>
+
+        <h1 class="page-title">
+            ⚠️ Cảnh Báo Kho
+        </h1>
+        <div class="alert-banner">
+
+            ⚠️ Những sản phẩm dưới mức tồn kho tối thiểu cần được nhập thêm để tránh hết hàng.
+
+        </div>
 
         <div class="table-container">
 
@@ -40,13 +48,59 @@
 
                 <c:forEach items="${products}" var="p" varStatus="status">
 
-                    <tr>
+                    <c:choose>
+
+                        <c:when test="${p.inventoryQuantity == 0}">
+
+                            <tr class="stock-row-danger">
+
+                        </c:when>
+
+                        <c:when test="${p.inventoryQuantity <= p.minStock}">
+
+                            <tr class="stock-row-warning">
+
+                        </c:when>
+
+                        <c:otherwise>
+
+                            <tr>
+
+                        </c:otherwise>
+
+                    </c:choose>
 
                         <td>${status.count}</td>
 
                         <td>${p.name}</td>
 
-                        <td>${p.inventoryQuantity}</td>
+                        <td>
+
+                            <c:choose>
+
+                                <c:when test="${p.inventoryQuantity == 0}">
+
+            <span class="stock-danger">
+
+                    ${p.inventoryQuantity}
+
+            </span>
+
+                                </c:when>
+
+                                <c:otherwise>
+
+            <span class="stock-warning">
+
+                    ${p.inventoryQuantity}
+
+            </span>
+
+                                </c:otherwise>
+
+                            </c:choose>
+
+                        </td>
 
                         <td>${p.minStock}</td>
 
@@ -55,15 +109,27 @@
                             <c:choose>
 
                                 <c:when test="${p.inventoryQuantity == 0}">
-                                     Hết hàng
+
+                                    <span class="alert-badge alert-danger">
+                                        HẾT HÀNG
+                                    </span>
+
                                 </c:when>
 
                                 <c:when test="${p.inventoryQuantity <= p.minStock}">
-                                     Sắp hết
+
+                                    <span class="alert-badge alert-warning">
+                                        SẮP HẾT
+                                    </span>
+
                                 </c:when>
 
                                 <c:otherwise>
-                                     Bình thường
+
+                                    <span class="alert-badge alert-normal">
+                                        BÌNH THƯỜNG
+                                    </span>
+
                                 </c:otherwise>
 
                             </c:choose>
@@ -75,15 +141,30 @@
                             <c:choose>
 
                                 <c:when test="${p.inventoryQuantity == 0}">
-                                    Nhập gấp
+
+                                    <span class="recommend-danger">
+                                        Nhập gấp
+                                        (${p.minStock} sản phẩm)
+                                    </span>
+
                                 </c:when>
 
                                 <c:when test="${p.inventoryQuantity <= p.minStock}">
-                                    Nên nhập thêm
+
+                                    <span class="recommend-warning">
+                                        Nhập thêm
+                                        ${p.minStock - p.inventoryQuantity}
+                                        sản phẩm
+                                    </span>
+
                                 </c:when>
 
                                 <c:otherwise>
-                                    Không cần nhập
+
+                                    <span class="recommend-ok">
+                                        Đủ hàng
+                                    </span>
+
                                 </c:otherwise>
 
                             </c:choose>
