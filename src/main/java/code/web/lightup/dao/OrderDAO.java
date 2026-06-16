@@ -729,4 +729,26 @@ public class OrderDAO {
             return rows > 0;
         });
     }
+    public boolean hasPurchasedProduct(int userId, int productId) {
+
+        String sql = """
+        SELECT COUNT(*)
+        FROM orders o
+        JOIN order_details od
+            ON o.id = od.order_id
+        WHERE o.user_id = :userId
+        AND od.product_id = :productId
+        AND o.status = 'delivered'
+    """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("userId", userId)
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .one() > 0
+        );
+       // Test khi đánh giá mà ko cần mua
+        //return true;
+    }
 }
