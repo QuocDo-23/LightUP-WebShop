@@ -5,6 +5,12 @@
 
 <c:set var="isProductGroup"
        value="${currentPage eq 'products' or currentPage eq 'categories'}" />
+<c:set var="isInventoryGroup"
+       value="${currentPage eq 'inventory'
+       or currentPage eq 'inventory-import'
+       or currentPage eq 'inventory-export'
+       or currentPage eq 'inventory-history'
+       or currentPage eq 'inventory-alert'}" />
 
 <div class="sidebar">
     <div class="logo">
@@ -64,10 +70,47 @@
        class="menu-item <c:if test='${currentPage eq "analytics"}'>active</c:if>">
         Thống Kê
     </a>
-    <a href="${pageContext.request.contextPath}/admin/inventory"
-       class="menu-item <c:if test='${currentPage eq "inventory"}'>active</c:if>">
-        Quản Lý Kho
-    </a>
+    <div class="menu-group <c:if test='${isInventoryGroup}'>open</c:if>">
+
+        <a href="${pageContext.request.contextPath}/admin/inventory"
+           class="menu-item menu-toggle <c:if test='${isInventoryGroup}'>active</c:if>">
+
+            <span>Quản Lý Kho</span>
+            <i class="menu-arrow bi bi-chevron-down"></i>
+
+        </a>
+
+        <div class="submenu">
+
+            <a href="${pageContext.request.contextPath}/admin/inventory"
+               class="submenu-item <c:if test='${currentPage eq "inventory"}'>active</c:if>">
+                Tồn Kho
+            </a>
+
+            <a href="${pageContext.request.contextPath}/admin/inventory/import"
+               class="submenu-item <c:if test='${currentPage eq "inventory-import"}'>active</c:if>">
+                Nhập Kho
+            </a>
+
+            <a href="${pageContext.request.contextPath}/admin/inventory/export"
+               class="submenu-item <c:if test='${currentPage eq "inventory-export"}'>active</c:if>">
+                Xuất Kho
+            </a>
+
+            <a href="${pageContext.request.contextPath}/admin/inventory/history"
+               class="submenu-item <c:if test='${currentPage eq "inventory-history"}'>active</c:if>">
+                Lịch Sử Kho
+            </a>
+
+            <a href="${pageContext.request.contextPath}/admin/inventory/alert"
+               class="submenu-item <c:if test='${currentPage eq "inventory-alert"}'>active</c:if>">
+                Cảnh Báo Tồn Kho
+            </a>
+
+        </div>
+
+    </div>
+
 
     <button type="button" class="logout-btn"
             onclick="window.location.href='${pageContext.request.contextPath}/logout'">

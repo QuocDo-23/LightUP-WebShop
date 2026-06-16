@@ -1,12 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <html>
 <head>
-    <title>Quản Lý Kho</title>
+
+    <title>Cảnh Báo Kho</title>
 
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/views/CSS/adminCSS/admin.css">
+
 </head>
 
 <body>
@@ -15,74 +17,77 @@
 
     <jsp:include page="/views/layout/siderbar_admin.jsp"/>
 
-
     <div class="main-content">
 
-        <h1>📦 Quản Lý Kho</h1>
+        <h1>⚠️ Cảnh Báo Kho</h1>
 
         <div class="table-container">
-
-            <h2>Danh sách tồn kho</h2>
 
             <table>
 
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>STT</th>
                     <th>Sản phẩm</th>
                     <th>Tồn kho</th>
                     <th>Min Stock</th>
-                    <th>Nhập cuối</th>
-                    <th>Bán cuối</th>
+                    <th>Trạng thái</th>
+                    <th>Khuyến nghị</th>
                 </tr>
                 </thead>
 
                 <tbody>
 
-                <c:forEach items="${products}" var="p">
+                <c:forEach items="${products}" var="p" varStatus="status">
 
                     <tr>
 
-                        <td>${p.id}</td>
+                        <td>${status.count}</td>
 
                         <td>${p.name}</td>
+
+                        <td>${p.inventoryQuantity}</td>
+
+                        <td>${p.minStock}</td>
 
                         <td>
 
                             <c:choose>
 
+                                <c:when test="${p.inventoryQuantity == 0}">
+                                     Hết hàng
+                                </c:when>
+
                                 <c:when test="${p.inventoryQuantity <= p.minStock}">
-                                    <span style="color:red;font-weight:bold">
-                                            ${p.inventoryQuantity}
-                                    </span>
+                                     Sắp hết
                                 </c:when>
 
                                 <c:otherwise>
-                                    ${p.inventoryQuantity}
+                                     Bình thường
                                 </c:otherwise>
 
                             </c:choose>
 
                         </td>
 
-                        <td>${p.minStock}</td>
-
                         <td>
-                            <c:choose>
-                                <c:when test="${not empty p.lastImportDate}">
-                                    ${p.lastImportDate.toString().replace('T',' ')}
-                                </c:when>
-                                <c:otherwise>-</c:otherwise>
-                            </c:choose>
-                        </td>
 
-                        <td>
                             <c:choose>
-                                <c:when test="${not empty p.lastSaleDate}">
-                                    ${p.lastSaleDate.toString().replace('T',' ')}
+
+                                <c:when test="${p.inventoryQuantity == 0}">
+                                    Nhập gấp
                                 </c:when>
-                                <c:otherwise>-</c:otherwise>
+
+                                <c:when test="${p.inventoryQuantity <= p.minStock}">
+                                    Nên nhập thêm
+                                </c:when>
+
+                                <c:otherwise>
+                                    Không cần nhập
+                                </c:otherwise>
+
                             </c:choose>
+
                         </td>
 
                     </tr>
@@ -94,7 +99,6 @@
             </table>
 
         </div>
-
 
     </div>
 

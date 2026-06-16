@@ -329,6 +329,43 @@ public class ProductDAO {
             return rows > 0;
         });
     }
+    public boolean increaseProductQuantity(
+            int productId,
+            int quantity,
+            String reason
+    ) {
+
+        String sql =
+                "UPDATE product " +
+                        "SET inventory_quantity = inventory_quantity + ?, " +
+                        "last_import_date = NOW() " +
+                        "WHERE id = ?";
+
+        return jdbi.withHandle(handle -> {
+
+            int rows = handle.createUpdate(sql)
+                    .bind(0, quantity)
+                    .bind(1, productId)
+                    .execute();
+
+            if (rows > 0) {
+
+                InventoryTransactionDAO inventoryDAO =
+                        new InventoryTransactionDAO();
+
+                inventoryDAO.addTransaction(
+                        productId,
+                        "IMPORT",
+                        quantity,
+                        reason,
+                        null,
+                        null
+                );
+            }
+
+            return rows > 0;
+        });
+    }
     /**
      * Đếm tổng số sản phẩm
      */
