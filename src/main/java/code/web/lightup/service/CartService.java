@@ -116,4 +116,13 @@ public class CartService {
 
         return cart;
     }
+
+    public int getOrCreateCartId(int id) {
+        cartDAO.getOrCreateCartId(id);
+        return id;
+    }
+
+    public void upsertItem(int cartId, int productId, int quantity, double price) {
+        cartDAO.upsertItem(cartId, productId, quantity, price);
+    }
 }

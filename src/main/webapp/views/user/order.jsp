@@ -130,6 +130,15 @@
                                                 <a href="${pageContext.request.contextPath}/order_detail?id=${order.id}" class="btn btn-secondary">
                                                     Chi tiết
                                                 </a>
+
+                                                <form action="${pageContext.request.contextPath}/reorder"
+                                                      method="post" style="display:inline;">
+                                                    <input type="hidden" name="orderId" value="${order.id}">
+                                                    <button type="submit" class="btn btn-primary"
+                                                            onclick="return confirm('Thêm tất cả sản phẩm vào giỏ hàng?')"> Mua lại
+                                                    </button>
+                                                </form>
+
                                                 <c:if test="${order.status == 'delivered'}">
                                                     <c:choose>
                                                         <c:when test="${order.hasReview}">
