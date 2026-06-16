@@ -58,19 +58,19 @@
         return el;
     }
 
-    function showError(input, msgEl, msg) {
+    function showError(input, msgEl) {
         input.style.borderColor = '#dc3545';
         input.style.boxShadow = '0 0 0 2px rgba(220,53,69,.18)';
         msgEl.style.color = '#dc3545';
-        msgEl.textContent = msg;
+        msgEl.textContent = undefined;
         msgEl.style.display = 'block';
     }
 
-    function showSuccess(input, msgEl, msg) {
+    function showSuccess(input, msgEl) {
         input.style.borderColor = '#28a745';
         input.style.boxShadow = '0 0 0 2px rgba(40,167,69,.18)';
         msgEl.style.color = '#28a745';
-        msgEl.textContent = msg;
+        msgEl.textContent = undefined;
         msgEl.style.display = 'block';
     }
 
@@ -82,7 +82,7 @@
     }
 
     function attachValidation(input) {
-        const msgEl = getOrCreateMsgEl(input);
+        const msgEl = getOrCreateErrorEl(input);
         let touched = false;
 
         input.addEventListener('blur', function () {

@@ -100,42 +100,6 @@
         msgEl.textContent = '';
     }
 
-    function attachValidation(input) {
-        const msgEl = getOrCreateMsgEl(input);
-        let touched = false;
-
-        input.addEventListener('blur', function () {
-            touched = true;
-            const err = getEmailError(this.value);
-            if (this.value.trim() === '') { clearMsg(this, msgEl); return; }
-            if (err) showError(this, msgEl, err);
-            else showSuccess(this, msgEl);
-        });
-
-        input.addEventListener('input', function () {
-            if (!touched) return;
-            const err = getEmailError(this.value);
-            if (this.value.trim() === '') { clearMsg(this, msgEl); return; }
-            if (err) showError(this, msgEl, err);
-            else showSuccess(this, msgEl);
-        });
-
-        const form = input.closest('form');
-        if (form) {
-            form.addEventListener('submit', function (e) {
-                touched = true;
-                const err = getEmailError(input.value);
-                if (err) {
-                    e.preventDefault();
-                    showError(input, msgEl, err);
-                    input.focus();
-                } else {
-                    showSuccess(input, msgEl);
-                }
-            }, { capture: true });
-        }
-    }
-
     function checkEmailExists(input, msgEl, email, onResult) {
         msgEl.style.color   = '#6c757d';
         msgEl.textContent   = ' ';
