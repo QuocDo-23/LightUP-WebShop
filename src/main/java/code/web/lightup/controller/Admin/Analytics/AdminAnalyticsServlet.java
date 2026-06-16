@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import code.web.lightup.dao.InventoryDAO;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,11 +21,13 @@ public class AdminAnalyticsServlet extends HttpServlet {
 
     private OrderDAO orderDAO;
     private UserDAO userDAO;
+    private InventoryDAO inventoryDAO;
 
     @Override
     public void init() {
         orderDAO = new OrderDAO();
         userDAO = new UserDAO();
+        inventoryDAO = new InventoryDAO();
     }
 
     @Override
@@ -45,8 +48,21 @@ public class AdminAnalyticsServlet extends HttpServlet {
         int totalOrders = orderDAO.getTotalOrderCount();
         int totalCustomers = userDAO.getTotalCustomerCount();
         int processingOrders = pending + delivering;
+        int todayImport = inventoryDAO.getTodayImportQuantity();
 
+        int todaySale = inventoryDAO.getTodaySaleQuantity();
 
+        int lowStock = inventoryDAO.getLowStockCount();
+
+        int deadStock = inventoryDAO.getDeadStockCount();
+
+        request.setAttribute("todayImport", todayImport);
+
+        request.setAttribute("todaySale", todaySale);
+
+        request.setAttribute("lowStock", lowStock);
+
+        request.setAttribute("deadStock", deadStock);
         request.setAttribute("monthlyRevenue", monthlyRevenue);
 
         request.setAttribute("pending", pending);

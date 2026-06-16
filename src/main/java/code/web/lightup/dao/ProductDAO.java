@@ -3,7 +3,7 @@ package code.web.lightup.dao;
 import code.web.lightup.model.ProductWithDetails;
 import code.web.lightup.util.BaseDao;
 import org.jdbi.v3.core.Jdbi;
-
+import code.web.lightup.dao.InventoryTransactionDAO;
 import java.util.List;
 import java.util.Optional;
 
@@ -296,14 +296,36 @@ public class ProductDAO {
      * Giảm số lượng sản phẩm khi có đơn hàng
      */
     public boolean decreaseProductQuantity(int productId, int quantity) {
-        String sql = "UPDATE product SET inventory_quantity = inventory_quantity - ? WHERE id = ? AND inventory_quantity >= ?";
+
+        String sql =
+                "UPDATE product " +
+                        "SET inventory_quantity = inventory_quantity - ?, " +
+                        "last_sale_date = NOW() " +
+                        "WHERE id = ? AND inventory_quantity >= ?";
 
         return jdbi.withHandle(handle -> {
+
             int rows = handle.createUpdate(sql)
                     .bind(0, quantity)
                     .bind(1, productId)
                     .bind(2, quantity)
                     .execute();
+
+            if (rows > 0) {
+
+                InventoryTransactionDAO inventoryDAO =
+                        new InventoryTransactionDAO();
+
+                inventoryDAO.addTransaction(
+                        productId,
+                        "SALE",
+                        -quantity,
+                        "Khách mua hàng",
+                        null,
+                        null
+                );
+            }
+
             return rows > 0;
         });
     }
@@ -377,8 +399,23 @@ public class ProductDAO {
 
             //thêm Product
             int productId = handle.createUpdate(
-                            "INSERT INTO Product (name, category_id, price, inventory_quantity, discount_id, status) " +
-                                    "VALUES (?, ?, ?, ?, ?, 'active')")
+                            "INSERT INTO Product (\n" +
+                                    "    name,\n" +
+                                    "    category_id,\n" +
+                                    "    price,\n" +
+                                    "    inventory_quantity,\n" +
+                                    "    discount_id,\n" +
+                                    "    status,\n" +
+                                    "    created_at,\n" +
+                                    "    last_import_date,\n" +
+                                    "    min_stock\n" +
+                                    ")\n" +
+                                    "VALUES (\n" +
+                                    "    ?, ?, ?, ?, ?, 'active',\n" +
+                                    "    NOW(),\n" +
+                                    "    NOW(),\n" +
+                                    "    10\n" +
+                                    ")")
                     .bind(0, product.getName())
                     .bind(1, product.getCategoryId())
                     .bind(2, product.getPrice())
@@ -387,7 +424,17 @@ public class ProductDAO {
                     .executeAndReturnGeneratedKeys("id")
                     .mapTo(int.class)
                     .one();
+            InventoryTransactionDAO inventoryDAO =
+                    new InventoryTransactionDAO();
 
+            inventoryDAO.addTransaction(
+                    productId,
+                    "IMPORT",
+                    product.getInventoryQuantity(),
+                    "Thêm sản phẩm mới",
+                    null,
+                    null
+            );
             handle.createUpdate(
                             "INSERT INTO Product_Detail (product_id, description, material, voltage, dimensions, " +
                                     "type, color, style, warranty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
@@ -424,7 +471,15 @@ public class ProductDAO {
         return jdbi.inTransaction(handle -> {
 
             int productRows = handle.createUpdate(
-                            "UPDATE Product SET name = ?, category_id = ?, price = ?, inventory_quantity = ?, discount_id = ? WHERE id = ?")
+                            "UPDATE Product\n" +
+                                    "SET\n" +
+                                    "    name = ?,\n" +
+                                    "    category_id = ?,\n" +
+                                    "    price = ?,\n" +
+                                    "    inventory_quantity = ?,\n" +
+                                    "    discount_id = ?,\n" +
+                                    "    updated_at = NOW()\n" +
+                                    "WHERE id = ?")
                     .bind(0, product.getName())
                     .bind(1, product.getCategoryId())
                     .bind(2, product.getPrice())

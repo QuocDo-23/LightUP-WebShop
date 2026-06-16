@@ -64,6 +64,10 @@
        class="menu-item <c:if test='${currentPage eq "analytics"}'>active</c:if>">
         Thống Kê
     </a>
+    <a href="${pageContext.request.contextPath}/admin/inventory"
+       class="menu-item <c:if test='${currentPage eq "inventory"}'>active</c:if>">
+        Quản Lý Kho
+    </a>
 
     <button type="button" class="logout-btn"
             onclick="window.location.href='${pageContext.request.contextPath}/logout'">
