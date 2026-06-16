@@ -26,7 +26,7 @@ public class UserDAO {
 
             return jdbi.withHandle(handle -> {
                 int result = handle.createUpdate(
-                                "INSERT INTO User (role_id, name, email, password) " +
+                                "INSERT INTO user (role_id, name, email, password) " +
                                         "VALUES (:roleId, :name, :email, :password)"
                         )
                         .bind("roleId", 2)
@@ -51,7 +51,7 @@ public class UserDAO {
             Optional<User> userOpt = jdbi.withHandle(handle ->
                     handle.createQuery(
                                     "SELECT u.*, r.name as role_name " +
-                                            "FROM User u " +
+                                            "FROM user u " +
                                             "LEFT JOIN Role r ON u.role_id = r.id " +
                                             "WHERE u.email = :email"
                             )
@@ -81,7 +81,7 @@ public class UserDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT id, email, password, failed_attempts, lock_until, auth_provider, status " +
-                                        "FROM User WHERE email = :email"
+                                        "FROM user WHERE email = :email"
                         )
                         .bind("email", email)
                         .map((rs, ctx) -> {
@@ -110,7 +110,7 @@ public class UserDAO {
     public boolean emailExists(String email) {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
-                                "SELECT COUNT(*) FROM User WHERE email = :email"
+                                "SELECT COUNT(*) FROM user WHERE email = :email"
                         )
                         .bind("email", email)
                         .mapTo(Integer.class)
@@ -123,7 +123,7 @@ public class UserDAO {
     public void recordFailedAttempt(String email) {
         jdbi.withHandle(handle -> {
             handle.createUpdate(
-                            "UPDATE User SET " +
+                            "UPDATE user SET " +
                                     "failed_attempts = failed_attempts + 1, " +
                                     "lock_until = CASE " +
                                     "  WHEN failed_attempts + 1 >= 5 " +
@@ -144,7 +144,7 @@ public class UserDAO {
     public void resetFailedAttempts(String email) {
         jdbi.withHandle(handle -> {
             handle.createUpdate(
-                            "UPDATE User SET failed_attempts = 0, lock_until = NULL " +
+                            "UPDATE user SET failed_attempts = 0, lock_until = NULL " +
                                     "WHERE email = :email"
                     )
                     .bind("email", email)
@@ -160,7 +160,7 @@ public class UserDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT u.*, r.name as role_name " +
-                                        "FROM User u " +
+                                        "FROM user u " +
                                         "LEFT JOIN Role r ON u.role_id = r.id " +
                                         "WHERE u.id = :id"
                         )
@@ -178,7 +178,7 @@ public class UserDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT u.*, r.name as role_name " +
-                                        "FROM User u " +
+                                        "FROM user u " +
                                         "LEFT JOIN Role r ON u.role_id = r.id " +
                                         "WHERE u.email = :email"
                         )
@@ -208,7 +208,7 @@ public class UserDAO {
 
             return jdbi.withHandle(handle -> {
                 int result = handle.createUpdate(
-                                "UPDATE User SET password = :password WHERE email = :email"
+                                "UPDATE user SET password = :password WHERE email = :email"
                         )
                         .bind("email", email)
                         .bind("password", hashedPassword)
@@ -229,7 +229,7 @@ public class UserDAO {
         try {
             return jdbi.withHandle(handle -> {
                 int result = handle.createUpdate(
-                                "UPDATE User SET name = :name, phone = :phone, " +
+                                "UPDATE user SET name = :name, phone = :phone, " +
                                         "gender = :gender, date_of_birth = :dob, avatar_img = :avatar " +
                                         "WHERE id = :id"
                         )
@@ -409,7 +409,7 @@ public class UserDAO {
         try {
             return jdbi.withHandle(handle ->
                     handle.createUpdate(
-                                    "INSERT INTO User (role_id, name, email, password, avatar_img, auth_provider) " +
+                                    "INSERT INTO user (role_id, name, email, password, avatar_img, auth_provider) " +
                                             "VALUES (:roleId, :name, :email, :password, :avatar, :provider)")
                             .bind("roleId", 2).bind("name", user.getName()).bind("email", user.getEmail())
                             .bind("password", "").bind("avatar", user.getAvatarImg()).bind("provider", "facebook")

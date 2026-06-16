@@ -1,4 +1,5 @@
 package code.web.lightup.dao;
+
 import code.web.lightup.model.News.News;
 import code.web.lightup.util.BaseDao;
 import org.jdbi.v3.core.Jdbi;
@@ -20,9 +21,9 @@ public class NewsDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT a.*, c.name AS categoryName, " +
-                                        "(SELECT img FROM Image WHERE type = 'Articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
-                                        "FROM Articles a " +
-                                        "LEFT JOIN Categories c ON a.category_id = c.id " +
+                                        "(SELECT img FROM image WHERE type = 'articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
+                                        "FROM articles a " +
+                                        "LEFT JOIN categories c ON a.category_id = c.id " +
                                         "WHERE a.feature = TRUE " +
                                         "ORDER BY a.date_of_posting DESC " +
                                         "LIMIT :featuredLimit"
@@ -40,9 +41,9 @@ public class NewsDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT a.*, c.name AS categoryName, " +
-                                        "(SELECT img FROM Image WHERE type = 'Articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
-                                        "FROM Articles a " +
-                                        "LEFT JOIN Categories c ON a.category_id = c.id " +
+                                        "(SELECT img FROM image WHERE type = 'articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
+                                        "FROM articles a " +
+                                        "LEFT JOIN categories c ON a.category_id = c.id " +
                                         "ORDER BY a.date_of_posting DESC " +
                                         "LIMIT :limit"
                         )
@@ -68,9 +69,9 @@ public class NewsDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT a.*, c.name as category_name, " +
-                                        "(SELECT img FROM Image WHERE type = 'Articles' AND ref_id = a.id LIMIT 1) as main_img " +
-                                        "FROM Articles a " +
-                                        "LEFT JOIN Categories c ON a.category_id = c.id " +
+                                        "(SELECT img FROM image WHERE type = 'articles' AND ref_id = a.id LIMIT 1) as main_img " +
+                                        "FROM articles a " +
+                                        "LEFT JOIN categories c ON a.category_id = c.id " +
                                         "WHERE (a.feature = FALSE OR a.feature IS NULL) " +
                                         "ORDER BY " + orderClause + " " +
                                         "LIMIT :limit OFFSET :offset"
@@ -88,7 +89,7 @@ public class NewsDAO {
      */
     public int getTotalArticle() {
         return jdbi.withHandle(handle ->
-                handle.createQuery("SELECT COUNT(*) FROM Articles"
+                handle.createQuery("SELECT COUNT(*) FROM articles"
                                 + " WHERE (feature = FALSE OR feature IS NULL)")
                         .mapTo(Integer.class)
                         .one()
@@ -102,9 +103,9 @@ public class NewsDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT a.*, c.name AS categoryName, " +
-                                        "(SELECT img FROM Image WHERE type = 'Articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
-                                        "FROM Articles a " +
-                                        "LEFT JOIN Categories c ON a.category_id = c.id " +
+                                        "(SELECT img FROM image WHERE type = 'articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
+                                        "FROM articles a " +
+                                        "LEFT JOIN categories c ON a.category_id = c.id " +
                                         "WHERE a.id = :id"
                         )
                         .bind("id", id)
@@ -121,9 +122,9 @@ public class NewsDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT a.*, c.name AS categoryName, " +
-                                        "(SELECT img FROM Image WHERE type = 'Articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
-                                        "FROM Articles a " +
-                                        "LEFT JOIN Categories c ON a.category_id = c.id " +
+                                        "(SELECT img FROM image WHERE type = 'articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
+                                        "FROM articles a " +
+                                        "LEFT JOIN categories c ON a.category_id = c.id " +
                                         "WHERE a.slug = :slug"
                         )
                         .bind("slug", slug)
@@ -144,7 +145,7 @@ public class NewsDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT a.*, c.name AS categoryName, " +
-                                        "(SELECT img FROM Image WHERE type = 'Articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
+                                        "(SELECT img FROM image WHERE type = 'articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
                                         "FROM articles a " +
                                         "LEFT JOIN categories c ON a.category_id = c.id " +
                                         "WHERE a.category_id = :categoryId " +
@@ -167,7 +168,7 @@ public class NewsDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT a.*, c.name AS categoryName, " +
-                                        "(SELECT img FROM Image WHERE type = 'Articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
+                                        "(SELECT img FROM image WHERE type = 'articles' AND ref_id = a.id ORDER BY id LIMIT 1) as mainImg " +
                                         "FROM articles a " +
                                         "LEFT JOIN categories c ON a.category_id = c.id " +
                                         "WHERE a.title LIKE :keyword " +
@@ -203,7 +204,7 @@ public class NewsDAO {
                     .mapTo(Integer.class)
                     .one();
             if (article.getMainImg() != null && !article.getMainImg().isEmpty()) {
-                handle.createUpdate("INSERT INTO Image (type, ref_id, img) VALUES ('Articles', :refId, :img)")
+                handle.createUpdate("INSERT INTO image (type, ref_id, img) VALUES ('articles', :refId, :img)")
                         .bind("refId", articleId)
                         .bind("img", article.getMainImg())
                         .execute();
@@ -237,18 +238,18 @@ public class NewsDAO {
                     .bind("id", article.getId())
                     .execute();
             if (article.getMainImg() != null && !article.getMainImg().isEmpty()) {
-                int imageCount = handle.createQuery("SELECT COUNT(*) FROM Image WHERE type = 'Articles' AND ref_id = :id")
+                int imageCount = handle.createQuery("SELECT COUNT(*) FROM image WHERE type = 'articles' AND ref_id = :id")
                         .bind("id", article.getId())
                         .mapTo(Integer.class)
                         .one();
 
                 if (imageCount > 0) {
-                    handle.createUpdate("UPDATE Image SET img = :img WHERE type = 'Articles' AND ref_id = :id")
+                    handle.createUpdate("UPDATE image SET img = :img WHERE type = 'articles' AND ref_id = :id")
                             .bind("img", article.getMainImg())
                             .bind("id", article.getId())
                             .execute();
                 } else {
-                    handle.createUpdate("INSERT INTO Image (type, ref_id, img) VALUES ('Articles', :id, :img)")
+                    handle.createUpdate("INSERT INTO image (type, ref_id, img) VALUES ('articles', :id, :img)")
                             .bind("id", article.getId())
                             .bind("img", article.getMainImg())
                             .execute();
@@ -264,7 +265,7 @@ public class NewsDAO {
      */
     public int deleteArticle(int id) {
         return jdbi.inTransaction(handle -> {
-            handle.createUpdate("DELETE FROM Image WHERE type = 'Articles' AND ref_id = :id")
+            handle.createUpdate("DELETE FROM image WHERE type = 'articles' AND ref_id = :id")
                     .bind("id", id)
                     .execute();
 
@@ -299,5 +300,4 @@ public class NewsDAO {
                         .one()
         );
     }
-
 }
