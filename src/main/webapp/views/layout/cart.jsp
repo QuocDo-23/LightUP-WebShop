@@ -42,10 +42,27 @@
         <%-- Checkbox chọn tất cả --%>
         <c:if test="${not empty sessionScope.cart.listItem}">
             <div class="cart-select-all">
+
                 <label>
                     <input type="checkbox" id="chkSelectAll" checked>
                     <span>Chọn tất cả</span>
                 </label>
+
+                <form id="clearCartForm"
+                      action="${pageContext.request.contextPath}/clear-cart"
+                      method="post">
+
+                    <button type="button"
+                            class="clear-cart-btn"
+                            onclick="confirmClearCart()">
+
+                        <i class="bi bi-trash"></i>
+                        Xóa tất cả
+
+                    </button>
+
+                </form>
+
             </div>
         </c:if>
 
@@ -170,7 +187,41 @@
             </ul>
         </div>
     </div>
+
 </main>
+<div id="clearCartModal" class="confirm-overlay">
+
+    <div class="confirm-box">
+
+        <div class="confirm-icon">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+
+        <h3>Xác nhận xóa</h3>
+
+        <p>
+            Bạn có chắc muốn xóa toàn bộ sản phẩm trong giỏ hàng?
+        </p>
+
+        <div class="confirm-actions">
+
+            <button type="button"
+                    class="cancel-btn"
+                    onclick="closeClearCartModal()">
+                Hủy
+            </button>
+
+            <button type="button"
+                    class="confirm-btn"
+                    onclick="submitClearCart()">
+                Xóa tất cả
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
 <!-- Footer -->
 <jsp:include page="footer.jsp"/>
@@ -255,6 +306,39 @@
     }
 
     capNhatTong();
+</script>
+<script>
+
+    function confirmClearCart() {
+
+        document
+            .getElementById("clearCartModal")
+            .classList.add("show");
+    }
+
+    function closeClearCartModal() {
+
+        document
+            .getElementById("clearCartModal")
+            .classList.remove("show");
+    }
+
+    function submitClearCart() {
+
+        document
+            .getElementById("clearCartForm")
+            .submit();
+    }
+    window.onclick = function(event){
+
+        const modal =
+            document.getElementById("clearCartModal");
+
+        if(event.target === modal){
+
+            closeClearCartModal();
+        }
+    }
 </script>
 </body>
 

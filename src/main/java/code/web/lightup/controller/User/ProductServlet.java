@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -39,6 +40,22 @@ public class ProductServlet extends HttpServlet {
 
             String[] priceRanges = request.getParameterValues("price");
 
+            HttpSession session = request.getSession();
+
+            if (priceRanges != null && priceRanges.length > 0) {
+
+                session.setAttribute(
+                        "selectedPrices",
+                        priceRanges
+                );
+
+            } else {
+
+                priceRanges =
+                        (String[]) session.getAttribute(
+                                "selectedPrices"
+                        );
+            }
             List<Category> categories = categoryService.getSubCategories();
 
             Integer userId = SessionUtil.getUserId(request);
@@ -51,6 +68,11 @@ public class ProductServlet extends HttpServlet {
             if (priceRanges != null && priceRanges.length > 0) {
                 List<ProductWithDetails> filteredProducts =
                         productService.filterProductsByPrice(priceRanges);
+
+                request.setAttribute(
+                        "totalProducts",
+                        filteredProducts.size()
+                );
 
                 if (!favIds.isEmpty()) {
                     for (ProductWithDetails p : filteredProducts) {
@@ -69,6 +91,7 @@ public class ProductServlet extends HttpServlet {
             List<ProductWithDetails> allProducts =
                     productService.getAllProductsWithDetails();
 
+
             if (!favIds.isEmpty()) {
                 for (ProductWithDetails p : allProducts) {
                     if (favIds.contains(p.getId())) {
@@ -80,6 +103,8 @@ public class ProductServlet extends HttpServlet {
             Map<Integer, List<ProductWithDetails>> productsByCategory = new HashMap<>();
 
             for (ProductWithDetails product : allProducts) {
+
+
                 int catId = product.getCategoryId();
                 List<ProductWithDetails> list =
                         productsByCategory.computeIfAbsent(catId, k -> new ArrayList<>());
@@ -91,6 +116,7 @@ public class ProductServlet extends HttpServlet {
             }
 
             request.setAttribute("categories", categories);
+
             request.setAttribute("productsByCategory", productsByCategory);
             request.setAttribute("totalProducts", allProducts.size());
             request.getRequestDispatcher("/views/user/products.jsp").forward(request, response);

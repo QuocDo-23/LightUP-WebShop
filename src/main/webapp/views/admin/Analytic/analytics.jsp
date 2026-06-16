@@ -44,6 +44,25 @@
                 <div class="stat-value">${totalCustomers}</div>
                 <div class="stat-label">Khách hàng</div>
             </div>
+            <div class="stat-card">
+                <div class="stat-value">${todayImport}</div>
+                <div class="stat-label">Nhập hôm nay</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value">${todaySale}</div>
+                <div class="stat-label">Bán hôm nay</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value">${lowStock}</div>
+                <div class="stat-label">Sắp hết hàng</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value">${deadStock}</div>
+                <div class="stat-label">Hàng ế > 6 tháng</div>
+            </div>
 
         </div>
 

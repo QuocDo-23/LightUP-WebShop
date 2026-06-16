@@ -59,4 +59,14 @@ public class ReviewService {
     public boolean hasOrderReview(int orderId){
         return reviewDAO.hasOrderReview(orderId);
     }
+    public boolean hasReviewed(
+            int userId,
+            int productId
+    ) {
+
+        return reviewDAO.hasReviewed(
+                userId,
+                productId
+        );
+    }
 }
