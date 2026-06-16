@@ -73,8 +73,8 @@
 }
 
 .status-processing {
-    background: #cfe2ff;
-    color: #084298;
+    background: #8b7355;
+    color: #8b7355;
 }
 
 .status-shipped {
@@ -147,7 +147,7 @@
 }
 
 .step_complete i {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #8b7355;
     color: white;
     animation: pulse 2s infinite;
 }
@@ -172,7 +172,7 @@
 }
 
 .step_complete p {
-    color: #667eea;
+    color: #8b7355;
     font-weight: 600;
 }
 
@@ -236,7 +236,7 @@
 }
 
 .info-value strong {
-    color: #667eea;
+    color: #8b7355;
 }
 
 /* Products Section */
@@ -319,7 +319,7 @@
 .subtotal-value {
     font-size: 18px;
     font-weight: 700;
-    color: #667eea;
+    color: #8b7355;
 }
 
 /* Order Total */
@@ -338,7 +338,7 @@
 }
 
 .grand-total {
-    border-top: 2px solid #667eea;
+    border-top: 2px solid #8b7355;
     margin-top: 15px;
     padding-top: 20px;
     font-size: 20px;
@@ -346,7 +346,7 @@
 }
 
 .grand-total .total-value {
-    color: #667eea;
+    color: #8b7355;
     font-size: 24px;
 }
 
@@ -382,17 +382,6 @@
     background: #d32f2f;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
-}
-
-.btn-review {
-    background: #ff9800;
-    color: white;
-}
-
-.btn-review:hover {
-    background: #f57c00;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
 }
 
 .btn-reorder {
@@ -541,7 +530,7 @@
 }
 
 .btn-update-primary {
-    background: #667eea;
+    background: #8b7355;
     color: white;
     padding: 10px 20px;
     border-radius: 8px;
@@ -571,21 +560,21 @@
     outline: none;
 }
 .btn-return {
-     background-color: #ff9800 !important;
+     background-color: #8b7355 !important;
      color: white !important;
  }
 
 .btn-return:hover {
-    background-color: #e68900 !important;
+    background-color: #c9a26a !important;
 }
 
 .btn-review {
-    background-color: #17a2b8;
+    background-color: #8b7355;
     color: white;
 }
 
 .btn-review:hover {
-    background-color: #138496;
+    background-color: #c9a26a;
 }
 
 .btn-back {
