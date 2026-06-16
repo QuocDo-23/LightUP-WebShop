@@ -21,7 +21,7 @@ public class CartDAO {
     public int getOrCreateCartId(int userId) {
         return jdbi.inTransaction(handle -> {
             Optional<Integer> activeId = handle.createQuery(
-                            "SELECT id FROM Cart WHERE user_id = :uid AND status = 'active' LIMIT 1"
+                            "SELECT id FROM cart WHERE user_id = :uid AND status = 'active' LIMIT 1"
                     )
                     .bind("uid", userId)
                     .mapTo(Integer.class)
@@ -32,20 +32,20 @@ public class CartDAO {
             }
 
             Optional<Integer> anyId = handle.createQuery(
-                            "SELECT id FROM Cart WHERE user_id = :uid ORDER BY id DESC LIMIT 1"
+                            "SELECT id FROM cart WHERE user_id = :uid ORDER BY id DESC LIMIT 1"
                     )
                     .bind("uid", userId)
                     .mapTo(Integer.class)
                     .findFirst();
 
             if (anyId.isPresent()) {
-                handle.createUpdate("UPDATE Cart SET status = 'active' WHERE id = :id")
+                handle.createUpdate("UPDATE cart SET status = 'active' WHERE id = :id")
                         .bind("id", anyId.get())
                         .execute();
                 return anyId.get();
             }
             return handle.createUpdate(
-                            "INSERT INTO Cart (user_id, status) VALUES (:uid, 'active')"
+                            "INSERT INTO cart (user_id, status) VALUES (:uid, 'active')"
                     )
                     .bind("uid", userId)
                     .executeAndReturnGeneratedKeys("id")
@@ -59,7 +59,7 @@ public class CartDAO {
      */
     public void markOrdered(int cartId) {
         jdbi.useHandle(handle ->
-                handle.createUpdate("UPDATE Cart SET status = 'ordered' WHERE id = :id")
+                handle.createUpdate("UPDATE cart SET status = 'ordered' WHERE id = :id")
                         .bind("id", cartId)
                         .execute()
         );
@@ -74,8 +74,8 @@ public class CartDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT ci.product_id, ci.quantity, ci.price_at_add " +
-                                        "FROM Cart_Item ci " +
-                                        "JOIN Cart c ON ci.cart_id = c.id " +
+                                        "FROM cart_item ci " +
+                                        "JOIN cart c ON ci.cart_id = c.id " +
                                         "WHERE c.user_id = :uid AND c.status = 'active'"
                         )
                         .bind("uid", userId)
@@ -94,7 +94,7 @@ public class CartDAO {
     public void upsertItem(int cartId, int productId, int quantity, double priceAtAdd) {
         jdbi.useHandle(handle ->
                 handle.createUpdate(
-                                "INSERT INTO Cart_Item (cart_id, product_id, quantity, price_at_add) " +
+                                "INSERT INTO cart_item (cart_id, product_id, quantity, price_at_add) " +
                                         "VALUES (:cid, :pid, :qty, :price) " +
                                         "ON DUPLICATE KEY UPDATE quantity = :qty, price_at_add = :price"
                         )
@@ -112,7 +112,7 @@ public class CartDAO {
     public void removeItem(int cartId, int productId) {
         jdbi.useHandle(handle ->
                 handle.createUpdate(
-                                "DELETE FROM Cart_Item WHERE cart_id = :cid AND product_id = :pid"
+                                "DELETE FROM cart_item WHERE cart_id = :cid AND product_id = :pid"
                         )
                         .bind("cid", cartId)
                         .bind("pid", productId)
@@ -125,12 +125,9 @@ public class CartDAO {
      */
     public void clearCart(int cartId) {
         jdbi.useHandle(handle ->
-                handle.createUpdate("DELETE FROM Cart_Item WHERE cart_id = :cid")
+                handle.createUpdate("DELETE FROM cart_item WHERE cart_id = :cid")
                         .bind("cid", cartId)
                         .execute()
         );
     }
-
-
-
 }

@@ -1,6 +1,5 @@
 package code.web.lightup.dao;
 
-
 import code.web.lightup.model.Review;
 import code.web.lightup.model.ReviewStatistics;
 import code.web.lightup.util.BaseDao;
@@ -22,8 +21,8 @@ public class ReviewDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT r.*, u.name AS user_name " +
-                                        "FROM Review_Product r " +
-                                        "LEFT JOIN User u ON r.user_id = u.id " +
+                                        "FROM review_product r " +
+                                        "LEFT JOIN user u ON r.user_id = u.id " +
                                         "WHERE r.product_id = :productId AND r.parent_id IS NULL "+
                                         "ORDER BY r.date DESC"
                         )
@@ -45,7 +44,7 @@ public class ReviewDAO {
                                         "SUM(CASE WHEN rating=3 THEN 1 ELSE 0 END) AS three_stars, " +
                                         "SUM(CASE WHEN rating=2 THEN 1 ELSE 0 END) AS two_stars, " +
                                         "SUM(CASE WHEN rating=1 THEN 1 ELSE 0 END) AS one_star " +
-                                        "FROM Review_Product WHERE product_id=:productId"
+                                        "FROM review_product WHERE product_id=:productId"
                         )
                         .bind("productId", productId)
                         .mapToBean(ReviewStatistics.class)
@@ -57,7 +56,7 @@ public class ReviewDAO {
     public int addReview(Review review) {
         int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(
-                                "INSERT INTO Review_Product(product_id,user_id,text,img,rating,date,status,parent_id) " +
+                                "INSERT INTO review_product(product_id,user_id,text,img,rating,date,status,parent_id) " +
                                         "VALUES(:productId,:userId,:text,:img,:rating,NOW(),1,:parentId)"
                         )
                         .bind("productId", review.getProductId())
@@ -82,9 +81,9 @@ public class ReviewDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT r.*, u.name AS user_name, p.name AS product_name\n" +
-                                        "FROM Review_Product r\n" +
-                                        "LEFT JOIN User u ON r.user_id = u.id\n" +
-                                        "LEFT JOIN Product p ON r.product_id = p.id\n" +
+                                        "FROM review_product r\n" +
+                                        "LEFT JOIN user u ON r.user_id = u.id\n" +
+                                        "LEFT JOIN product p ON r.product_id = p.id\n" +
                                         "ORDER BY r.date DESC"
                         )
                         .mapToBean(Review.class)
@@ -97,8 +96,8 @@ public class ReviewDAO {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT r.*, u.name AS user_name " +
-                                        "FROM Review_Product r " +
-                                        "LEFT JOIN User u ON r.user_id = u.id " +
+                                        "FROM review_product r " +
+                                        "LEFT JOIN user u ON r.user_id = u.id " +
                                         "WHERE r.status = :status " +
                                         "ORDER BY r.date DESC"
                         )
@@ -112,7 +111,7 @@ public class ReviewDAO {
     public int updateReviewStatus(int reviewId, int status) {
 
         Integer productId = jdbi.withHandle(handle ->
-                handle.createQuery("SELECT product_id FROM Review_Product WHERE id=:id")
+                handle.createQuery("SELECT product_id FROM review_product WHERE id=:id")
                         .bind("id", reviewId)
                         .mapTo(Integer.class)
                         .findOne()
@@ -121,7 +120,7 @@ public class ReviewDAO {
 
         int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(
-                                "UPDATE Review_Product SET status=:status WHERE id=:id"
+                                "UPDATE review_product SET status=:status WHERE id=:id"
                         )
                         .bind("status", status)
                         .bind("id", reviewId)
@@ -136,28 +135,28 @@ public class ReviewDAO {
     }
 
     // Xóa review
-        public int deleteReview(int reviewId) {
+    public int deleteReview(int reviewId) {
 
-            Integer productId = jdbi.withHandle(handle ->
-                    handle.createQuery("SELECT product_id FROM Review_Product WHERE id=:id")
-                            .bind("id", reviewId)
-                            .mapTo(Integer.class)
-                            .findOne()
-                            .orElse(null)
-            );
+        Integer productId = jdbi.withHandle(handle ->
+                handle.createQuery("SELECT product_id FROM review_product WHERE id=:id")
+                        .bind("id", reviewId)
+                        .mapTo(Integer.class)
+                        .findOne()
+                        .orElse(null)
+        );
 
-            int rows = jdbi.withHandle(handle ->
-                    handle.createUpdate("DELETE FROM Review_Product WHERE id=:id")
-                            .bind("id", reviewId)
-                            .execute()
-            );
+        int rows = jdbi.withHandle(handle ->
+                handle.createUpdate("DELETE FROM review_product WHERE id=:id")
+                        .bind("id", reviewId)
+                        .execute()
+        );
 
-            if (rows > 0 && productId != null) {
-                updateProductReview(productId);
-            }
-
-            return rows;
+        if (rows > 0 && productId != null) {
+            updateProductReview(productId);
         }
+
+        return rows;
+    }
 
 
     public ReviewStatistics getAdminReviewStatistics() {
@@ -171,7 +170,7 @@ public class ReviewDAO {
                                         "SUM(CASE WHEN rating=3 THEN 1 ELSE 0 END) AS three_stars, " +
                                         "SUM(CASE WHEN rating=2 THEN 1 ELSE 0 END) AS two_stars, " +
                                         "SUM(CASE WHEN rating=1 THEN 1 ELSE 0 END) AS one_star " +
-                                        "FROM Review_Product"
+                                        "FROM review_product"
                         )
                         .mapToBean(ReviewStatistics.class)
                         .one()
@@ -189,13 +188,14 @@ public class ReviewDAO {
                         .one() > 0
         );
     }
+
     public void updateProductReview(int productId) {
         jdbi.useHandle(handle ->
                 handle.createUpdate(
-                                "UPDATE Product " +
+                                "UPDATE product " +
                                         "SET review = (" +
                                         "   SELECT COALESCE(ROUND(AVG(rating),2),0) " +
-                                        "   FROM Review_Product " +
+                                        "   FROM review_product " +
                                         "   WHERE product_id = :productId AND status = 1" +
                                         ") " +
                                         "WHERE id = :productId"
@@ -203,14 +203,14 @@ public class ReviewDAO {
                         .bind("productId", productId)
                         .execute()
         );
-
     }
+
     public List<Review> getRepliesByParentId(int parentId) {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT r.*, u.name AS user_name " +
-                                        "FROM Review_Product r " +
-                                        "LEFT JOIN User u ON r.user_id = u.id " +
+                                        "FROM review_product r " +
+                                        "LEFT JOIN user u ON r.user_id = u.id " +
                                         "WHERE r.parent_id = :parentId " +
                                         "ORDER BY r.date ASC"
                         )

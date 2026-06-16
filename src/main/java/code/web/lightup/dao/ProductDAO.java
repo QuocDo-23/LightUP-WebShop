@@ -24,17 +24,17 @@ public class ProductDAO {
                 handle.createQuery(
                                 "SELECT p.*, " +
                                         "d.discount_rate, " +
-                                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
-                                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image, " +
-                                        "(SELECT COUNT(*) FROM Review_Product WHERE product_id = p.id) as review_count " +
-                                        "FROM Product p " +
-                                        "LEFT JOIN Categories c ON p.category_id = c.id " +
-                                        "LEFT JOIN Discount d ON p.discount_id = d.id " +
+                                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
+                                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image, " +
+                                        "(SELECT COUNT(*) FROM review_product WHERE product_id = p.id) as review_count " +
+                                        "FROM product p " +
+                                        "LEFT JOIN categories c ON p.category_id = c.id " +
+                                        "LEFT JOIN discount d ON p.discount_id = d.id " +
                                         "WHERE p.status = 'active' " +
-                                        "AND EXISTS (SELECT 1 FROM Review_Product rp WHERE rp.product_id = p.id) " +
+                                        "AND EXISTS (SELECT 1 FROM review_product rp WHERE rp.product_id = p.id) " +
                                         "ORDER BY " +
                                         "p.review DESC, " +
-                                        "(SELECT COUNT(*) FROM Review_Product WHERE product_id = p.id) DESC, " +
+                                        "(SELECT COUNT(*) FROM review_product WHERE product_id = p.id) DESC, " +
                                         "p.id DESC " +
                                         "LIMIT :limit"
                         )
@@ -55,12 +55,12 @@ public class ProductDAO {
                                         "d.discount_rate, " +
                                         "pd.description, pd.warranty, pd.material, pd.voltage, " +
                                         "pd.dimensions, pd.type, pd.color, pd.style, " +
-                                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
-                                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image " +
-                                        "FROM Product p " +
-                                        "LEFT JOIN Categories c ON p.category_id = c.id " +
-                                        "LEFT JOIN Discount d ON p.discount_id = d.id " +
-                                        "LEFT JOIN Product_Detail pd ON p.id = pd.product_id " +
+                                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
+                                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image " +
+                                        "FROM product p " +
+                                        "LEFT JOIN categories c ON p.category_id = c.id " +
+                                        "LEFT JOIN discount d ON p.discount_id = d.id " +
+                                        "LEFT JOIN product_detail pd ON p.id = pd.product_id " +
                                         "WHERE p.status = 'active' " +
                                         "ORDER BY c.sort_order, p.id"
                         )
@@ -80,12 +80,12 @@ public class ProductDAO {
                                         "d.discount_rate, " +
                                         "pd.description, pd.warranty, pd.material, pd.voltage, " +
                                         "pd.dimensions, pd.type, pd.color, pd.style, " +
-                                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
-                                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image " +
-                                        "FROM Product p " +
-                                        "LEFT JOIN Categories c ON p.category_id = c.id " +
-                                        "LEFT JOIN Discount d ON p.discount_id = d.id " +
-                                        "LEFT JOIN Product_Detail pd ON p.id = pd.product_id " +
+                                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
+                                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image " +
+                                        "FROM product p " +
+                                        "LEFT JOIN categories c ON p.category_id = c.id " +
+                                        "LEFT JOIN discount d ON p.discount_id = d.id " +
+                                        "LEFT JOIN product_detail pd ON p.id = pd.product_id " +
                                         "WHERE p.status = 'active' AND p.category_id = :categoryId " +
                                         "ORDER BY p.id"
                         )
@@ -105,10 +105,10 @@ public class ProductDAO {
                             "SELECT p.*, c.name as category_name, d.discount_rate, " +
                                     "pd.description, pd.warranty, pd.material, pd.voltage, " +
                                     "pd.dimensions, pd.type, pd.color, pd.style " +
-                                    "FROM Product p " +
-                                    "LEFT JOIN Categories c ON p.category_id = c.id " +
-                                    "LEFT JOIN Discount d ON p.discount_id = d.id " +
-                                    "LEFT JOIN Product_Detail pd ON p.id = pd.product_id " +
+                                    "FROM product p " +
+                                    "LEFT JOIN categories c ON p.category_id = c.id " +
+                                    "LEFT JOIN discount d ON p.discount_id = d.id " +
+                                    "LEFT JOIN product_detail pd ON p.id = pd.product_id " +
                                     "WHERE p.id = :id"
                     )
                     .bind("id", id)
@@ -117,7 +117,7 @@ public class ProductDAO {
 
             productOpt.ifPresent(p -> {
                 List<String> images = handle.createQuery(
-                                "SELECT img FROM Image WHERE type = 'product' AND ref_id = :id ORDER BY id")
+                                "SELECT img FROM image WHERE type = 'product' AND ref_id = :id ORDER BY id")
                         .bind("id", id)
                         .mapTo(String.class)
                         .list();
@@ -155,11 +155,11 @@ public class ProductDAO {
                                             "c.name as category_name, " +
                                             "d.discount_rate, " +
                                             "pd.description, " +
-                                            "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image " +
-                                            "FROM Product p " +
-                                            "LEFT JOIN Categories c ON p.category_id = c.id " +
-                                            "LEFT JOIN Discount d ON p.discount_id = d.id " +
-                                            "LEFT JOIN Product_Detail pd ON p.id = pd.product_id " +
+                                            "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image " +
+                                            "FROM product p " +
+                                            "LEFT JOIN categories c ON p.category_id = c.id " +
+                                            "LEFT JOIN discount d ON p.discount_id = d.id " +
+                                            "LEFT JOIN product_detail pd ON p.id = pd.product_id " +
                                             "WHERE p.status = 'active' " +
                                             "AND (" +
                                             "  p.name LIKE :keyword " +
@@ -212,7 +212,7 @@ public class ProductDAO {
     public void updateRating(int productId, double rating) {
         jdbi.useHandle(handle ->
                 handle.createUpdate(
-                                "UPDATE Product SET review = :rating WHERE id = :productId"
+                                "UPDATE product SET review = :rating WHERE id = :productId"
                         )
                         .bind("productId", productId)
                         .bind("rating", rating)
@@ -232,12 +232,12 @@ public class ProductDAO {
                                         "d.discount_rate, " +
                                         "pd.description, pd.warranty, pd.material, pd.voltage, " +
                                         "pd.dimensions, pd.type, pd.color, pd.style, " +
-                                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
-                                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image " +
-                                        "FROM Product p " +
-                                        "LEFT JOIN Categories c ON p.category_id = c.id " +
-                                        "LEFT JOIN Discount d ON p.discount_id = d.id " +
-                                        "LEFT JOIN Product_Detail pd ON p.id = pd.product_id " +
+                                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
+                                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image " +
+                                        "FROM product p " +
+                                        "LEFT JOIN categories c ON p.category_id = c.id " +
+                                        "LEFT JOIN discount d ON p.discount_id = d.id " +
+                                        "LEFT JOIN product_detail pd ON p.id = pd.product_id " +
                                         "WHERE p.status = 'active' AND p.category_id = :categoryId " +
                                         "ORDER BY p.id " +
                                         "LIMIT 8"
@@ -254,7 +254,7 @@ public class ProductDAO {
     public int countProductsByCategory(int categoryId) {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
-                                "SELECT COUNT(*) FROM Product " +
+                                "SELECT COUNT(*) FROM product " +
                                         "WHERE status = 'active' AND category_id = :categoryId"
                         )
                         .bind("categoryId", categoryId)
@@ -274,12 +274,12 @@ public class ProductDAO {
                                         "d.discount_rate, " +
                                         "pd.description, pd.warranty, pd.material, pd.voltage, " +
                                         "pd.dimensions, pd.type, pd.color, pd.style, " +
-                                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
-                                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image " +
-                                        "FROM Product p " +
-                                        "LEFT JOIN Categories c ON p.category_id = c.id " +
-                                        "LEFT JOIN Discount d ON p.discount_id = d.id " +
-                                        "LEFT JOIN Product_Detail pd ON p.id = pd.product_id " +
+                                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
+                                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image " +
+                                        "FROM product p " +
+                                        "LEFT JOIN categories c ON p.category_id = c.id " +
+                                        "LEFT JOIN discount d ON p.discount_id = d.id " +
+                                        "LEFT JOIN product_detail pd ON p.id = pd.product_id " +
                                         "WHERE p.status = 'active' AND p.category_id = :categoryId " +
                                         "ORDER BY p.id " +
                                         "LIMIT :limit OFFSET :offset"
@@ -434,25 +434,10 @@ public class ProductDAO {
     public boolean insertProduct(ProductWithDetails product) {
         return jdbi.inTransaction(handle -> {
 
-            //thêm Product
+            //thêm product
             int productId = handle.createUpdate(
-                            "INSERT INTO Product (\n" +
-                                    "    name,\n" +
-                                    "    category_id,\n" +
-                                    "    price,\n" +
-                                    "    inventory_quantity,\n" +
-                                    "    discount_id,\n" +
-                                    "    status,\n" +
-                                    "    created_at,\n" +
-                                    "    last_import_date,\n" +
-                                    "    min_stock\n" +
-                                    ")\n" +
-                                    "VALUES (\n" +
-                                    "    ?, ?, ?, ?, ?, 'active',\n" +
-                                    "    NOW(),\n" +
-                                    "    NOW(),\n" +
-                                    "    10\n" +
-                                    ")")
+                            "INSERT INTO product (name, category_id, price, inventory_quantity, discount_id, status) " +
+                                    "VALUES (?, ?, ?, ?, ?, 'active')")
                     .bind(0, product.getName())
                     .bind(1, product.getCategoryId())
                     .bind(2, product.getPrice())
@@ -473,7 +458,7 @@ public class ProductDAO {
                     null
             );
             handle.createUpdate(
-                            "INSERT INTO Product_Detail (product_id, description, material, voltage, dimensions, " +
+                            "INSERT INTO product_detail (product_id, description, material, voltage, dimensions, " +
                                     "type, color, style, warranty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
                     .bind(0, productId)
                     .bind(1, product.getDescription())
@@ -490,7 +475,7 @@ public class ProductDAO {
             if (product.getImages() != null) {
                 for (String img : product.getImages()) {
                     handle.createUpdate(
-                                    "INSERT INTO Image (type, ref_id, img) VALUES ('product', ?, ?)")
+                                    "INSERT INTO image (type, ref_id, img) VALUES ('product', ?, ?)")
                             .bind(0, productId)
                             .bind(1, img.trim())
                             .execute();
@@ -508,15 +493,7 @@ public class ProductDAO {
         return jdbi.inTransaction(handle -> {
 
             int productRows = handle.createUpdate(
-                            "UPDATE Product\n" +
-                                    "SET\n" +
-                                    "    name = ?,\n" +
-                                    "    category_id = ?,\n" +
-                                    "    price = ?,\n" +
-                                    "    inventory_quantity = ?,\n" +
-                                    "    discount_id = ?,\n" +
-                                    "    updated_at = NOW()\n" +
-                                    "WHERE id = ?")
+                            "UPDATE product SET name = ?, category_id = ?, price = ?, inventory_quantity = ?, discount_id = ? WHERE id = ?")
                     .bind(0, product.getName())
                     .bind(1, product.getCategoryId())
                     .bind(2, product.getPrice())
@@ -526,7 +503,7 @@ public class ProductDAO {
                     .execute();
 
             int detailRows = handle.createUpdate(
-                            "UPDATE Product_Detail SET description = ?, material = ?, voltage = ?, dimensions = ?, " +
+                            "UPDATE product_detail SET description = ?, material = ?, voltage = ?, dimensions = ?, " +
                                     "type = ?, color = ?, style = ?, warranty = ? WHERE product_id = ?")
                     .bind(0, product.getDescription())
                     .bind(1, product.getMaterial())
@@ -540,14 +517,14 @@ public class ProductDAO {
                     .execute();
 
             handle.createUpdate(
-                            "DELETE FROM Image WHERE type = 'product' AND ref_id = ?")
+                            "DELETE FROM image WHERE type = 'product' AND ref_id = ?")
                     .bind(0, product.getId())
                     .execute();
 
             if (product.getImages() != null) {
                 for (String img : product.getImages()) {
                     handle.createUpdate(
-                                    "INSERT INTO Image (type, ref_id, img) VALUES ('product', ?, ?)")
+                                    "INSERT INTO image (type, ref_id, img) VALUES ('product', ?, ?)")
                             .bind(0, product.getId())
                             .bind(1, img.trim())
                             .execute();
@@ -564,19 +541,19 @@ public class ProductDAO {
 
     public boolean deleteProduct(int productId) {
         return jdbi.inTransaction(handle -> {
-            handle.createUpdate("DELETE FROM Image WHERE type = 'product' AND ref_id = ?")
+            handle.createUpdate("DELETE FROM image WHERE type = 'product' AND ref_id = ?")
                     .bind(0, productId)
                     .execute();
 
-            handle.createUpdate("DELETE FROM Product_Detail WHERE product_id = ?")
+            handle.createUpdate("DELETE FROM product_detail WHERE product_id = ?")
                     .bind(0, productId)
                     .execute();
 
-            handle.createUpdate("DELETE FROM Review_Product WHERE product_id = ?")
+            handle.createUpdate("DELETE FROM review_product WHERE product_id = ?")
                     .bind(0, productId)
                     .execute();
 
-            int rows = handle.createUpdate("DELETE FROM Product WHERE id = ?")
+            int rows = handle.createUpdate("DELETE FROM product WHERE id = ?")
                     .bind(0, productId)
                     .execute();
 
@@ -597,12 +574,12 @@ public class ProductDAO {
                         "d.discount_rate, " +
                         "pd.description, pd.warranty, pd.material, pd.voltage, " +
                         "pd.dimensions, pd.type, pd.color, pd.style, " +
-                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
-                        "(SELECT img FROM Image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image " +
-                        "FROM Product p " +
-                        "LEFT JOIN Categories c ON p.category_id = c.id " +
-                        "LEFT JOIN Discount d ON p.discount_id = d.id " +
-                        "LEFT JOIN Product_Detail pd ON p.id = pd.product_id " +
+                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1) as main_image, " +
+                        "(SELECT img FROM image WHERE type = 'product' AND ref_id = p.id LIMIT 1 OFFSET 1) as hover_image " +
+                        "FROM product p " +
+                        "LEFT JOIN categories c ON p.category_id = c.id " +
+                        "LEFT JOIN discount d ON p.discount_id = d.id " +
+                        "LEFT JOIN product_detail pd ON p.id = pd.product_id " +
                         "WHERE 1=1 "
         );
 
@@ -647,7 +624,7 @@ public class ProductDAO {
      */
     public int countProductsWithFilter(String search, Integer categoryId, String status) {
         StringBuilder sql = new StringBuilder(
-                "SELECT COUNT(*) FROM Product p WHERE 1=1 "
+                "SELECT COUNT(*) FROM product p WHERE 1=1 "
         );
 
         if (search != null && !search.trim().isEmpty()) {
@@ -684,7 +661,7 @@ public class ProductDAO {
     public List<String> getProductImages(int productId) {
         return jdbi.withHandle(handle ->
                 handle.createQuery(
-                                "SELECT img FROM Image WHERE type = 'product' AND ref_id = :productId ORDER BY id"
+                                "SELECT img FROM image WHERE type = 'product' AND ref_id = :productId ORDER BY id"
                         )
                         .bind("productId", productId)
                         .mapTo(String.class)
