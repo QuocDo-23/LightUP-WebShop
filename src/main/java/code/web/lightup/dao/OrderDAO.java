@@ -15,22 +15,32 @@ public class OrderDAO {
     }
 
     public int insertOrder(Order order) {
-        String sql = "INSERT INTO orders (user_id, recipient_name, recipient_phone, recipient_email, " +
+        String sql = "INSERT INTO orders (" +
+                "user_id, recipient_name, recipient_phone, recipient_email, " +
                 "shipping_house_number, shipping_commune, shipping_district, shipping_address_detail, " +
-                "order_date, total, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "shipping_province, shipping_ward, shipping_fee, " +
+                "order_date, total, status" +
+                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         return jdbi.withHandle(handle -> handle.createUpdate(sql)
                 .bind(0, order.getUserId())
                 .bind(1, order.getRecipientName())
                 .bind(2, order.getRecipientPhone())
                 .bind(3, order.getRecipientEmail())
+
                 .bind(4, order.getShippingHouseNumber())
                 .bind(5, order.getShippingCommune())
                 .bind(6, order.getShippingDistrict())
                 .bind(7, order.getShippingAddressDetail())
-                .bind(8, order.getOrderDate())
-                .bind(9, order.getTotal())
-                .bind(10, order.getStatus())
+
+                .bind(8, order.getShippingProvince())
+                .bind(9, order.getShippingWard())
+
+                .bind(10, order.getShippingFee())
+
+                .bind(11, order.getOrderDate())
+                .bind(12, order.getTotal())
+                .bind(13, order.getStatus())
                 .executeAndReturnGeneratedKeys("id")
                 .mapTo(Integer.class)
                 .findOne()

@@ -42,7 +42,10 @@
                     </div>
                     <div class="address-display-content">
                         <strong>${selectedAddress.recipientName} - ${selectedAddress.phone}</strong>
-                        <div>${selectedAddress.commune}, ${selectedAddress.district}, ${selectedAddress.addressDetail}</div>
+                        <div>${selectedAddress.house_number},
+                                ${selectedAddress.ward},
+                                ${selectedAddress.district},
+                                ${selectedAddress.province}</div>
                     </div>
                 </div>
             </c:if>
@@ -86,15 +89,27 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="text" name="commune" id="commune"
-                           placeholder="Phường/xã"
-                           value="${isNewAddress ? '' : (not empty selectedAddress ? selectedAddress.commune : '')}">
+                    <input type="text"
+                           name="province"
+                           id="province"
+                           placeholder="Tỉnh/Thành phố *"
+                           required>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" name="district" id="district"
-                           placeholder="Quận/Huyện, Tỉnh/Thành phố"
-                           value="${isNewAddress ? '' : (not empty selectedAddress ? selectedAddress.district : '')}">
+                    <input type="text"
+                           name="district"
+                           id="district"
+                           placeholder="Quận/Huyện *"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <input type="text"
+                           name="ward"
+                           id="ward"
+                           placeholder="Phường/Xã *"
+                           required>
                 </div>
 
                 <div class="form-group">
@@ -261,7 +276,10 @@
                                 <span class="badge-default">Mặc định</span>
                             </c:if>
                             <br>
-                                ${addr.addressDetail}, ${addr.commune}, ${addr.district}
+                                ${addr.house_number},
+                                ${addr.ward},
+                                ${addr.district},
+                                ${addr.province}
                         </div>
                     </label>
 

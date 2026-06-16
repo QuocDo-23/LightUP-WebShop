@@ -132,9 +132,13 @@ public class PaymentServlet extends HttpServlet {
             String phone = request.getParameter("phone");
             String email = request.getParameter("email");
             String houseNumber = request.getParameter("houseNumber");
-            String commune = request.getParameter("commune");
+//            String commune = request.getParameter("commune");
+
             String district = request.getParameter("district");
             String addressDetail = request.getParameter("addressDetail");
+            String province = request.getParameter("province");
+            String ward = request.getParameter("ward");
+            String commune = ward;
             if (addressDetail != null && addressDetail.trim().isEmpty()) {
                 addressDetail = null;
             }
@@ -146,11 +150,16 @@ public class PaymentServlet extends HttpServlet {
             boolean saveAddress = "true".equals(request.getParameter("saveAddress"));
 
 
-            double shippingFee = "express".equals(shippingMethod) ? 150000 : 70000;
+            double shippingFee =
+                    "express".equals(shippingMethod)
+                            ? 150000
+                            : 70000;
+
             double totalAmount = cart.getTotalPrice() + shippingFee;
 
-
             Order order = new Order();
+
+            order.setShippingFee(shippingFee);
             order.setUserId(userId);
             order.setRecipientName(recipientName);
             order.setRecipientPhone(phone);
@@ -159,6 +168,8 @@ public class PaymentServlet extends HttpServlet {
             order.setShippingCommune(commune);
             order.setShippingDistrict(district);
             order.setShippingAddressDetail(addressDetail);
+            order.setShippingProvince(province);
+            order.setShippingWard(ward);
             order.setOrderDate(LocalDateTime.now());
             order.setTotal(totalAmount);
             order.setStatus("pending");
@@ -198,8 +209,15 @@ public class PaymentServlet extends HttpServlet {
 
                 if (user != null && saveAddress) {
                     Address newAddress = new Address(
-                            phone, userId, recipientName,
-                            houseNumber, commune, district, addressDetail
+                            phone,
+                            userId,
+                            recipientName,
+                            houseNumber,
+                            commune,
+                            district,
+                            province,
+                            ward,
+                            addressDetail
                     );
                     newAddress.setEmail(email);
                     addressService.insertAddress(newAddress);
