@@ -106,8 +106,6 @@
                             ${not empty favoriteCount ? favoriteCount : 0}
                         </span>
                     </a>
-
-
                     <div class="favorite-dropdown">
                         <div class="favorite-dropdown-content">
                             <c:choose>
@@ -133,7 +131,11 @@
                                         </c:forEach>
                                     </ul>
                                     <div class="view-all-fav">
-                                        <a href="favorite-page">Xem tất cả</a>
+                                        <a href="${pageContext.request.contextPath}/favorite-list">
+
+                                            Xem tất cả
+
+                                        </a>
                                     </div>
                                 </c:otherwise>
                             </c:choose>

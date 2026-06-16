@@ -1,6 +1,7 @@
 package code.web.lightup.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class Product {
     private int id;
@@ -13,6 +14,20 @@ public class Product {
     private String status;
     private String mainImage;
     private boolean favorite;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime lastImportDate;
+    private LocalDateTime lastSaleDate;
+    private long deadDays;
+
+    private int minStock;
+    public long getDeadDays() {
+        return deadDays;
+    }
+
+    public void setDeadDays(long deadDays) {
+        this.deadDays = deadDays;
+    }
 
     public String getName() {
         return name;
@@ -88,6 +103,46 @@ public class Product {
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
     }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getLastImportDate() {
+        return lastImportDate;
+    }
+
+    public void setLastImportDate(LocalDateTime lastImportDate) {
+        this.lastImportDate = lastImportDate;
+    }
+
+    public LocalDateTime getLastSaleDate() {
+        return lastSaleDate;
+    }
+
+    public void setLastSaleDate(LocalDateTime lastSaleDate) {
+        this.lastSaleDate = lastSaleDate;
+    }
+
+    public int getMinStock() {
+        return minStock;
+    }
+
+    public void setMinStock(int minStock) {
+        this.minStock = minStock;
+    }
+
 
 
 }

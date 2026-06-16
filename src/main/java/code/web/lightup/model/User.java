@@ -18,6 +18,7 @@ public class User {
     private String authProvider;
     private int failedAttempts;
     private LocalDateTime lockUntil;
+    private String facebookId;
 
 
     private int orderCount;
@@ -146,6 +147,10 @@ public class User {
     public void setLockUntil(LocalDateTime lockUntil) {
         this.lockUntil = lockUntil;
     }
+
+    public String getFacebookId() {return facebookId;}
+
+    public void setFacebookId(String facebookId) {this.facebookId = facebookId;}
 
     public LocalDateTime getLockUntil() {
         return lockUntil;

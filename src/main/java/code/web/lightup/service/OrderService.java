@@ -91,6 +91,14 @@ public class OrderService {
     public int bulkUpdateOrderStatus(List<Integer> orderIds, String newStatus){
         return orderDAO.bulkUpdateOrderStatus(orderIds, newStatus);
     }
-
+    public boolean hasPurchasedProduct(
+            int userId,
+            int productId
+    ) {
+        return orderDAO.hasPurchasedProduct(
+                userId,
+                productId
+        );
+    }
 
 }

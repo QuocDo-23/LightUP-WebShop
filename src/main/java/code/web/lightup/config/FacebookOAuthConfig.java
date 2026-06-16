@@ -14,7 +14,8 @@ public class FacebookOAuthConfig {
     public static final String GRAPH_URL =
             "https://graph.facebook.com/v19.0/me?fields=id,name,email,picture.type(large)";
 
-    public static final String SCOPE = "public_profile,email";
+//    public static final String SCOPE = "public_profile,email";
+public static final String SCOPE = "public_profile";
 
     public static String getRedirectUri(HttpServletRequest request) {
         String scheme      = request.getScheme();

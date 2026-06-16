@@ -3,7 +3,7 @@ package code.web.lightup.dao;
 import code.web.lightup.model.ProductWithDetails;
 import code.web.lightup.util.BaseDao;
 import org.jdbi.v3.core.Jdbi;
-
+import code.web.lightup.dao.InventoryTransactionDAO;
 import java.util.List;
 import java.util.Optional;
 
@@ -296,14 +296,73 @@ public class ProductDAO {
      * Giảm số lượng sản phẩm khi có đơn hàng
      */
     public boolean decreaseProductQuantity(int productId, int quantity) {
-        String sql = "UPDATE product SET inventory_quantity = inventory_quantity - ? WHERE id = ? AND inventory_quantity >= ?";
+
+        String sql =
+                "UPDATE product " +
+                        "SET inventory_quantity = inventory_quantity - ?, " +
+                        "last_sale_date = NOW() " +
+                        "WHERE id = ? AND inventory_quantity >= ?";
 
         return jdbi.withHandle(handle -> {
+
             int rows = handle.createUpdate(sql)
                     .bind(0, quantity)
                     .bind(1, productId)
                     .bind(2, quantity)
                     .execute();
+
+            if (rows > 0) {
+
+                InventoryTransactionDAO inventoryDAO =
+                        new InventoryTransactionDAO();
+
+                inventoryDAO.addTransaction(
+                        productId,
+                        "SALE",
+                        -quantity,
+                        "Khách mua hàng",
+                        null,
+                        null
+                );
+            }
+
+            return rows > 0;
+        });
+    }
+    public boolean increaseProductQuantity(
+            int productId,
+            int quantity,
+            String reason
+    ) {
+
+        String sql =
+                "UPDATE product " +
+                        "SET inventory_quantity = inventory_quantity + ?, " +
+                        "last_import_date = NOW() " +
+                        "WHERE id = ?";
+
+        return jdbi.withHandle(handle -> {
+
+            int rows = handle.createUpdate(sql)
+                    .bind(0, quantity)
+                    .bind(1, productId)
+                    .execute();
+
+            if (rows > 0) {
+
+                InventoryTransactionDAO inventoryDAO =
+                        new InventoryTransactionDAO();
+
+                inventoryDAO.addTransaction(
+                        productId,
+                        "IMPORT",
+                        quantity,
+                        reason,
+                        null,
+                        null
+                );
+            }
+
             return rows > 0;
         });
     }
@@ -387,7 +446,17 @@ public class ProductDAO {
                     .executeAndReturnGeneratedKeys("id")
                     .mapTo(int.class)
                     .one();
+            InventoryTransactionDAO inventoryDAO =
+                    new InventoryTransactionDAO();
 
+            inventoryDAO.addTransaction(
+                    productId,
+                    "IMPORT",
+                    product.getInventoryQuantity(),
+                    "Thêm sản phẩm mới",
+                    null,
+                    null
+            );
             handle.createUpdate(
                             "INSERT INTO product_detail (product_id, description, material, voltage, dimensions, " +
                                     "type, color, style, warranty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
@@ -597,6 +666,23 @@ public class ProductDAO {
                         .bind("productId", productId)
                         .mapTo(String.class)
                         .list()
+        );
+    }
+    public int getSoldQuantityByProductId(int productId) {
+
+        String sql = """
+        SELECT COALESCE(SUM(quantity),0)
+        FROM order_details od
+        JOIN orders o ON od.order_id = o.id
+        WHERE od.product_id = :productId
+        AND o.status != 'cancelled'
+    """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .one()
         );
     }
 }

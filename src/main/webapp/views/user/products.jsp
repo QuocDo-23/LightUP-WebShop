@@ -68,11 +68,17 @@
 
 
                 <div class="filter-dropdown">
-                    <button type="submit" class="filter-toggle"
-                            style="background:none;border:none;">
+                    <button type="submit" class="filter-toggle">
                         <i class="bi bi-funnel-fill"></i>
                         <span>Bộ lọc</span>
                     </button>
+                </div>
+                <div class="filter-dropdown">
+                    <a href="${pageContext.request.contextPath}/reset-filter"
+                       class="filter-toggle reset-link">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        <span>Đặt lại lọc</span>
+                    </a>
                 </div>
 
 
@@ -85,45 +91,80 @@
                     <ul class="filter-list">
                         <li>
                             <label>
-                                <input type="checkbox" class="price-filter"
-                                       name="price" value="0-1000000"
-                                       data-min="0" data-max="1000000">
+                                <input type="checkbox"
+                                       class="price-filter"
+                                       name="price"
+                                       value="0-1000000"
+                                       data-min="0"
+                                       data-max="1000000"
+
+                                <c:if test="${fn:contains(paramValues.price,'0-1000000')}">
+                                       checked
+                                </c:if>>
                                 Dưới 1.000.000₫
                             </label>
                         </li>
                         <li>
                             <label>
-                                <input type="checkbox" class="price-filter"
-                                       name="price" value="1000000-5000000"
-                                       data-min="1000000" data-max="5000000">
+                                <input type="checkbox"
+                                       class="price-filter"
+                                       name="price"
+                                       value="1000000-5000000"
+                                       data-min="1000000"
+                                       data-max="5000000"
+
+                                <c:if test="${fn:contains(paramValues.price,'1000000-5000000')}">
+                                       checked
+                                </c:if>>
                                 1.000.000₫ – 5.000.000₫
                             </label>
                         </li>
                         <li>
                             <label>
-                                <input type="checkbox" class="price-filter"
-                                       name="price" value="5000000-7500000"
-                                       data-min="5000000" data-max="7500000">
+                                <input type="checkbox"
+                                       class="price-filter"
+                                       name="price"
+                                       value="5000000-7500000"
+                                       data-min="5000000"
+                                       data-max="7500000"
 
+                                <c:if test="${fn:contains(paramValues.price,'5000000-7500000')}">
+                                       checked
+                                </c:if>>
                                 5.000.000₫ – 7.500.000₫
                             </label>
                         </li>
                         <li>
                             <label>
-                                <input type="checkbox" class="price-filter"
-                                       name="price" value="7500000-10000000"
-                                       data-min="7500000" data-max="10000000">
+                                <input type="checkbox"
+                                       class="price-filter"
+                                       name="price"
+                                       value="7500000-10000000"
+                                       data-min="7500000"
+                                       data-max="10000000"
+
+                                <c:if test="${fn:contains(paramValues.price,'7500000-10000000')}">
+                                       checked
+                                </c:if>>
                                 7.500.000₫ – 10.000.000₫
                             </label>
                         </li>
                         <li>
                             <label>
-                                <input type="checkbox" class="price-filter"
-                                       name="price" value="10000000-999999999"
-                                       data-min="10000000" data-max="999999999">
+                                <input type="checkbox"
+                                       class="price-filter"
+                                       name="price"
+                                       value="10000000-999999999"
+                                       data-min="10000000"
+                                       data-max="999999999"
+
+                                <c:if test="${fn:contains(paramValues.price,'10000000-999999999')}">
+                                       checked
+                                </c:if>>
                                 Trên 10.000.000₫
                             </label>
                         </li>
+
                     </ul>
                 </div>
             </div>
@@ -142,14 +183,78 @@
             </div>
 
         </div>
+
     </form>
 
 
     <div class="container product-section">
+        <c:if test="${not empty sessionScope.selectedPrices}">
+            <div class="active-filter-box">
 
+        <span class="active-filter-label">
+            Đang lọc theo:
+        </span>
+
+                <c:forEach var="price" items="${sessionScope.selectedPrices}">
+            <span class="active-filter-tag">
+
+                <c:choose>
+
+                    <c:when test="${price == '0-1000000'}">
+                        Dưới 1.000.000₫
+                    </c:when>
+
+                    <c:when test="${price == '1000000-5000000'}">
+                        1.000.000₫ - 5.000.000₫
+                    </c:when>
+
+                    <c:when test="${price == '5000000-7500000'}">
+                        5.000.000₫ - 7.500.000₫
+                    </c:when>
+
+                    <c:when test="${price == '7500000-10000000'}">
+                        7.500.000₫ - 10.000.000₫
+                    </c:when>
+
+                    <c:otherwise>
+                        Trên 10.000.000₫
+                    </c:otherwise>
+
+                </c:choose>
+
+            </span>
+
+                </c:forEach>
+
+            </div>
+
+        </c:if>
+        <c:if test="${not empty products}">
+            <div class="product-count-box">
+                Tìm thấy ${totalProducts} sản phẩm phù hợp
+            </div>
+        </c:if>
+
+        <c:if test="${empty products and not empty sessionScope.selectedPrices}">            <div class="empty-product-message">
+
+                <div class="empty-product-title">
+                    <i class="bi bi-search"></i>
+
+                    <p>
+                        Không tìm thấy sản phẩm phù hợp với bộ lọc đã chọn
+                    </p>
+                </div>
+
+                <span>
+        Vui lòng thử khoảng giá khác hoặc nhấn Đặt lại lọc.
+    </span>
+
+            </div>
+        </c:if>
         <c:choose>
+            <c:when test="${not empty products}">
 
-            <c:when test="${not empty category or not empty products}">
+
                 <div class="product-grid" id="productGrid">
                     <c:forEach var="product" items="${products}">
                         <div class="product-card"
@@ -216,7 +321,10 @@
                         </div>
                     </c:forEach>
                 </div>
-            </c:when>
+
+        </c:when>
+
+
 
 
             <c:otherwise>
@@ -278,7 +386,7 @@
                                                     <span class="current-price">
                                                         <fmt:formatNumber value="${product.discountedPrice}"
                                                                           pattern="#,###"/>₫
-</span>
+                                                    </span>
                                                     <c:if test="${product.hasDiscount()}">
                                                         <span class="old-price">
                                                             <del><fmt:formatNumber value="${product.price}"
@@ -309,8 +417,6 @@
             </c:otherwise>
         </c:choose>
 
-
-
         <c:if test="${totalPages > 1}">
             <div class="pagination">
                 <c:if test="${currentPage > 1}">
@@ -335,17 +441,13 @@
         </c:if>
     </div>
 
-
     <jsp:include page="/views/layout/footer.jsp"/>
-
 
     <a href="#">
         <button id="scrollToTopBtn">
             <i class="bi bi-chevron-up"></i>
         </button>
     </a>
-
-
 
 </main>
 <script src="${pageContext.request.contextPath}/views/JS/products.js"></script>

@@ -50,7 +50,8 @@
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Họ và Tên</label>
+                                <label>Họ và Tên
+                                    <span class="required">*</span></label>
                                 <input type="text" name="fullName"
                                        value="${user.name}"
                                        placeholder="Nhập họ và tên"
@@ -58,18 +59,35 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" name="email"
-                                       value="${user.email}"
-                                       placeholder="Nhập email"
-                                       readonly
-                                       style="background-color: #f0f0f0;">
+                                <label>Email
+                                    <span class="required">*</span></label>
+
+                                <c:choose>
+
+                                    <c:when test="${user.authProvider == 'facebook'}">
+                                        <input type="text"
+                                               value="📘 Đăng nhập bằng Facebook"
+                                               readonly
+                                               class="social-login-input">
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <input type="email"
+                                               name="email"
+                                               value="${user.email}"
+                                               readonly
+                                               class="readonly-input">
+                                    </c:otherwise>
+
+                                </c:choose>
+
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Giới Tính</label>
+                                <label>Giới Tính
+                                    <span class="required">*</span></label>
                                 <select name="gender">
                                     <option value="">Chọn giới tính</option>
                                     <option value="male"   ${user.gender == 'male' ? 'selected' : ''}>Nam</option>
@@ -80,17 +98,18 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Ngày Sinh</label>
+                                <label>Ngày Sinh
+                                    <span class="required">*</span></label>
                                 <input type="date" name="dob" value="${user.dateOfBirth}" placeholder="Chọn ngày sinh">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Số Điện Thoại</label>
+                            <label>Số Điện Thoại
+                                <span class="required">*</span></label>
                             <input type="tel" name="phone"
                                    value="${user.phone}"
-                                   placeholder="Nhập số điện thoại"
-                                   pattern="[0-9]{10,11}">
+                                   placeholder="Nhập số điện thoại">
                         </div>
 
                         <button type="submit" class="save-btn">Lưu Thay Đổi</button>
@@ -117,5 +136,10 @@
         }
     };
 </script>
+
+<script src="${pageContext.request.contextPath}/views/JS/email_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/phone_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/name_validation.js"></script>
+
 </body>
 </html>

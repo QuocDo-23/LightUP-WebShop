@@ -7,6 +7,7 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
+
 public class ReviewDAO {
 
     private final Jdbi jdbi;
@@ -218,4 +219,29 @@ public class ReviewDAO {
                         .list()
         );
     }
+    public boolean hasReviewed(
+            int userId,
+            int productId
+    ) {
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery("""
+                    SELECT COUNT(*)
+                    FROM Review_Product
+                    WHERE user_id = :userId
+                    AND product_id = :productId
+                    AND parent_id IS NULL
+                    """)
+                        .bind("userId", userId)
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .one() > 0
+        );
+    }
 }
+
+
+
+
+
+

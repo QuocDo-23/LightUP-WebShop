@@ -1,0 +1,61 @@
+.favorite-page{
+    width: 1300px;
+    margin: 120px auto 80px;
+}
+.empty-favorite{
+    min-height: 500px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+}
+
+.empty-favorite i{
+    font-size: 80px;
+
+    color: #b08b57;
+
+    margin-bottom: 20px;
+}
+
+.empty-favorite h2{
+    font-size: 32px;
+
+    color: #333;
+
+    margin-bottom: 12px;
+}
+
+.empty-favorite p{
+    color: #777;
+
+    font-size: 18px;
+
+    margin-bottom: 30px;
+}
+
+.go-shopping-btn{
+    padding: 14px 32px;
+
+    background: #b08b57;
+
+    color: white;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+.go-shopping-btn:hover{
+    background: #967347;
+}

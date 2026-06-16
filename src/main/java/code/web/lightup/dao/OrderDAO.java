@@ -1,15 +1,10 @@
 package code.web.lightup.dao;
 
-
-
 import code.web.lightup.model.OrderItem;
 import code.web.lightup.util.BaseDao;
 import org.jdbi.v3.core.Jdbi;
 import code.web.lightup.model.Order;
-
-
 import java.util.*;
-
 
 public class OrderDAO {
 
@@ -18,7 +13,6 @@ public class OrderDAO {
     public OrderDAO() {
         this.jdbi = BaseDao.get();
     }
-
 
     public int insertOrder(Order order) {
         String sql = "INSERT INTO orders (user_id, recipient_name, recipient_phone, recipient_email, " +
@@ -42,7 +36,6 @@ public class OrderDAO {
                 .findOne()
                 .orElse(-1));
     }
-
 
     public Order getOrderById(int orderId) {
         String sql = "SELECT * FROM orders WHERE id = ?";
@@ -108,15 +101,13 @@ public class OrderDAO {
 
 
     public boolean updateOrderStatus(int orderId, String status) {
-        String sql = "UPDATE orders SET status = ? WHERE id = ?";
-
-        return jdbi.withHandle(handle -> {
-            int rows = handle.createUpdate(sql)
-                    .bind(0, status)
-                    .bind(1, orderId)
-                    .execute();
-            return rows > 0;
-        });
+        String sql = "UPDATE orders SET status = :status WHERE id = :orderId";
+        return jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("status", status)
+                        .bind("orderId", orderId)
+                        .execute() > 0
+        );
     }
 
 
@@ -615,11 +606,11 @@ public class OrderDAO {
         );
 
 
-        stats.putIfAbsent("pending", 0);
-        stats.putIfAbsent("processing", 0);
-        stats.putIfAbsent("shipped", 0);
-        stats.putIfAbsent("delivered", 0);
-        stats.putIfAbsent("cancelled", 0);
+        stats.putIfAbsent("Đã nhận", 0);
+        stats.putIfAbsent("Đang xử lý", 0);
+        stats.putIfAbsent("Đang vận chuyển", 0);
+        stats.putIfAbsent("Đã giao hàng", 0);
+        stats.putIfAbsent("Hủy đơn", 0);
 
         return stats;
     }
@@ -737,5 +728,27 @@ public class OrderDAO {
                     .execute();
             return rows > 0;
         });
+    }
+    public boolean hasPurchasedProduct(int userId, int productId) {
+
+        String sql = """
+        SELECT COUNT(*)
+        FROM orders o
+        JOIN order_details od
+            ON o.id = od.order_id
+        WHERE o.user_id = :userId
+        AND od.product_id = :productId
+        AND o.status = 'delivered'
+    """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("userId", userId)
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .one() > 0
+        );
+       // Test khi đánh giá mà ko cần mua
+        //return true;
     }
 }

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import code.web.lightup.service.OrderService;
 
 import java.io.IOException;
 
@@ -49,6 +50,23 @@ public class ReviewServlet extends HttpServlet {
 
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
+            OrderService orderService = new OrderService();
+
+            if (!orderService.hasPurchasedProduct(
+                    userId,
+                    productId
+            )) {
+
+                response.sendRedirect(
+                        "product-detail?id="
+                                + productId
+                                + "&reviewError=notPurchased"
+                );
+
+                return;
+            }
+
+
             String comment = request.getParameter("comment");
 
 
@@ -59,6 +77,23 @@ public class ReviewServlet extends HttpServlet {
 
             if (parentIdParam != null && !parentIdParam.isEmpty()) {
                 parentId = Integer.parseInt(parentIdParam);
+            }
+            if (
+                    parentId == null
+                            &&
+                            reviewService.hasReviewed(
+                                    userId,
+                                    productId
+                            )
+            )
+            {
+                response.sendRedirect(
+                        "product-detail?id="
+                                + productId
+                                + "&reviewError=alreadyReviewed"
+                );
+
+                return;
             }
 
 // chỉ check rating khi là comment cha

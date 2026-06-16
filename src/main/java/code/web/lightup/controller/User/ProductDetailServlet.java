@@ -5,14 +5,18 @@ import code.web.lightup.model.Image;
 import code.web.lightup.model.ProductWithDetails;
 import code.web.lightup.model.Review;
 import code.web.lightup.model.ReviewStatistics;
+
 import code.web.lightup.service.ImageService;
 import code.web.lightup.service.ProductService;
 import code.web.lightup.service.ReviewService;
+import code.web.lightup.service.OrderService;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -26,6 +30,7 @@ public class ProductDetailServlet extends HttpServlet {
     private ProductService productService;
     private ReviewService reviewService;
     private ImageService imageService;
+    private OrderService orderService;
 
 
     @Override
@@ -33,6 +38,7 @@ public class ProductDetailServlet extends HttpServlet {
         productService = new ProductService();
         reviewService = new ReviewService();
         imageService = new ImageService();
+        orderService = new OrderService();
     }
 
     @Override
@@ -62,6 +68,10 @@ public class ProductDetailServlet extends HttpServlet {
         }
 
         ProductWithDetails product = productOpt.get();
+        int soldQuantity =
+                productService.getSoldQuantityByProductId(
+                        productId
+                );
 
 
         List<Image> images = imageService.getImagesByProductId(productId);
@@ -82,9 +92,32 @@ public class ProductDetailServlet extends HttpServlet {
 
 
         NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        HttpSession session = request.getSession(false);
 
+        boolean canReview = false;
+        boolean isLoggedIn = false;
 
+        if (session != null) {
+
+            Integer userId =
+                    (Integer) session.getAttribute("userId");
+
+            if (userId != null) {
+
+                isLoggedIn = true;
+
+                canReview =
+                        orderService.hasPurchasedProduct(
+                                userId,
+                                productId
+                        );
+            }
+        }
+
+        request.setAttribute("isLoggedIn", isLoggedIn);
+        request.setAttribute("canReview", canReview);
         request.setAttribute("product", product);
+        request.setAttribute("soldQuantity", soldQuantity);
         request.setAttribute("images", images);
         request.setAttribute("reviews", reviews);
         request.setAttribute("stats", stats);

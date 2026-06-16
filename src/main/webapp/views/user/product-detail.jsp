@@ -184,6 +184,7 @@
                             </button>
                         </div>
                         <p class="stock-info">Còn lại: ${product.inventoryQuantity}</p>
+                        <p class="sold-info">Đã bán: ${soldQuantity}</p>
                     </div>
 
 
@@ -250,7 +251,21 @@
                                 <div class="reviews-title">
                                     ${stats.totalReviews} đánh giá cho <span>${product.name}</span>
                                 </div>
+                                <c:if test="${param.reviewError == 'alreadyReviewed'}">
 
+                                    <div class="review-warning">
+                                        Bạn đã đánh giá sản phẩm này trước đó.
+                                    </div>
+
+                                </c:if>
+
+                                <c:if test="${param.reviewError == 'notPurchased'}">
+
+                                    <div class="review-warning">
+                                        Bạn cần mua và nhận sản phẩm trước khi có thể đánh giá sản phẩm này.
+                                    </div>
+
+                                </c:if>
                                 <div class="star_box">
                                     <div class="star-average">
                                         <div class="product-rating">
@@ -298,8 +313,31 @@
                                         </div>
                                     </div>
 
+
+
                                     <div class="star_box_right">
-                                        <a href="#" class="btn-reviews-now">Đánh giá ngay</a>
+
+                                        <c:if test="${canReview == true}">
+                                            <a href="#" class="btn-reviews-now">
+                                                Đánh giá ngay
+                                            </a>
+                                        </c:if>
+
+                                        <c:if test="${canReview != true && isLoggedIn != true}">
+                                            <a href="${pageContext.request.contextPath}/login?redirect=product-detail?id=${product.id}"
+                                               class="btn-login-review">
+                                                Đánh giá ngay
+                                            </a>
+                                        </c:if>
+
+                                        <c:if test="${canReview != true && isLoggedIn == true}">
+                                            <button type="button"
+                                                    class="btn-review-disabled">
+
+                                                Mua hàng để đánh giá
+                                            </button>
+                                        </c:if>
+
                                     </div>
                                 </div>
 
@@ -582,7 +620,7 @@
                   placeholder="Mời bạn chia sẻ cảm nhận về sản phẩm..."
                   required
                   style="width:100%;height:100px;margin-top:15px;padding:10px;border:1px solid #ddd;border-radius:6px;">
-    </textarea>
+        </textarea>
 
 
         <div style="margin-top:15px;">
@@ -632,7 +670,6 @@
 
 </script>
 <script src="${pageContext.request.contextPath}/views/JS/product_detail.js"></script>
-<%--<script src="${pageContext.request.contextPath}/views/JS/index.js"></script>--%>
 <script src="${pageContext.request.contextPath}/views/JS/products.js"></script>
 <script>
     function toggleReply(id) {
@@ -651,8 +688,7 @@
             form.style.display = "none";
         }
     }
-</script>
-<script>
+
     function countReplyText(id){
         let txt = document.getElementById("replyText-" + id).value.length;
         document.getElementById("replyCount-" + id).innerText =
