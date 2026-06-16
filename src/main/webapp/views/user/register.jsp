@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="contextPath" content="${pageContext.request.contextPath}">
     <title>Đăng Ký - LightUp</title>
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/register.css">
@@ -66,5 +67,9 @@
         </div>
     </div>
 </div>
+
+<script src="${pageContext.request.contextPath}/views/JS/email_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/name_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/password_validation.js"></script>
 </body>
 </html>

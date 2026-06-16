@@ -115,5 +115,9 @@
         </div>
     </div>
 </div>
+
+<script src="${pageContext.request.contextPath}/views/JS/email_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/password_validation.js"></script>
+
 </body>
 </html>

@@ -336,7 +336,7 @@
         const formData = new FormData();
         formData.append('amount', total);
         formData.append('orderId', orderId);
-        formData.append('orderInfo', 'Thanh toan don hang ' + orderId);
+        formData.append('orderInfo', 'Thanh toán đơn hàng' + orderId);
 
         fetch('${pageContext.request.contextPath}/momo-payment', {
             method: 'POST',
@@ -404,5 +404,9 @@
         }
     });
 </script>
+
+<script src="${pageContext.request.contextPath}/views/JS/email_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/phone_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/name_validation.js"></script>
 </body>
 </html>

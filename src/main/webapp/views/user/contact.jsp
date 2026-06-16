@@ -126,5 +126,8 @@
 </main>
 
 <script src="JS/index.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/email_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/phone_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/name_validation.js"></script>
 </body>
 </html>
