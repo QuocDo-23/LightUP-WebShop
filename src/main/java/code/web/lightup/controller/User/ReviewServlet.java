@@ -65,6 +65,8 @@ public class ReviewServlet extends HttpServlet {
 
                 return;
             }
+
+
             String comment = request.getParameter("comment");
 
 
@@ -75,6 +77,23 @@ public class ReviewServlet extends HttpServlet {
 
             if (parentIdParam != null && !parentIdParam.isEmpty()) {
                 parentId = Integer.parseInt(parentIdParam);
+            }
+            if (
+                    parentId == null
+                            &&
+                            reviewService.hasReviewed(
+                                    userId,
+                                    productId
+                            )
+            )
+            {
+                response.sendRedirect(
+                        "product-detail?id="
+                                + productId
+                                + "&reviewError=alreadyReviewed"
+                );
+
+                return;
             }
 
 // chỉ check rating khi là comment cha

@@ -748,7 +748,7 @@ public class OrderDAO {
                         .mapTo(Integer.class)
                         .one() > 0
         );
-//        Test khi đánh giá mà ko cần mua
-//        return true;
+       // Test khi đánh giá mà ko cần mua
+        //return true;
     }
 }

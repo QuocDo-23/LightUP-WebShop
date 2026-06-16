@@ -251,12 +251,18 @@
                                 <div class="reviews-title">
                                     ${stats.totalReviews} đánh giá cho <span>${product.name}</span>
                                 </div>
+                                <c:if test="${param.reviewError == 'alreadyReviewed'}">
+
+                                    <div class="review-warning">
+                                        Bạn đã đánh giá sản phẩm này trước đó.
+                                    </div>
+
+                                </c:if>
+
                                 <c:if test="${param.reviewError == 'notPurchased'}">
 
                                     <div class="review-warning">
-
                                         Bạn cần mua và nhận sản phẩm trước khi có thể đánh giá sản phẩm này.
-
                                     </div>
 
                                 </c:if>
