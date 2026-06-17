@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="contextPath" content="${pageContext.request.contextPath}">
     <title>Đăng Ký - LightUp</title>
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/26JnYsPT/Logo-Photoroom.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/CSS/register.css">
@@ -37,14 +38,29 @@
 
             <div class="input-group">
                 <label for="password"><i class="bi bi-key-fill"></i>Mật Khẩu</label>
-                <input id="password" name="password" type="password"
-                       placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)" required>
+                <div style="position: relative;">
+                    <input id="password" name="password" type="password"
+                           placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)" required style="padding-right: 2.5rem; width: 100%; box-sizing: border-box;">
+                    <button type="button" onclick="togglePassword('password', this)"
+                            style="position: absolute; right: 0.75rem; top: 30%; transform: translateY(-50%);
+                            background: none; border: none; cursor: pointer; padding: 0; color: #888; font-size: 1rem;">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="input-group">
                 <label for="confirm-password"><i class="bi bi-key-fill"></i>Xác Nhận Mật Khẩu</label>
-                <input id="confirm-password" name="confirmPassword" type="password"
-                       placeholder="Nhập lại mật khẩu" required>
+                <div style="position: relative;">
+                    <input id="confirm-password" name="confirmPassword" type="password"
+                        placeholder="Nhập lại mật khẩu" required
+                           style="padding-right: 2.5rem; width: 100%; box-sizing: border-box;">
+                    <button type="button" onclick="togglePassword('confirm-password', this)"
+                            style="position: absolute; right: 0.75rem; top: 30%; transform: translateY(-50%);
+                            background: none; border: none; cursor: pointer; padding: 0; color: #888; font-size: 1rem;">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
             </div>
 
             <button type="submit">Đăng ký</button>
@@ -66,5 +82,23 @@
         </div>
     </div>
 </div>
+
+<script src="${pageContext.request.contextPath}/views/JS/email_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/name_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/password_validation.js"></script>
+
+<script>
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'bi bi-eye-slash';
+        }else {
+            input.type = 'password';
+            icon.className = 'bi bi-eye';
+        }
+    }
+</script>
 </body>
 </html>

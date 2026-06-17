@@ -616,11 +616,11 @@ public class OrderDAO {
         );
 
 
-        stats.putIfAbsent("pending", 0);
-        stats.putIfAbsent("processing", 0);
-        stats.putIfAbsent("shipped", 0);
-        stats.putIfAbsent("delivered", 0);
-        stats.putIfAbsent("cancelled", 0);
+        stats.putIfAbsent("Đã nhận", 0);
+        stats.putIfAbsent("Đang xử lý", 0);
+        stats.putIfAbsent("Đang vận chuyển", 0);
+        stats.putIfAbsent("Đã giao hàng", 0);
+        stats.putIfAbsent("Hủy đơn", 0);
 
         return stats;
     }

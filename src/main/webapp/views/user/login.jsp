@@ -47,8 +47,15 @@
 
             <div class="input-group">
                 <label for="password"><i class="bi bi-key-fill"></i>Mật Khẩu</label>
-                <input id="password" name="password" type="password"
-                       placeholder="Nhập mật khẩu" required>
+                <div style="position: relative;">
+                    <input id="password" name="password" type="password"
+                           placeholder="Nhập mật khẩu" required style="padding-right: 2.5rem; width: 100%; box-sizing: border-box;">
+                    <button type="button" onclick="togglePassword('password', this)"
+                            style="position: absolute; right: 0.75rem; top: 35%; transform: translateY(-50%);
+                                 background: none; border: none; cursor: pointer; padding: 0; color: #888; font-size: 1rem;">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
             </div>
 
             <input type="hidden" name="redirect" value="${param.redirect}">
@@ -115,5 +122,23 @@
         </div>
     </div>
 </div>
+
+<script src="${pageContext.request.contextPath}/views/JS/email_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/password_validation.js"></script>
+
+<script>
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'bi bi-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'bi bi-eye';
+        }
+    }
+</script>
+
 </body>
 </html>

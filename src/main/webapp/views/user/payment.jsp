@@ -71,7 +71,6 @@
                 <div class="form-group">
                     <input type="tel" name="phone" id="phone"
                            placeholder="Số điện thoại *"
-                           pattern="[0-9]{10,11}"
                            value="${isNewAddress ? '' : (not empty selectedAddress ? selectedAddress.phone : '')}"
                            required>
                 </div>
@@ -114,7 +113,7 @@
 
                 <div class="form-group">
                     <textarea name="addressDetail" id="addressDetail"
-                              placeholder="Ghi chú địa chỉ cụ thể (nếu có) *">${isNewAddress ? '' : (not empty selectedAddress ? selectedAddress.addressDetail : '')}</textarea>
+                              placeholder="Ghi chú địa chỉ cụ thể (nếu có)">${isNewAddress ? '' : (not empty selectedAddress ? selectedAddress.addressDetail : '')}</textarea>
                 </div>
 
                 <c:if test="${not empty sessionScope.user}">
@@ -175,14 +174,13 @@
 
                 <div class="sub-payment-options" id="subPaymentOptions">
                     <label class="sub-payment-method">
-                        <input type="radio" name="subPaymentMethod" value="vnpay" checked>
+                        <input type="radio" name="subPaymentMethod" value="vnpay" form="checkoutForm" checked>
                         <span class="radio"></span>
                         <span>Thanh toán VNPay</span>
                         <img src="https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg" alt="VNPay">
                     </label>
                     <label class="sub-payment-method">
-                        <input type="radio" name="subPaymentMethod" value="momo">
-                        <span class="radio"></span>
+                        <input type="radio" name="subPaymentMethod" value="momo" form="checkoutForm">                        <span class="radio"></span>
                         <span>Thanh toán MoMo</span>
                         <img src="https://developers.momo.vn/v3/assets/images/MOMO-Logo-App-6262c3743a290ef02396a24ea2b66c35.png"
                              alt="MoMo" style="width:36px;height:36px;object-fit:contain;border-radius:6px;margin-left:auto;flex-shrink:0;">
@@ -354,7 +352,7 @@
         const formData = new FormData();
         formData.append('amount', total);
         formData.append('orderId', orderId);
-        formData.append('orderInfo', 'Thanh toan don hang ' + orderId);
+        formData.append('orderInfo', 'Thanh toán đơn hàng' + orderId);
 
         fetch('${pageContext.request.contextPath}/momo-payment', {
             method: 'POST',
@@ -377,41 +375,37 @@
     }
 
     document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-        const recipientName = document.getElementById('recipientName').value.trim();
-        const phone = document.getElementById('phone').value.trim();
+        const phoneInput = document.getElementById('phone');
+        const nameInput = document.getElementById('recipientName');
+        const phoneValue =
+            document.getElementById('phone').value.trim();
 
-        if (!recipientName || !phone) {
+        if (!/^(03|05|07|08|09)\d{8}$/.test(phoneValue)) {
             e.preventDefault();
-            alert('Vui lòng điền đầy đủ thông tin nhận hàng');
-            return false;
+            alert('Số điện thoại không hợp lệ');
+            return;
         }
-        if (!/^[0-9]{10,11}$/.test(phone)) {
+
+        phoneInput.dispatchEvent(new Event('blur'));
+        nameInput.dispatchEvent(new Event('blur'));
+
+        if ((phoneErr && phoneErr.style.display !== 'none' && phoneErr.textContent.trim() !== '')) {
             e.preventDefault();
-            alert('Số điện thoại không hợp lệ (phải có 10-11 chữ số)');
-            return false;
+            e.stopImmediatePropagation();
+            return;
         }
 
         const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
         if (paymentMethod === 'transfer') {
-            e.preventDefault();
             const sub = document.querySelector('input[name="subPaymentMethod"]:checked').value;
-            const total = parseInt(document.getElementById('totalPrice').textContent.replace(/\D/g, ''));
-            const orderId = 'ORDER' + Date.now();
 
             if (sub === 'vnpay') {
-                fetch('${pageContext.request.contextPath}/vnpay-payment?amount=' + total + '&orderId=' + orderId, {
-                    method: 'POST'
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.payUrl) {
-                            window.location.href = data.payUrl;
-                        } else {
-                            alert('Không thể tạo thanh toán VNPay: ' + (data.error || 'Lỗi không xác định'));
-                        }
-                    })
-                    .catch(err => alert('Lỗi kết nối VNPay: ' + err.message));
-            } else {
+                return true;
+            }
+
+            if (sub === 'momo') {
+                e.preventDefault();
+
                 const payUrl = document.getElementById('momoPopup').dataset.payUrl;
                 if (payUrl) {
                     window.location.href = payUrl;
@@ -422,5 +416,9 @@
         }
     });
 </script>
+
+<script src="${pageContext.request.contextPath}/views/JS/email_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/phone_validation.js"></script>
+<script src="${pageContext.request.contextPath}/views/JS/name_validation.js"></script>
 </body>
 </html>

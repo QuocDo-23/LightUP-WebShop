@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import code.web.lightup.model.Order;
+import code.web.lightup.util.VnpayConstants;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -146,6 +147,23 @@ public class PaymentServlet extends HttpServlet {
 
             String shippingMethod = request.getParameter("shippingMethod");
             String paymentMethod = request.getParameter("paymentMethod");
+            String subPaymentMethod = request.getParameter("subPaymentMethod");
+
+            String finalPaymentMethod = paymentMethod;
+
+            if ("transfer".equals(paymentMethod)) {
+                if (subPaymentMethod == null || subPaymentMethod.isBlank()) {
+                    request.setAttribute("error", "Vui lòng chọn cổng thanh toán.");
+                    request.getRequestDispatcher("/views/user/payment.jsp").forward(request, response);
+                    return;
+                }
+
+                finalPaymentMethod = subPaymentMethod;
+            }
+
+            if ("transfer".equals(paymentMethod)) {
+                finalPaymentMethod = subPaymentMethod;
+            }
 
             boolean saveAddress = "true".equals(request.getParameter("saveAddress"));
 
@@ -199,13 +217,11 @@ public class PaymentServlet extends HttpServlet {
 
                 Payment payment = new Payment();
                 payment.setOrderId(orderId);
-                payment.setPaymentMethod(paymentMethod);
+                payment.setPaymentMethod(finalPaymentMethod);
                 payment.setAmount(totalAmount);
                 payment.setStatus("pending");
                 payment.setPayDate(LocalDate.now());
-
                 paymentService.insertPayment(payment);
-
 
                 if (user != null && saveAddress) {
                     Address newAddress = new Address(
@@ -223,17 +239,21 @@ public class PaymentServlet extends HttpServlet {
                     addressService.insertAddress(newAddress);
                 }
 
+                if ("vnpay".equals(finalPaymentMethod)) {
+                    String paymentUrl = VnpayConstants.generatePaymentUrl(
+                            orderId,
+                            totalAmount,
+                            "Thanh toan don hang " + orderId,
+                            request
+                    );
 
-                Cart fullCart = (Cart) session.getAttribute("cart");
-                if (fullCart != null) {
-                    for (CartItem item : cart.getListItem()) {
-                        fullCart.removeItem(item.getProduct().getId());
-                    }
-                    session.setAttribute("cart", fullCart);
+                    response.sendRedirect(paymentUrl);
+                    return;
                 }
-                // Xoá checkoutCart tạm
-                session.removeAttribute("checkoutCart");
-                session.removeAttribute("checkoutType");
+                if ("momo".equals(finalPaymentMethod)) {
+                    // Sau này thêm MoMo ở đây
+                }
+
 
                 session.setAttribute("orderId", orderId);
                 response.sendRedirect(request.getContextPath() + "/order-success");

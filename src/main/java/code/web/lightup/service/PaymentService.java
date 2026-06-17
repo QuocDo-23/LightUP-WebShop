@@ -37,6 +37,8 @@ public class PaymentService {
     public List<Payment> getAllPayments() {
         return paymentDAO.getAllPayments();
     }
-
+    public boolean updatePaymentStatusByOrderId(int orderId, String status) {
+        return paymentDAO.updatePaymentStatusByOrderId(orderId, status);
+    }
 
 }

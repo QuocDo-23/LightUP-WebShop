@@ -133,4 +133,15 @@ public class PaymentDAO {
                     .list();
         });
     }
+    public boolean updatePaymentStatusByOrderId(int orderId, String status) {
+        String sql = "UPDATE payment SET status = ? WHERE order_id = ?";
+
+        return jdbi.withHandle(handle -> {
+            int rows = handle.createUpdate(sql)
+                    .bind(0, status)
+                    .bind(1, orderId)
+                    .execute();
+            return rows > 0;
+        });
+    }
 }

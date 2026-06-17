@@ -98,7 +98,6 @@ button.ghost {
     border-radius: 20px;
     border: 1px solid #c09b5b;
     background-color: #c09b5b;
-    box-shadow: 0 0 1rem rgba(192, 155, 91, 0.6);
     color: #fff;
     font-size: 15px;
     font-weight: 700;
@@ -113,7 +112,6 @@ button.ghost {
 button:hover {
     letter-spacing: 3px;
     background-color: #d4ab6a;
-    box-shadow: 0 0 1.5rem rgba(192, 155, 91, 0.8);
 }
 
 button:active {
