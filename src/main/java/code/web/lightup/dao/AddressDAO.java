@@ -19,8 +19,8 @@ public class AddressDAO {
      */
     public boolean insertAddress(Address address) {
         String sql = "INSERT INTO address (user_id, recipient_name, phone, email, " +
-                "house_number, commune, district, address_detail, is_default) " +
-                "VALUES (:userId, :recipientName, :phone, :email, :houseNumber, :commune, :district, :addressDetail, :isDefault)";
+                "house_number, commune, district, province, ward, address_detail, is_default) " +
+                "VALUES (:userId, :recipientName, :phone, :email, :houseNumber, :commune, :district, :province, :ward, :addressDetail, :isDefault)";
 
         return jdbi.withHandle(handle -> {
             int rows = handle.createUpdate(sql)
@@ -31,6 +31,8 @@ public class AddressDAO {
                     .bind("houseNumber", address.getHouse_number())
                     .bind("commune", address.getCommune())
                     .bind("district", address.getDistrict())
+                    .bind("province", address.getProvince())
+                    .bind("ward", address.getWard())
                     .bind("addressDetail", address.getAddressDetail())
                     .bind("isDefault", address.isDefault())
                     .execute();
@@ -57,6 +59,10 @@ public class AddressDAO {
                         address.setHouse_number(rs.getString("house_number"));
                         address.setCommune(rs.getString("commune"));
                         address.setDistrict(rs.getString("district"));
+
+                        address.setProvince(rs.getString("province"));
+                        address.setWard(rs.getString("ward"));
+
                         address.setAddressDetail(rs.getString("address_detail"));
                         address.setDefault(rs.getBoolean("is_default"));
                         return address;
@@ -84,6 +90,10 @@ public class AddressDAO {
                         address.setHouse_number(rs.getString("house_number"));
                         address.setCommune(rs.getString("commune"));
                         address.setDistrict(rs.getString("district"));
+
+                        address.setProvince(rs.getString("province"));
+                        address.setWard(rs.getString("ward"));
+
                         address.setAddressDetail(rs.getString("address_detail"));
                         address.setDefault(rs.getBoolean("is_default"));
                         return address;
@@ -113,6 +123,8 @@ public class AddressDAO {
                         address.setCommune(rs.getString("commune"));
                         address.setDistrict(rs.getString("district"));
                         address.setAddressDetail(rs.getString("address_detail"));
+                        address.setProvince(rs.getString("province"));
+                        address.setWard(rs.getString("ward"));
                         address.setDefault(rs.getBoolean("is_default"));
                         return address;
                     })
@@ -126,8 +138,9 @@ public class AddressDAO {
      */
     public boolean updateAddress(Address address) {
         String sql = "UPDATE address SET recipient_name = :recipientName, phone = :phone, email = :email, " +
-                "house_number = :houseNumber, commune = :commune, district = :district, address_detail = :addressDetail, " +
-                "is_default = :isDefault WHERE id = :id";
+                "house_number = :houseNumber, commune = :commune, district = :district, " +
+                "province = :province, ward = :ward, " +
+                "address_detail = :addressDetail, is_default = :isDefault WHERE id = :id";
 
         return jdbi.withHandle(handle -> {
             int rows = handle.createUpdate(sql)
@@ -137,6 +150,8 @@ public class AddressDAO {
                     .bind("houseNumber", address.getHouse_number())
                     .bind("commune", address.getCommune())
                     .bind("district", address.getDistrict())
+                    .bind("province", address.getProvince())
+                    .bind("ward", address.getWard())
                     .bind("addressDetail", address.getAddressDetail())
                     .bind("isDefault", address.isDefault())
                     .bind("id", address.getId())

@@ -11,20 +11,33 @@ public class Address implements Serializable {
     private String house_number;
     private String commune;
     private String district;
+    private String province;
+    private String ward;
     private String addressDetail;
     private boolean isDefault;
 
     public Address() {
     }
 
-    public Address(String phone,  int userId, String recipientName,
-                   String house_number, String commune, String district, String addressDetail) {
+    public Address(
+            String phone,
+            int userId,
+            String recipientName,
+            String house_number,
+            String commune,
+            String district,
+            String province,
+            String ward,
+            String addressDetail
+    ) {
         this.phone = phone;
         this.userId = userId;
         this.recipientName = recipientName;
         this.house_number = house_number;
         this.commune = commune;
         this.district = district;
+        this.province = province;
+        this.ward = ward;
         this.addressDetail = addressDetail;
     }
 
@@ -59,6 +72,9 @@ public class Address implements Serializable {
     public String getDistrict() {
         return district;
     }
+    public String getProvince() {return province;}
+
+    public String getWard() {return ward;}
 
     public String getAddressDetail() {
         return addressDetail;
@@ -96,9 +112,10 @@ public class Address implements Serializable {
         this.commune = commune;
     }
 
-    public void setDistrict(String district) {
-        this.district = district;
-    }
+    public void setDistrict(String district) {this.district = district;}
+    public void setProvince(String province) {this.province = province;}
+
+    public void setWard(String ward) {this.ward = ward;}
 
     public void setAddressDetail(String addressDetail) {
         this.addressDetail = addressDetail;
